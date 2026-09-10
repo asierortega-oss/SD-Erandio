@@ -190,7 +190,9 @@ async function consultarRegistros() {
     await supabaseClient
         .from("respuestas")
         .select("*")
+        .eq("equipo", equipoSeleccionado)
         .eq("jugador", jugadorSeleccionado)
+        .eq("tipo", tipoSeleccionado)
         .order("fecha", {
             ascending: false
         });
