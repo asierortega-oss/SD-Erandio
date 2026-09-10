@@ -130,6 +130,7 @@
     }
 
     /* TABLA OCULTA AL ENTRAR */
+
     .tabla-contenedor {
       display: none;
       width: 100%;
@@ -332,8 +333,8 @@
 
         <select id="equipo">
 
-          <option value="juvenil-a">
-            Juvenil A
+          <option value="">
+            Cargando equipos...
           </option>
 
         </select>
@@ -467,40 +468,17 @@
 
 
     // =========================================================
-    // JUGADORES POR EQUIPO
+    // EQUIPOS CARGADOS DESDE SUPABASE
     // =========================================================
 
-    const jugadoresPorEquipo = {
+    let equipos = [];
 
-      "juvenil-a": [
 
-        "Oier Roman",
-        "Markel Navas",
-        "Asier Zabal",
-        "Rayan El Armaoui",
-        "Iker García",
-        "Aimar Martinez",
-        "Liher Martinez",
-        "Alex Clavero",
-        "Xabi Losada",
-        "Markel Alonso",
-        "Ibon Lanseros",
-        "Nahuel Churruca",
-        "Unai Zarraga",
-        "Enaitz Posada",
-        "Aitzol Estarlich",
-        "Ibai Pineda",
-        "Mikel Zorriketa",
-        "Luken Rivas",
-        "Peio Alcubilla",
-        "Xabier Santiesteban",
-        "Eder García",
-        "Unai Hernandez",
-        "Ander Elortegi"
+    // =========================================================
+    // JUGADORES DEL EQUIPO SELECCIONADO
+    // =========================================================
 
-      ]
-
-    };
+    let jugadoresActuales = [];
 
 
     // =========================================================
@@ -509,7 +487,8 @@
 
     function fechaHoyLocal() {
 
-      const ahora = new Date();
+      const ahora =
+        new Date();
 
       const año =
         ahora.getFullYear();
@@ -600,7 +579,9 @@
     ) {
 
       const mensaje =
-        document.getElementById("mensaje");
+        document.getElementById(
+          "mensaje"
+        );
 
       mensaje.textContent =
         texto;
@@ -629,10 +610,225 @@
     function ocultarMensaje() {
 
       const mensaje =
-        document.getElementById("mensaje");
+        document.getElementById(
+          "mensaje"
+        );
 
       mensaje.style.display =
         "none";
+
+    }
+
+
+    // =========================================================
+    // CARGAR EQUIPOS DESDE SUPABASE
+    // =========================================================
+
+    async function cargarEquipos() {
+
+      const selectEquipo =
+        document.getElementById(
+          "equipo"
+        );
+
+
+      selectEquipo.innerHTML = `
+        <option value="">
+          Cargando equipos...
+        </option>
+      `;
+
+
+      try {
+
+        const {
+          data,
+          error
+        } = await supabaseClient
+
+          .from("equipos")
+
+          .select("id, nombre")
+
+          .order(
+            "nombre",
+            {
+              ascending: true
+            }
+          );
+
+
+        if (error) {
+
+          console.error(
+            "Error cargando equipos:",
+            error
+          );
+
+          throw error;
+
+        }
+
+
+        equipos =
+          data || [];
+
+
+        selectEquipo.innerHTML = `
+          <option value="">
+            Selecciona un equipo
+          </option>
+        `;
+
+
+        equipos.forEach(
+          equipo => {
+
+            const opcion =
+              document.createElement(
+                "option"
+              );
+
+
+            // El value es el UUID
+            opcion.value =
+              equipo.id;
+
+
+            // Lo que ve el usuario es el nombre
+            opcion.textContent =
+              equipo.nombre;
+
+
+            selectEquipo.appendChild(
+              opcion
+            );
+
+          }
+        );
+
+
+        // Si hay equipos, seleccionar el primero
+        if (equipos.length > 0) {
+
+          selectEquipo.value =
+            equipos[0].id;
+
+
+          await cargarJugadores(
+            equipos[0].id
+          );
+
+        } else {
+
+          mostrarMensaje(
+            "No hay equipos configurados.",
+            false
+          );
+
+        }
+
+
+      } catch (error) {
+
+        console.error(
+          error
+        );
+
+
+        selectEquipo.innerHTML = `
+          <option value="">
+            Error al cargar equipos
+          </option>
+        `;
+
+
+        mostrarMensaje(
+          "No se han podido cargar los equipos desde Supabase.",
+          true
+        );
+
+      }
+
+    }
+
+
+    // =========================================================
+    // CARGAR JUGADORES DEL EQUIPO
+    // =========================================================
+
+    async function cargarJugadores(
+      equipoId
+    ) {
+
+      jugadoresActuales =
+        [];
+
+
+      if (!equipoId) {
+
+        return;
+
+      }
+
+
+      try {
+
+        const {
+          data,
+          error
+        } = await supabaseClient
+
+          .from("jugadores")
+
+          .select(
+            "id, nombre, equipo_id"
+          )
+
+          .eq(
+            "equipo_id",
+            equipoId
+          )
+
+          .order(
+            "nombre",
+            {
+              ascending: true
+            }
+          );
+
+
+        if (error) {
+
+          console.error(
+            "Error cargando jugadores:",
+            error
+          );
+
+          throw error;
+
+        }
+
+
+        jugadoresActuales =
+          data || [];
+
+
+      } catch (error) {
+
+        console.error(
+          error
+        );
+
+        jugadoresActuales =
+          [];
+
+        mostrarMensaje(
+          "No se han podido cargar los jugadores del equipo.",
+          true
+        );
+
+      }
 
     }
 
@@ -657,8 +853,10 @@
 
       }
 
+
       const numero =
         Number(valor);
+
 
       return `
         <span class="valor sueno-${numero}">
@@ -689,8 +887,10 @@
 
       }
 
+
       const numero =
         Number(valor);
+
 
       return `
         <span class="valor riesgo-${numero}">
@@ -720,6 +920,7 @@
         `;
 
       }
+
 
       const texto =
         String(valor).toLowerCase();
@@ -754,7 +955,7 @@
       ocultarMensaje();
 
 
-      const equipo =
+      const equipoId =
         document.getElementById(
           "equipo"
         ).value;
@@ -785,6 +986,28 @@
 
 
       // =======================================================
+      // COMPROBAR EQUIPO
+      // =======================================================
+
+      if (!equipoId) {
+
+        mostrarMensaje(
+          "Selecciona un equipo antes de consultar.",
+          true
+        );
+
+        tablaContenedor.style.display =
+          "none";
+
+        contador.textContent =
+          "";
+
+        return;
+
+      }
+
+
+      // =======================================================
       // COMPROBAR FECHA
       // =======================================================
 
@@ -807,7 +1030,43 @@
 
 
       // =======================================================
-      // MOSTRAR TABLA SOLO AL CONSULTAR
+      // BUSCAR EQUIPO
+      // =======================================================
+
+      const equipoSeleccionado =
+        equipos.find(
+          equipo =>
+            equipo.id === equipoId
+        );
+
+
+      if (!equipoSeleccionado) {
+
+        mostrarMensaje(
+          "No se ha encontrado el equipo seleccionado.",
+          true
+        );
+
+        return;
+
+      }
+
+
+      const equipoNombre =
+        equipoSeleccionado.nombre;
+
+
+      // =======================================================
+      // CARGAR JUGADORES ACTUALIZADOS
+      // =======================================================
+
+      await cargarJugadores(
+        equipoId
+      );
+
+
+      // =======================================================
+      // MOSTRAR TABLA
       // =======================================================
 
       tablaContenedor.style.display =
@@ -837,7 +1096,9 @@
         // =====================================================
 
         const desde =
-          fechaLocalAISO(fecha);
+          fechaLocalAISO(
+            fecha
+          );
 
 
         // =====================================================
@@ -845,7 +1106,9 @@
         // =====================================================
 
         const hasta =
-          new Date(desde);
+          new Date(
+            desde
+          );
 
 
         hasta.setDate(
@@ -868,7 +1131,7 @@
 
           .eq(
             "equipo",
-            equipo
+            equipoNombre
           )
 
           .eq(
@@ -911,23 +1174,14 @@
 
 
         // =====================================================
-        // JUGADORES DEL EQUIPO
-        // =====================================================
-
-        const jugadores =
-          jugadoresPorEquipo[
-            equipo
-          ] || [];
-
-
-        // =====================================================
         // ORGANIZAR RESPUESTAS
         // =====================================================
 
-        const respuestasPorJugador = {};
+        const respuestasPorJugador =
+          {};
 
 
-        data.forEach(
+        (data || []).forEach(
           registro => {
 
             respuestasPorJugador[
@@ -946,12 +1200,12 @@
           0;
 
 
-        jugadores.forEach(
+        jugadoresActuales.forEach(
           jugador => {
 
             if (
               respuestasPorJugador[
-                jugador
+                jugador.nombre
               ]
             ) {
 
@@ -964,7 +1218,7 @@
 
 
         contador.textContent =
-          `${numeroRespuestas} de ${jugadores.length} jugadores han respondido`;
+          `${numeroRespuestas} de ${jugadoresActuales.length} jugadores han respondido`;
 
 
         // =====================================================
@@ -972,7 +1226,7 @@
         // =====================================================
 
         if (
-          jugadores.length === 0
+          jugadoresActuales.length === 0
         ) {
 
           tabla.innerHTML = `
@@ -1004,13 +1258,16 @@
         // CREAR UNA FILA POR JUGADOR
         // =====================================================
 
-        jugadores.forEach(
+        jugadoresActuales.forEach(
           jugador => {
+
+            const nombreJugador =
+              jugador.nombre;
 
 
             const registro =
               respuestasPorJugador[
-                jugador
+                nombreJugador
               ];
 
 
@@ -1029,7 +1286,7 @@
               fila.innerHTML = `
 
                 <td>
-                  ${escaparHTML(jugador)}
+                  ${escaparHTML(nombreJugador)}
                 </td>
 
                 <td>
@@ -1152,7 +1409,7 @@
             fila.innerHTML = `
 
               <td>
-                ${escaparHTML(jugador)}
+                ${escaparHTML(nombreJugador)}
               </td>
 
               <td>
@@ -1237,17 +1494,57 @@
 
 
     // =========================================================
-    // PONER FECHA DE HOY
+    // CAMBIO DE EQUIPO
+    // =========================================================
+
+    document.getElementById(
+      "equipo"
+    ).addEventListener(
+      "change",
+      async function () {
+
+        const equipoId =
+          this.value;
+
+
+        await cargarJugadores(
+          equipoId
+        );
+
+
+        // Ocultar resultados anteriores
+        document.querySelector(
+          ".tabla-contenedor"
+        ).style.display =
+          "none";
+
+
+        document.getElementById(
+          "contador"
+        ).textContent =
+          "";
+
+      }
+    );
+
+
+    // =========================================================
+    // INICIALIZAR
     // =========================================================
 
     document.addEventListener(
       "DOMContentLoaded",
-      function () {
+      async function () {
 
+        // Poner fecha de hoy
         document.getElementById(
           "fecha"
         ).value =
           fechaHoyLocal();
+
+
+        // Cargar equipos
+        await cargarEquipos();
 
       }
     );
