@@ -62,27 +62,18 @@
 
         table {
             border-collapse: collapse;
-
-            /* IMPORTANTE:
-               La tabla ocupa el ancho disponible */
             width: 100%;
-
             table-layout: fixed;
-
             font-size: 12px;
         }
 
         th,
         td {
             border: 1px solid #ddd;
-
-            /* MUCHO MÁS COMPACTO */
             padding: 3px 2px;
-
             text-align: center;
             white-space: nowrap;
             box-sizing: border-box;
-
             height: 32px;
         }
 
@@ -177,8 +168,6 @@
         }
 
 
-        /* Campo de minutos un poco más ancho */
-
         .celda-min .input-minutos {
 
             width: 42px;
@@ -241,10 +230,6 @@
 
         }
 
-
-        /* ======================================================
-           EVITAR QUE LAS CELDAS FIJAS TAPEN LOS DATOS
-        ====================================================== */
 
         th.carga-total-col,
         td.carga-total-col {
@@ -389,10 +374,6 @@
                 Selecciona un equipo
             </option>
 
-            <option value="juvenil-a">
-                Juvenil A
-            </option>
-
         </select>
 
 
@@ -495,50 +476,155 @@ const supabaseClient =
     );
 
 
+// ======================================================
+// JUGADORES CARGADOS DESDE SUPABASE
+// ======================================================
+
+let jugadoresActuales = [];
+
 
 // ======================================================
-// JUGADORES
+// CARGAR EQUIPOS
 // ======================================================
 
+async function cargarEquipos() {
 
-const jugadoresPorEquipo = {
+    const equipo =
+        document.getElementById("equipo");
 
-    "juvenil-a": [
+    equipo.innerHTML =
+        '<option value="">Selecciona un equipo</option>';
 
-        "Oier Roman",
-        "Markel Navas",
-        "Asier Zabal",
-        "Rayan El Armaoui",
-        "Iker García",
-        "Aimar Martinez",
-        "Liher Martinez",
-        "Alex Clavero",
-        "Xabi Losada",
-        "Markel Alonso",
-        "Ibon Lanseros",
-        "Nahuel Churruca",
-        "Unai Zarraga",
-        "Enaitz Posada",
-        "Aitzol Estarlich",
-        "Ibai Pineda",
-        "Mikel Zorriketa",
-        "Luken Rivas",
-        "Peio Alcubilla",
-        "Xabier Santiesteban",
-        "Eder García",
-        "Unai Hernandez",
-        "Ander Elortegi"
 
-    ]
+    const { data, error } =
+        await supabaseClient
+            .from("equipos")
+            .select("*")
+            .order("nombre", {
+                ascending: true
+            });
 
-};
 
+    if (error) {
+
+        console.error(error);
+
+        equipo.innerHTML =
+            '<option value="">Error al cargar equipos</option>';
+
+        return;
+
+    }
+
+
+    data.forEach(function(item) {
+
+        const opcion =
+            document.createElement("option");
+
+        // El value será el UUID del equipo
+        opcion.value =
+            item.id;
+
+        // Lo que verá el usuario
+        opcion.textContent =
+            item.nombre;
+
+        equipo.appendChild(opcion);
+
+    });
+
+}
+
+
+// ======================================================
+// CARGAR JUGADORES DEL EQUIPO
+// ======================================================
+
+async function cargarJugadoresEquipo(equipoId) {
+
+    jugadoresActuales = [];
+
+
+    if (!equipoId) {
+
+        return;
+
+    }
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("jugadores")
+            .select("*")
+            .eq("equipo_id", equipoId)
+            .order("nombre", {
+                ascending: true
+            });
+
+
+    if (error) {
+
+        console.error(error);
+
+        return;
+
+    }
+
+
+    jugadoresActuales =
+        data || [];
+
+}
+
+
+// ======================================================
+// CAMBIO DE EQUIPO
+// ======================================================
+
+document
+    .getElementById("equipo")
+    .addEventListener(
+        "change",
+        async function() {
+
+            const equipoId =
+                this.value;
+
+
+            // Limpiar tabla anterior
+            document.getElementById(
+                "tablaJugadores"
+            ).innerHTML = "";
+
+            document.getElementById(
+                "cabeceraTabla"
+            ).innerHTML = "";
+
+            document.getElementById(
+                "pieTabla"
+            ).innerHTML = "";
+
+            document.getElementById(
+                "columnasTabla"
+            ).innerHTML = "";
+
+            document.getElementById(
+                "mensaje"
+            ).textContent = "";
+
+
+            await cargarJugadoresEquipo(
+                equipoId
+            );
+
+        }
+    );
 
 
 // ======================================================
 // CREAR FECHA LOCAL
 // ======================================================
-
 
 function fechaLocal(texto) {
 
@@ -556,11 +642,9 @@ function fechaLocal(texto) {
 }
 
 
-
 // ======================================================
 // CLAVE DE FECHA
 // ======================================================
-
 
 function claveFecha(fecha) {
 
@@ -585,11 +669,9 @@ function claveFecha(fecha) {
 }
 
 
-
 // ======================================================
 // FORMATO DE FECHA
 // ======================================================
-
 
 function formatearFecha(fecha) {
 
@@ -607,11 +689,9 @@ function formatearFecha(fecha) {
 }
 
 
-
 // ======================================================
 // OBTENER TODAS LAS FECHAS
 // ======================================================
-
 
 function obtenerFechas(
     inicioTexto,
@@ -648,19 +728,29 @@ function obtenerFechas(
 }
 
 
-
 // ======================================================
 // CARGAR TABLA
 // ======================================================
 
-
 async function cargarTabla() {
 
 
-    const equipo =
+    const equipoSelect =
         document.getElementById(
             "equipo"
-        ).value;
+        );
+
+
+    const equipoId =
+        equipoSelect.value;
+
+
+    const equipoNombre =
+        equipoSelect.value
+            ? equipoSelect.options[
+                equipoSelect.selectedIndex
+              ].textContent
+            : "";
 
 
     const fechaInicio =
@@ -716,14 +806,12 @@ async function cargarTabla() {
     mensaje.textContent = "";
 
 
-
     // --------------------------------------------------
     // COMPROBAR FILTROS
     // --------------------------------------------------
 
-
     if (
-        !equipo ||
+        !equipoId ||
         !fechaInicio ||
         !fechaFin
     ) {
@@ -734,7 +822,6 @@ async function cargarTabla() {
         return;
 
     }
-
 
 
     if (
@@ -749,6 +836,21 @@ async function cargarTabla() {
     }
 
 
+    // --------------------------------------------------
+    // COMPROBAR JUGADORES
+    // --------------------------------------------------
+
+    if (
+        jugadoresActuales.length === 0
+    ) {
+
+        mensaje.textContent =
+            "Este equipo no tiene jugadores.";
+
+        return;
+
+    }
+
 
     const fechasPeriodo =
         obtenerFechas(
@@ -761,11 +863,9 @@ async function cargarTabla() {
         "Cargando datos...";
 
 
-
     // --------------------------------------------------
     // RANGO DE FECHAS PARA SUPABASE
     // --------------------------------------------------
-
 
     const desde =
         fechaInicio +
@@ -786,11 +886,9 @@ async function cargarTabla() {
         "T00:00:00";
 
 
-
     // --------------------------------------------------
     // CONSULTAR SUPABASE
     // --------------------------------------------------
-
 
     const {
         data,
@@ -801,9 +899,11 @@ async function cargarTabla() {
 
         .select("*")
 
+        // IMPORTANTE:
+        // respuestas.equipo guarda el nombre
         .eq(
             "equipo",
-            equipo
+            equipoNombre
         )
 
         .eq(
@@ -829,7 +929,6 @@ async function cargarTabla() {
         );
 
 
-
     if (error) {
 
         console.error(error);
@@ -842,11 +941,9 @@ async function cargarTabla() {
     }
 
 
-
     // ==================================================
     // ORGANIZAR REGISTROS
     // ==================================================
-
 
     const registros = {};
 
@@ -879,11 +976,9 @@ async function cargarTabla() {
     );
 
 
-
     // ==================================================
     // SOLO FECHAS CON AL MENOS UN RPE
     // ==================================================
-
 
     const fechasConRPE =
         fechasPeriodo.filter(
@@ -913,11 +1008,9 @@ async function cargarTabla() {
         );
 
 
-
     // ==================================================
     // SI NO HAY RPE
     // ==================================================
-
 
     if (fechasConRPE.length === 0) {
 
@@ -929,18 +1022,12 @@ async function cargarTabla() {
     }
 
 
-
     // ==================================================
-    // CREAR COLUMNAS REALES DE LA TABLA
+    // CREAR COLUMNAS
     // ==================================================
-
 
     let columnasHTML = "";
 
-
-    // --------------------------------------------------
-    // JUGADOR
-    // --------------------------------------------------
 
     columnasHTML += `
         <col style="
@@ -949,14 +1036,8 @@ async function cargarTabla() {
     `;
 
 
-    // --------------------------------------------------
-    // CADA FECHA
-    // --------------------------------------------------
-
     fechasConRPE.forEach(
         function() {
-
-            // RPE
 
             columnasHTML += `
                 <col style="
@@ -965,16 +1046,12 @@ async function cargarTabla() {
             `;
 
 
-            // MIN
-
             columnasHTML += `
                 <col style="
                     width:48px;
                 ">
             `;
 
-
-            // CARGA
 
             columnasHTML += `
                 <col style="
@@ -985,10 +1062,6 @@ async function cargarTabla() {
         }
     );
 
-
-    // --------------------------------------------------
-    // CARGA TOTAL
-    // --------------------------------------------------
 
     columnasHTML += `
         <col style="
@@ -1001,11 +1074,9 @@ async function cargarTabla() {
         columnasHTML;
 
 
-
     // ==================================================
     // CABECERA
     // ==================================================
-
 
     let cabecera1 = `
 
@@ -1083,11 +1154,9 @@ async function cargarTabla() {
         cabecera2;
 
 
-
     // ==================================================
     // MEDIAS
     // ==================================================
-
 
     const medias = {};
 
@@ -1111,252 +1180,240 @@ async function cargarTabla() {
     );
 
 
-
     // ==================================================
-    // JUGADORES
+    // JUGADORES DESDE SUPABASE
     // ==================================================
 
+    jugadoresActuales.forEach(
+        function(jugador) {
 
-    jugadoresPorEquipo[equipo]
-        .forEach(
-            function(nombre) {
-
-
-                const fila =
-                    document.createElement(
-                        "tr"
-                    );
+            const nombre =
+                jugador.nombre;
 
 
-                let html = `
-
-                    <td class="jugador-col">
-                        ${nombre}
-                    </td>
-
-                `;
+            const fila =
+                document.createElement(
+                    "tr"
+                );
 
 
-                let cargaTotal = 0;
+            let html = `
+
+                <td class="jugador-col">
+                    ${nombre}
+                </td>
+
+            `;
 
 
-
-                // --------------------------------------
-                // CADA DÍA CON RPE
-                // --------------------------------------
+            let cargaTotal = 0;
 
 
-                fechasConRPE.forEach(
-                    function(fecha) {
+            // --------------------------------------
+            // CADA DÍA CON RPE
+            // --------------------------------------
+
+            fechasConRPE.forEach(
+                function(fecha) {
+
+                    const fechaClave =
+                        claveFecha(
+                            fecha
+                        );
 
 
-                        const fechaClave =
-                            claveFecha(
-                                fecha
+                    const clave =
+                        nombre +
+                        "|" +
+                        fechaClave;
+
+
+                    const registro =
+                        registros[clave];
+
+
+                    const respuestas =
+                        registro
+                            ? (
+                                registro.respuestas ||
+                                {}
+                            )
+                            : {};
+
+
+                    const rpe =
+                        respuestas.rpe ??
+                        "";
+
+
+                    // --------------------------------
+                    // MINUTOS
+                    // --------------------------------
+
+                    let minutos;
+
+
+                    if (
+
+                        respuestas.minutos !==
+                            undefined &&
+
+                        respuestas.minutos !==
+                            null &&
+
+                        respuestas.minutos !==
+                            ""
+
+                    ) {
+
+                        minutos =
+                            Number(
+                                respuestas.minutos
                             );
 
+                    } else {
 
-                        const clave =
-                            nombre +
-                            "|" +
-                            fechaClave;
-
-
-                        const registro =
-                            registros[clave];
-
-
-                        const respuestas =
-                            registro
-                                ? (
-                                    registro.respuestas ||
-                                    {}
-                                )
-                                : {};
-
-
-                        const rpe =
-                            respuestas.rpe ??
-                            "";
-
-
-
-                        // --------------------------------
-                        // MINUTOS
-                        // --------------------------------
-
-                        let minutos;
-
-
-                        if (
-
-                            respuestas.minutos !==
-                                undefined &&
-
-                            respuestas.minutos !==
-                                null &&
-
-                            respuestas.minutos !==
-                                ""
-
-                        ) {
-
-                            minutos =
-                                Number(
-                                    respuestas.minutos
-                                );
-
-                        } else {
-
-                            minutos =
-                                75;
-
-                        }
-
-
-
-                        // --------------------------------
-                        // CARGA
-                        // --------------------------------
-
-                        const carga =
-
-                            Number(rpe) > 0 &&
-                            Number(minutos) > 0
-
-                                ? Number(rpe) *
-                                  Number(minutos)
-
-                                : 0;
-
-
-
-                        // --------------------------------
-                        // MEDIA RPE DEL DÍA
-                        // --------------------------------
-
-                        if (
-
-                            Number(rpe) >= 1 &&
-
-                            Number(rpe) <= 10
-
-                        ) {
-
-                            medias[
-                                fechaClave
-                            ].suma +=
-                                Number(rpe);
-
-
-                            medias[
-                                fechaClave
-                            ].cantidad++;
-
-                        }
-
-
-
-                        // --------------------------------
-                        // CARGA TOTAL
-                        // --------------------------------
-
-                        cargaTotal +=
-                            carga;
-
-
-
-                        // --------------------------------
-                        // HTML
-                        // --------------------------------
-
-                        html += `
-
-                            <td class="celda-rpe">
-
-                                <input
-                                    class="input-rpe"
-                                    type="number"
-                                    min="1"
-                                    max="10"
-                                    value="${rpe}"
-                                    readonly
-                                >
-
-                            </td>
-
-
-                            <td class="celda-min">
-
-                                <input
-                                    class="input-minutos"
-                                    type="number"
-                                    min="0"
-                                    value="${minutos}"
-                                    data-id="${
-                                        registro
-                                            ? registro.id
-                                            : ""
-                                    }"
-                                    ${
-                                        registro
-                                            ? ""
-                                            : "disabled"
-                                    }
-                                >
-
-                            </td>
-
-
-                            <td class="celda-carga">
-
-                                ${carga || ""}
-
-                            </td>
-
-                        `;
+                        minutos =
+                            75;
 
                     }
-                );
 
 
+                    // --------------------------------
+                    // CARGA
+                    // --------------------------------
 
-                // --------------------------------------
-                // CARGA TOTAL
-                // --------------------------------------
+                    const carga =
 
+                        Number(rpe) > 0 &&
+                        Number(minutos) > 0
 
-                html += `
+                            ? Number(rpe) *
+                              Number(minutos)
 
-                    <td
-                        class="
-                            carga-total-col
-                            carga-total
-                        "
-                    >
-                        ${cargaTotal || ""}
-                    </td>
-
-                `;
+                            : 0;
 
 
-                fila.innerHTML =
-                    html;
+                    // --------------------------------
+                    // MEDIA RPE
+                    // --------------------------------
+
+                    if (
+
+                        Number(rpe) >= 1 &&
+
+                        Number(rpe) <= 10
+
+                    ) {
+
+                        medias[
+                            fechaClave
+                        ].suma +=
+                            Number(rpe);
 
 
-                tabla.appendChild(
-                    fila
-                );
+                        medias[
+                            fechaClave
+                        ].cantidad++;
 
-            }
-        );
+                    }
 
+
+                    // --------------------------------
+                    // CARGA TOTAL
+                    // --------------------------------
+
+                    cargaTotal +=
+                        carga;
+
+
+                    // --------------------------------
+                    // HTML
+                    // --------------------------------
+
+                    html += `
+
+                        <td class="celda-rpe">
+
+                            <input
+                                class="input-rpe"
+                                type="number"
+                                min="1"
+                                max="10"
+                                value="${rpe}"
+                                readonly
+                            >
+
+                        </td>
+
+
+                        <td class="celda-min">
+
+                            <input
+                                class="input-minutos"
+                                type="number"
+                                min="0"
+                                value="${minutos}"
+                                data-id="${
+                                    registro
+                                        ? registro.id
+                                        : ""
+                                }"
+                                ${
+                                    registro
+                                        ? ""
+                                        : "disabled"
+                                }
+                            >
+
+                        </td>
+
+
+                        <td class="celda-carga">
+
+                            ${carga || ""}
+
+                        </td>
+
+                    `;
+
+                }
+            );
+
+
+            // --------------------------------------
+            // CARGA TOTAL
+            // --------------------------------------
+
+            html += `
+
+                <td
+                    class="
+                        carga-total-col
+                        carga-total
+                    "
+                >
+                    ${cargaTotal || ""}
+                </td>
+
+            `;
+
+
+            fila.innerHTML =
+                html;
+
+
+            tabla.appendChild(
+                fila
+            );
+
+        }
+    );
 
 
     // ==================================================
     // FILA MEDIA RPE
     // ==================================================
-
 
     const filaMedia =
         document.createElement(
@@ -1379,7 +1436,6 @@ async function cargarTabla() {
 
     fechasConRPE.forEach(
         function(fecha) {
-
 
             const clave =
                 claveFecha(
@@ -1438,11 +1494,9 @@ async function cargarTabla() {
     );
 
 
-
     // ==================================================
     // EVENTOS DE MINUTOS
     // ==================================================
-
 
     document
         .querySelectorAll(
@@ -1450,7 +1504,6 @@ async function cargarTabla() {
         )
         .forEach(
             function(input) {
-
 
                 input.addEventListener(
                     "input",
@@ -1477,7 +1530,6 @@ async function cargarTabla() {
         );
 
 
-
     // ==================================================
     // COLORES
     // ==================================================
@@ -1494,16 +1546,13 @@ async function cargarTabla() {
 }
 
 
-
 // ======================================================
 // GUARDAR MINUTOS
 // ======================================================
 
-
 async function guardarMinutos(
     input
 ) {
-
 
     const id =
         input.dataset.id;
@@ -1601,12 +1650,9 @@ async function guardarMinutos(
 }
 
 
-
 // ======================================================
 // COLOR DEL RPE
-// ESCALA FIJA 1 - 10
 // ======================================================
-
 
 function colorRPE(valor) {
 
@@ -1631,12 +1677,6 @@ function colorRPE(valor) {
     let g;
 
     let b;
-
-
-
-    // --------------------------------------------------
-    // VERDE → NARANJA
-    // --------------------------------------------------
 
 
     if (valor <= mitad) {
@@ -1671,16 +1711,7 @@ function colorRPE(valor) {
                 porcentaje
             );
 
-    }
-
-
-
-    // --------------------------------------------------
-    // NARANJA → ROJO
-    // --------------------------------------------------
-
-
-    else {
+    } else {
 
         porcentaje =
 
@@ -1720,14 +1751,11 @@ function colorRPE(valor) {
 }
 
 
-
 // ======================================================
 // COLOREAR RPE
 // ======================================================
 
-
 function colorearRPE() {
-
 
     const celdas =
         document.querySelectorAll(
@@ -1737,7 +1765,6 @@ function colorearRPE() {
 
     celdas.forEach(
         function(celda) {
-
 
             const input =
                 celda.querySelector(
@@ -1772,15 +1799,11 @@ function colorearRPE() {
 }
 
 
-
 // ======================================================
 // COLOREAR CARGA TOTAL
-// ESCALA RELATIVA A LOS JUGADORES
 // ======================================================
 
-
 function colorearCargaTotal() {
-
 
     const celdas =
         document.querySelectorAll(
@@ -1791,15 +1814,8 @@ function colorearCargaTotal() {
     const valores = [];
 
 
-
-    // --------------------------------------------------
-    // OBTENER CARGAS
-    // --------------------------------------------------
-
-
     celdas.forEach(
         function(celda) {
-
 
             const valor =
                 Number(
@@ -1823,18 +1839,11 @@ function colorearCargaTotal() {
     );
 
 
-
     if (valores.length === 0) {
 
         return;
 
     }
-
-
-
-    // --------------------------------------------------
-    // MÍNIMO Y MÁXIMO
-    // --------------------------------------------------
 
 
     const minimo =
@@ -1849,15 +1858,8 @@ function colorearCargaTotal() {
         );
 
 
-
-    // --------------------------------------------------
-    // COLOREAR
-    // --------------------------------------------------
-
-
     celdas.forEach(
         function(celda) {
-
 
             const valor =
                 Number(
@@ -1878,9 +1880,6 @@ function colorearCargaTotal() {
             }
 
 
-
-            // Todos iguales → naranja
-
             if (
                 maximo === minimo
             ) {
@@ -1893,7 +1892,6 @@ function colorearCargaTotal() {
             }
 
 
-
             const porcentaje =
 
                 (valor - minimo) /
@@ -1901,18 +1899,11 @@ function colorearCargaTotal() {
                 (maximo - minimo);
 
 
-
             let r;
 
             let g;
 
             let b;
-
-
-
-            // ------------------------------------------------
-            // VERDE → NARANJA
-            // ------------------------------------------------
 
 
             if (
@@ -1946,16 +1937,7 @@ function colorearCargaTotal() {
                         p
                     );
 
-            }
-
-
-
-            // ------------------------------------------------
-            // NARANJA → ROJO
-            // ------------------------------------------------
-
-
-            else {
+            } else {
 
                 const p =
 
@@ -2000,11 +1982,9 @@ function colorearCargaTotal() {
 }
 
 
-
 // ======================================================
-// APLICAR LAS DOS ESCALAS
+// APLICAR ESCALAS
 // ======================================================
-
 
 function aplicarEscalasColores() {
 
@@ -2015,14 +1995,11 @@ function aplicarEscalasColores() {
 }
 
 
-
 // ======================================================
 // ACTUALIZAR CARGAS
 // ======================================================
 
-
 function actualizarCargas() {
-
 
     document
         .querySelectorAll(
@@ -2030,7 +2007,6 @@ function actualizarCargas() {
         )
         .forEach(
             function(fila) {
-
 
                 const rpes =
                     fila.querySelectorAll(
@@ -2059,7 +2035,6 @@ function actualizarCargas() {
                 let suma = 0;
 
 
-
                 for (
 
                     let i = 0;
@@ -2069,7 +2044,6 @@ function actualizarCargas() {
                     i++
 
                 ) {
-
 
                     const rpe =
                         Number(
@@ -2097,7 +2071,6 @@ function actualizarCargas() {
                 }
 
 
-
                 if (total) {
 
                     total.textContent =
@@ -2109,18 +2082,14 @@ function actualizarCargas() {
         );
 
 
-    // Volver a calcular colores
-
     aplicarEscalasColores();
 
 }
 
 
-
 // ======================================================
 // BOTÓN CONSULTAR
 // ======================================================
-
 
 document
     .getElementById(
@@ -2132,11 +2101,9 @@ document
     );
 
 
-
 // ======================================================
 // FECHAS DE PRUEBA
 // ======================================================
-
 
 document
     .getElementById(
@@ -2150,6 +2117,13 @@ document
         "fechaFin"
     ).value =
         "2026-09-13";
+
+
+// ======================================================
+// INICIAR
+// ======================================================
+
+cargarEquipos();
 
 
 </script>
