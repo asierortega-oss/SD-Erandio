@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SD Erandio - Panel Wellness</title>
+
+  <link rel="stylesheet" href="estilos.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      background: #f4f4f4;
+    }
+
+    .contenedor {
+      max-width: 1400px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .cabecera {
+      margin-bottom: 25px;
+    }
+
+    .cabecera h1 {
+      margin-bottom: 8px;
+    }
+
+    .cabecera p {
+      color: #666;
+      margin: 0;
+    }
+
+    .filtros {
+      display: flex;
+      gap: 15px;
+      align-items: end;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+      padding: 20px;
+      background: #f7f7f7;
+      border-radius: 10px;
+    }
+
+    .campo {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .campo label {
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .campo select,
+    .campo input {
+      padding: 11px 12px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      font-size: 15px;
+      background: white;
+    }
+
+    .boton-consultar {
+      padding: 11px 20px;
+      border: none;
+      border-radius: 7px;
+      background: #222;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .boton-consultar:hover {
+      opacity: 0.85;
+    }
+
+    .boton-volver {
+      margin-top: 25px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 7px;
+      background: #ddd;
+      color: #222;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .boton-volver:hover {
+      background: #ccc;
+    }
+
+    .info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .contador {
+      font-weight: bold;
+      color: #444;
+    }
+
+    .mensaje {
+      padding: 15px;
+      border-radius: 8px;
+      background: #f7f7f7;
+      color: #555;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .mensaje.error {
+      background: #ffe5e5;
+      color: #a00000;
+    }
+
+    .tabla-contenedor {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      min-width: 950px;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    thead th {
+      background: #222;
+      color: white;
+      padding: 13px 10px;
+      font-size: 14px;
+      text-align: center;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    tbody td {
+      padding: 11px 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    tbody tr:hover {
+      background: #f8f8f8;
+    }
+
+    th:first-child,
+    td:first-child {
+      text-align: left;
+      position: sticky;
+      left: 0;
+      z-index: 3;
+    }
+
+    thead th:first-child {
+      background: #222;
+    }
+
+    tbody td:first-child {
+      background: white;
+      font-weight: bold;
+      min-width: 170px;
+    }
+
+    tbody tr:hover td:first-child {
+      background: #f8f8f8;
+    }
+
+    .valor {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-width: 32px;
+      height: 32px;
+      padding: 0 7px;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+
+    /*
+      SUEÑO:
+      1 = peor
+      5 = mejor
+    */
+
+    .sueno-1,
+    .sueno-2 {
+      background: #ffd6d6;
+      color: #a00000;
+    }
+
+    .sueno-3 {
+      background: #fff0c2;
+      color: #775500;
+    }
+
+    .sueno-4,
+    .sueno-5 {
+      background: #d9f5df;
+      color: #176b2c;
+    }
+
+    /*
+      FATIGA, ESTRÉS Y DOLOR:
+      1 = mejor
+      5 = peor
+    */
+
+    .riesgo-1,
+    .riesgo-2 {
+      background: #d9f5df;
+      color: #176b2c;
+    }
+
+    .riesgo-3 {
+      background: #fff0c2;
+      color: #775500;
+    }
+
+    .riesgo-4,
+    .riesgo-5 {
+      background: #ffd6d6;
+      color: #a00000;
+    }
+
+    .molestias-si {
+      background: #ffd6d6;
+      color: #a00000;
+      font-weight: bold;
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+
+    .molestias-no {
+      background: #d9f5df;
+      color: #176b2c;
+      font-weight: bold;
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+
+    .sin-respuesta {
+      color: #aaa;
+      font-weight: normal;
+    }
+
+    .comentario {
+      min-width: 230px;
+      max-width: 350px;
+      text-align: left !important;
+      white-space: normal;
+      word-break: break-word;
+      line-height: 1.4;
+    }
+
+    .cargando {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+    }
+
+    @media (max-width: 700px) {
+      .contenedor {
+        margin: 15px;
+        padding: 18px;
+      }
+
+      .filtros {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .campo select,
+      .campo input,
+      .boton-consultar {
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .cabecera h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="contenedor">
+
+    <div class="cabecera">
+      <h1>Panel Wellness</h1>
+      <p>Consulta las respuestas Wellness de los jugadores por equipo y día.</p>
+    </div>
+
+    <div class="filtros">
+
+      <div class="campo">
+        <label for="equipo">Equipo</label>
+
+        <select id="equipo">
+          <option value="juvenil-a">Juvenil A</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="fecha">Día</label>
+        <input type="date" id="fecha">
+      </div>
+
+      <button class="boton-consultar" onclick="consultarWellness()">
+        CONSULTAR
+      </button>
+
+    </div>
+
+    <div id="mensaje" class="mensaje"></div>
+
+    <div class="info">
+      <div id="contador" class="contador">
+        Selecciona un equipo y un día.
+      </div>
+    </div>
+
+    <div class="tabla-contenedor">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Jugador</th>
+            <th>Sueño</th>
+            <th>Fatiga</th>
+            <th>Estrés</th>
+            <th>Dolor</th>
+            <th>Molestias</th>
+            <th>Comentario</th>
+          </tr>
+        </thead>
+
+        <tbody id="tablaWellness">
+
+          <tr>
+            <td colspan="7" class="cargando">
+              Selecciona un día y pulsa CONSULTAR.
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <button class="boton-volver" onclick="volverAdmin()">
+      VOLVER
+    </button>
+
+  </div>
+
+
+  <script>
+
+    // =========================================================
+    // SUPABASE
+    // =========================================================
+
+    const SUPABASE_URL = "https://alprdcjaexllelxthhbv.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_6kF4hhGM3bwqgwv6Fz3mmw__HvkPXiD";
+
+    const supabaseClient =
+      supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+
+    // =========================================================
+    // JUGADORES POR EQUIPO
+    // =========================================================
+
+    const jugadoresPorEquipo = {
+
+      "juvenil-a": [
+
+        "Oier Roman",
+        "Markel Navas",
+        "Asier Zabal",
+        "Rayan El Armaoui",
+        "Iker García",
+        "Aimar Martinez",
+        "Liher Martinez",
+        "Alex Clavero",
+        "Xabi Losada",
+        "Markel Alonso",
+        "Ibon Lanseros",
+        "Nahuel Churruca",
+        "Unai Zarraga",
+        "Enaitz Posada",
+        "Aitzol Estarlich",
+        "Ibai Pineda",
+        "Mikel Zorriketa",
+        "Luken Rivas",
+        "Peio Alcubilla",
+        "Xabier Santiesteban",
+        "Eder García",
+        "Unai Hernandez",
+        "Ander Elortegi"
+
+      ]
+
+    };
+
+
+    // =========================================================
+    // FECHA LOCAL
+    // =========================================================
+
+    function fechaHoyLocal() {
+
+      const ahora = new Date();
+
+      const año = ahora.getFullYear();
+
+      const mes = String(
+        ahora.getMonth() + 1
+      ).padStart(2, "0");
+
+      const dia = String(
+        ahora.getDate()
+      ).padStart(2, "0");
+
+      return `${año}-${mes}-${dia}`;
+    }
+
+
+    function fechaLocalAISO(fechaTexto) {
+
+      const partes = fechaTexto.split("-");
+
+      const año = Number(partes[0]);
+      const mes = Number(partes[1]) - 1;
+      const dia = Number(partes[2]);
+
+      return new Date(
+        año,
+        mes,
+        dia,
+        0,
+        0,
+        0,
+        0
+      );
+
+    }
+
+
+    // =========================================================
+    // ESCAPAR TEXTO
+    // =========================================================
+
+    function escaparHTML(texto) {
+
+      if (texto === null || texto === undefined) {
+        return "";
+      }
+
+      return String(texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+    // =========================================================
+    // MOSTRAR MENSAJE
+    // =========================================================
+
+    function mostrarMensaje(texto, error = false) {
+
+      const mensaje =
+        document.getElementById("mensaje");
+
+      mensaje.textContent = texto;
+
+      mensaje.className = "mensaje";
+
+      if (error) {
+        mensaje.classList.add("error");
+      }
+
+      mensaje.style.display = "block";
+
+    }
+
+
+    function ocultarMensaje() {
+
+      const mensaje =
+        document.getElementById("mensaje");
+
+      mensaje.style.display = "none";
+
+    }
+
+
+    // =========================================================
+    // CLASE PARA LOS VALORES
+    // =========================================================
+
+    function pintarSueno(valor) {
+
+      if (
+        valor === null ||
+        valor === undefined ||
+        valor === ""
+      ) {
+        return '<span class="sin-respuesta">—</span>';
+      }
+
+      const numero = Number(valor);
+
+      return `
+        <span class="valor sueno-${numero}">
+          ${escaparHTML(numero)}
+        </span>
+      `;
+
+    }
+
+
+    function pintarRiesgo(valor) {
+
+      if (
+        valor === null ||
+        valor === undefined ||
+        valor === ""
+      ) {
+        return '<span class="sin-respuesta">—</span>';
+      }
+
+      const numero = Number(valor);
+
+      return `
+        <span class="valor riesgo-${numero}">
+          ${escaparHTML(numero)}
+        </span>
+      `;
+
+    }
+
+
+    function pintarMolestias(valor) {
+
+      if (
+        valor === null ||
+        valor === undefined ||
+        valor === ""
+      ) {
+        return '<span class="sin-respuesta">—</span>';
+      }
+
+      const texto =
+        String(valor).toLowerCase();
+
+      if (texto === "si") {
+
+        return `
+          <span class="molestias-si">
+            Sí
+          </span>
+        `;
+
+      }
+
+      return `
+        <span class="molestias-no">
+          No
+        </span>
+      `;
+
+    }
+
+
+    // =========================================================
+    // CONSULTAR WELLNESS
+    // =========================================================
+
+    async function consultarWellness() {
+
+      ocultarMensaje();
+
+      const equipo =
+        document.getElementById("equipo").value;
+
+      const fecha =
+        document.getElementById("fecha").value;
+
+      const tabla =
+        document.getElementById("tablaWellness");
+
+      const contador =
+        document.getElementById("contador");
+
+
+      // Comprobar fecha
+
+      if (!fecha) {
+
+        mostrarMensaje(
+          "Selecciona un día antes de consultar.",
+          true
+        );
+
+        return;
+
+      }
+
+
+      // Mostrar cargando
+
+      tabla.innerHTML = `
+        <tr>
+          <td colspan="7" class="cargando">
+            Cargando respuestas...
+          </td>
+        </tr>
+      `;
+
+      contador.textContent =
+        "Consultando...";
+
+
+      try {
+
+        // =====================================================
+        // CREAR RANGO DEL DÍA
+        // =====================================================
+
+        /*
+          El formulario Wellness guarda:
+
+          new Date().toISOString()
+
+          Por eso convertimos el inicio y final
+          del día local a ISO UTC.
+        */
+
+        const desde =
+          fechaLocalAISO(fecha);
+
+        const hasta =
+          new Date(desde);
+
+        hasta.setDate(
+          hasta.getDate() + 1
+        );
+
+
+        // =====================================================
+        // CONSULTA SUPABASE
+        // =====================================================
+
+        const { data, error } =
+          await supabaseClient
+
+            .from("respuestas")
+
+            .select("*")
+
+            .eq("equipo", equipo)
+
+            .eq("tipo", "wellness")
+
+            .gte(
+              "fecha",
+              desde.toISOString()
+            )
+
+            .lt(
+              "fecha",
+              hasta.toISOString()
+            )
+
+            .order(
+              "fecha",
+              {
+                ascending: true
+              }
+            );
+
+
+        // =====================================================
+        // COMPROBAR ERROR
+        // =====================================================
+
+        if (error) {
+
+          console.error(
+            "Error Supabase:",
+            error
+          );
+
+          throw error;
+
+        }
+
+
+        // =====================================================
+        // LISTA DE JUGADORES
+        // =====================================================
+
+        const jugadores =
+          jugadoresPorEquipo[equipo] || [];
+
+
+        // =====================================================
+        // ORGANIZAR RESPUESTAS POR JUGADOR
+        // =====================================================
+
+        const respuestasPorJugador = {};
+
+
+        /*
+          Si un jugador tiene más de una respuesta
+          el mismo día, nos quedamos con la última.
+        */
+
+        data.forEach(registro => {
+
+          respuestasPorJugador[
+            registro.jugador
+          ] = registro;
+
+        });
+
+
+        // =====================================================
+        // CONTADOR
+        // =====================================================
+
+        let numeroRespuestas = 0;
+
+        jugadores.forEach(jugador => {
+
+          if (
+            respuestasPorJugador[jugador]
+          ) {
+
+            numeroRespuestas++;
+
+          }
+
+        });
+
+
+        contador.textContent =
+          `${numeroRespuestas} de ${jugadores.length} jugadores han respondido`;
+
+
+        // =====================================================
+        // SI NO HAY JUGADORES
+        // =====================================================
+
+        if (jugadores.length === 0) {
+
+          tabla.innerHTML = `
+            <tr>
+              <td colspan="7" class="cargando">
+                No hay jugadores configurados para este equipo.
+              </td>
+            </tr>
+          `;
+
+          return;
+
+        }
+
+
+        // =====================================================
+        // CREAR TABLA
+        // =====================================================
+
+        tabla.innerHTML = "";
+
+
+        jugadores.forEach(jugador => {
+
+          const registro =
+            respuestasPorJugador[jugador];
+
+
+          // ---------------------------------------------------
+          // SIN RESPUESTA
+          // ---------------------------------------------------
+
+          if (!registro) {
+
+            const fila =
+              document.createElement("tr");
+
+            fila.innerHTML = `
+
+              <td>
+                ${escaparHTML(jugador)}
+              </td>
+
+              <td>
+                <span class="sin-respuesta">—</span>
+              </td>
+
+              <td>
+                <span class="sin-respuesta">—</span>
+              </td>
+
+              <td>
+                <span class="sin-respuesta">—</span>
+              </td>
+
+              <td>
+                <span class="sin-respuesta">—</span>
+              </td>
+
+              <td>
+                <span class="sin-respuesta">—</span>
+              </td>
+
+              <td class="comentario">
+                <span class="sin-respuesta">
+                  Sin respuesta
+                </span>
+              </td>
+
+            `;
+
+            tabla.appendChild(fila);
+
+            return;
+
+          }
+
+
+          // ---------------------------------------------------
+          // RESPUESTAS
+          // ---------------------------------------------------
+
+          const respuestas =
+            registro.respuestas || {};
+
+
+          const sueño =
+            respuestas.sueno;
+
+          const fatiga =
+            respuestas.fatiga;
+
+          const estres =
+            respuestas.estres;
+
+          const dolor =
+            respuestas.dolor;
+
+          const molestias =
+            respuestas.molestias;
+
+          const comentario =
+            respuestas.comentario;
+
+
+          // ---------------------------------------------------
+          // COMENTARIO
+          // ---------------------------------------------------
+
+          let comentarioHTML =
+            '<span class="sin-respuesta">—</span>';
+
+
+          if (
+            comentario !== null &&
+            comentario !== undefined &&
+            String(comentario).trim() !== ""
+          ) {
+
+            comentarioHTML =
+              escaparHTML(comentario);
+
+          }
+
+
+          // ---------------------------------------------------
+          // CREAR FILA
+          // ---------------------------------------------------
+
+          const fila =
+            document.createElement("tr");
+
+
+          fila.innerHTML = `
+
+            <td>
+              ${escaparHTML(jugador)}
+            </td>
+
+            <td>
+              ${pintarSueno(sueño)}
+            </td>
+
+            <td>
+              ${pintarRiesgo(fatiga)}
+            </td>
+
+            <td>
+              ${pintarRiesgo(estres)}
+            </td>
+
+            <td>
+              ${pintarRiesgo(dolor)}
+            </td>
+
+            <td>
+              ${pintarMolestias(molestias)}
+            </td>
+
+            <td class="comentario">
+              ${comentarioHTML}
+            </td>
+
+          `;
+
+
+          tabla.appendChild(fila);
+
+        });
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        tabla.innerHTML = `
+          <tr>
+            <td colspan="7" class="cargando">
+              No se han podido cargar las respuestas.
+            </td>
+          </tr>
+        `;
+
+        contador.textContent =
+          "Error al consultar los datos.";
+
+        mostrarMensaje(
+          "Ha ocurrido un error al consultar Supabase. Revisa la consola del navegador.",
+          true
+        );
+
+      }
+
+    }
+
+
+    // =========================================================
+    // VOLVER AL PANEL DE ADMINISTRADOR
+    // =========================================================
+
+    function volverAdmin() {
+
+      window.location.href =
+        "panel-admin.html";
+
+    }
+
+
+    // =========================================================
+    // INICIAR FECHA DE HOY
+    // =========================================================
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      function () {
+
+        document.getElementById(
+          "fecha"
+        ).value = fechaHoyLocal();
+
+      }
+    );
+
+  </script>
+
+</body>
+
+</html>
