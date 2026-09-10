@@ -225,12 +225,13 @@ button {
 .tabla-contenedor {
     width: 100%;
     overflow-x: auto;
+    margin-top: 20px;
 }
 
+
+/* Estilo general para tablas */
+
 .tabla-contenedor table {
-    width: 100%;
-    min-width: 1000px;
-    table-layout: fixed;
     border-collapse: collapse;
     background: white;
 }
@@ -238,9 +239,27 @@ button {
 .tabla-contenedor th,
 .tabla-contenedor td {
     border: 1px solid #ddd;
-    padding: 8px 4px;
+    padding: 4px;
     text-align: center;
-    font-size: 13px;
+    box-sizing: border-box;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   TABLA DE EQUIPOS
+   ========================================================= */
+
+/*
+   La tabla principal de panel-equipos.html
+   tiene sus propios tamaños para evitar que
+   la columna de jugadores ocupe demasiado.
+*/
+
+#tablaPrincipal {
+    width: auto !important;
+    min-width: 0 !important;
+    table-layout: fixed !important;
 }
 
 
@@ -248,21 +267,197 @@ button {
    COLUMNA JUGADOR
    ========================================================= */
 
-.tabla-contenedor th:first-child,
-.tabla-contenedor td:first-child {
+#tablaPrincipal .jugador-col {
+    width: 120px !important;
+    min-width: 120px !important;
+    max-width: 120px !important;
+
+    text-align: left;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   CABECERA DE FECHA
+   ========================================================= */
+
+#tablaPrincipal .fecha-principal {
+    font-size: 11px;
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   SUBCABECERAS RPE / MIN / C
+   ========================================================= */
+
+#tablaPrincipal .subcabecera {
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+
+    font-size: 10px;
+    padding: 3px !important;
+}
+
+
+/* =========================================================
+   CELDA RPE
+   ========================================================= */
+
+#tablaPrincipal .celda-rpe {
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+}
+
+#tablaPrincipal .celda-rpe input {
+    width: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+
+    height: 27px;
+
+    padding: 2px;
+    margin: 0 auto;
+
+    text-align: center;
+    box-sizing: border-box;
+
+    background: transparent;
+}
+
+
+/* =========================================================
+   CELDA MINUTOS
+   ========================================================= */
+
+#tablaPrincipal .celda-min {
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+}
+
+#tablaPrincipal .celda-min input {
+    width: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+
+    height: 27px;
+
+    padding: 2px;
+    margin: 0 auto;
+
+    text-align: center;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   CELDA CARGA
+   ========================================================= */
+
+#tablaPrincipal .celda-carga {
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+
+    font-size: 12px;
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   COLUMNA CARGA TOTAL
+   ========================================================= */
+
+#tablaPrincipal .carga-total-col {
+    width: 70px !important;
+    min-width: 70px !important;
+    max-width: 70px !important;
+
+    font-size: 11px;
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   COLUMNAS FIJAS
+   ========================================================= */
+
+/* Jugadores */
+
+#tablaPrincipal .jugador-col {
+    position: sticky;
+    left: 0;
+
+    background: white;
+    z-index: 2;
+}
+
+
+/* Total */
+
+#tablaPrincipal .carga-total-col {
+    position: sticky;
+    right: 0;
+
+    background: white;
+    z-index: 2;
+}
+
+
+/* =========================================================
+   FILA MEDIA
+   ========================================================= */
+
+#tablaPrincipal .fila-media td {
+    background: #f7f7f7;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   COLORES DE LA TABLA
+   ========================================================= */
+
+#tablaPrincipal .celda-rpe,
+#tablaPrincipal .carga-total {
+    transition: background-color 0.2s ease;
+}
+
+
+/* =========================================================
+   OTRAS TABLAS
+   ========================================================= */
+
+/*
+   Las demás tablas de la web mantienen el comportamiento
+   que tenían anteriormente.
+*/
+
+.tabla-contenedor table:not(#tablaPrincipal) {
+    width: 100%;
+    min-width: 1000px;
+    table-layout: fixed;
+}
+
+.tabla-contenedor table:not(#tablaPrincipal) th,
+.tabla-contenedor table:not(#tablaPrincipal) td {
+    font-size: 13px;
+}
+
+.tabla-contenedor table:not(#tablaPrincipal) th:first-child,
+.tabla-contenedor table:not(#tablaPrincipal) td:first-child {
     width: 60px;
     min-width: 60px;
     text-align: left;
     font-weight: bold;
 }
 
-
-/* =========================================================
-   COLUMNAS RPE, MIN Y C
-   ========================================================= */
-
-.tabla-contenedor th:not(:first-child),
-.tabla-contenedor td:not(:first-child) {
+.tabla-contenedor table:not(#tablaPrincipal) th:not(:first-child),
+.tabla-contenedor table:not(#tablaPrincipal) td:not(:first-child) {
     width: 45px;
     min-width: 45px;
 }
@@ -363,4 +558,3 @@ button {
     }
 
 }
-
