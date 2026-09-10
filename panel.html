@@ -26,7 +26,6 @@
 
         <select id="equipo">
             <option value="">Selecciona un equipo</option>
-            <option value="juvenil-a">Juvenil A</option>
         </select>
 
         <label>Jugador</label>
@@ -70,45 +69,60 @@ const supabaseClient =
 
 
 // ===============================
-// JUGADORES
+// CARGAR EQUIPOS
 // ===============================
 
-const jugadoresPorEquipo = {
+async function cargarEquipos() {
 
-    "juvenil-a": [
-        "Oier Roman",
-        "Markel Navas",
-        "Asier Zabal",
-        "Rayan El Armaoui",
-        "Iker García",
-        "Aimar Martinez",
-        "Liher Martinez",
-        "Alex Clavero",
-        "Xabi Losada",
-        "Markel Alonso",
-        "Ibon Lanseros",
-        "Nahuel Churruca",
-        "Unai Zarraga",
-        "Enaitz Posada",
-        "Aitzol Estarlich",
-        "Ibai Pineda",
-        "Mikel Zorriketa",
-        "Luken Rivas",
-        "Peio Alcubilla",
-        "Xabier Santiesteban",
-        "Eder García",
-        "Unai Hernandez",
-        "Ander Elortegi"
-    ]
+    const equipo =
+        document.getElementById("equipo");
 
-};
+    equipo.innerHTML =
+        '<option value="">Selecciona un equipo</option>';
+
+    const { data, error } =
+        await supabaseClient
+            .from("equipos")
+            .select("*")
+            .order("nombre", {
+                ascending: true
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        equipo.innerHTML =
+            '<option value="">Error al cargar equipos</option>';
+
+        return;
+    }
+
+    data.forEach(function(item) {
+
+        const opcion =
+            document.createElement("option");
+
+        opcion.value = item.id;
+
+        opcion.textContent =
+            item.nombre;
+
+        equipo.appendChild(opcion);
+
+    });
+
+}
 
 
 // ===============================
 // CAMBIO DE EQUIPO
 // ===============================
 
-document.getElementById("equipo").addEventListener("change", function() {
+document.getElementById("equipo").addEventListener("change", async function() {
+
+    const equipoId =
+        this.value;
 
     const jugador =
         document.getElementById("jugador");
@@ -116,24 +130,51 @@ document.getElementById("equipo").addEventListener("change", function() {
     jugador.innerHTML =
         '<option value="">Selecciona un jugador</option>';
 
-    if (jugadoresPorEquipo[this.value]) {
+    document.getElementById("tipoConsulta").value = "";
 
-        jugadoresPorEquipo[this.value].forEach(function(nombre) {
+    document.getElementById("resultados").innerHTML = "";
 
-            const opcion =
-                document.createElement("option");
 
-            opcion.value = nombre;
-            opcion.textContent = nombre;
-
-            jugador.appendChild(opcion);
-
-        });
-
+    if (!equipoId) {
+        return;
     }
 
-    document.getElementById("tipoConsulta").value = "";
-    document.getElementById("resultados").innerHTML = "";
+
+    const { data, error } =
+        await supabaseClient
+            .from("jugadores")
+            .select("*")
+            .eq("equipo_id", equipoId)
+            .order("nombre", {
+                ascending: true
+            });
+
+
+    if (error) {
+
+        console.error(error);
+
+        jugador.innerHTML =
+            '<option value="">Error al cargar jugadores</option>';
+
+        return;
+    }
+
+
+    data.forEach(function(item) {
+
+        const opcion =
+            document.createElement("option");
+
+        opcion.value =
+            item.nombre;
+
+        opcion.textContent =
+            item.nombre;
+
+        jugador.appendChild(opcion);
+
+    });
 
 });
 
@@ -157,8 +198,11 @@ document.getElementById("jugador").addEventListener("change", function() {
 
 async function consultarRegistros() {
 
+    const equipoSelect =
+        document.getElementById("equipo");
+
     const equipoSeleccionado =
-        document.getElementById("equipo").value;
+        equipoSelect.value;
 
     const jugadorSeleccionado =
         document.getElementById("jugador").value;
@@ -177,9 +221,17 @@ async function consultarRegistros() {
     ) {
 
         resultados.innerHTML = "";
+
         return;
 
     }
+
+
+    // Obtenemos el nombre visible del equipo
+    const equipoNombre =
+        equipoSelect.options[
+            equipoSelect.selectedIndex
+        ].textContent;
 
 
     resultados.innerHTML =
@@ -187,15 +239,16 @@ async function consultarRegistros() {
 
 
     const { data, error } =
-    await supabaseClient
-        .from("respuestas")
-        .select("*")
-        .eq("equipo", equipoSeleccionado)
-        .eq("jugador", jugadorSeleccionado)
-        .eq("tipo", tipoSeleccionado)
-        .order("fecha", {
-            ascending: false
-        });
+        await supabaseClient
+            .from("respuestas")
+            .select("*")
+            .eq("equipo", equipoNombre)
+            .eq("jugador", jugadorSeleccionado)
+            .eq("tipo", tipoSeleccionado)
+            .order("fecha", {
+                ascending: false
+            });
+
 
     if (error) {
 
@@ -231,14 +284,17 @@ async function consultarRegistros() {
         resultados.innerHTML =
             "<h2>RPE</h2>";
 
+
         data.forEach(function(registro) {
 
             const respuestas =
                 registro.respuestas || {};
 
+
             const fecha =
                 new Date(registro.fecha)
                     .toLocaleString("es-ES");
+
 
             resultados.innerHTML += `
 
@@ -272,14 +328,17 @@ async function consultarRegistros() {
         resultados.innerHTML =
             "<h2>Wellness</h2>";
 
+
         data.forEach(function(registro) {
 
             const respuestas =
                 registro.respuestas || {};
 
+
             const fecha =
                 new Date(registro.fecha)
                     .toLocaleString("es-ES");
+
 
             resultados.innerHTML += `
 
@@ -336,8 +395,17 @@ async function consultarRegistros() {
 // ===============================
 
 document.getElementById("tipoConsulta").addEventListener("change", function() {
+
     consultarRegistros();
+
 });
+
+
+// ===============================
+// INICIAR
+// ===============================
+
+cargarEquipos();
 
 </script>
 
