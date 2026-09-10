@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SD Erandio - Administrador</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .contenedor {
+            max-width: 600px;
+            margin: 60px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 35px;
+        }
+
+        .botones {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        button {
+            padding: 18px;
+            font-size: 17px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #222;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        .volver {
+            margin-top: 30px;
+            background: #ddd;
+            color: #222;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <h1>Panel de administrador</h1>
+
+        <p>Selecciona qué zona quieres abrir</p>
+
+        <div class="botones">
+
+            <button onclick="abrirPanelPersonal()">
+                PANEL PERSONAL
+            </button>
+
+            <button onclick="abrirPanelEquipos()">
+                PANEL DE EQUIPOS
+            </button>
+
+            <button onclick="abrirEdicionDatos()">
+                EDITAR DATOS
+            </button>
+
+        </div>
+
+        <button class="volver" onclick="volverInicio()">
+            VOLVER
+        </button>
+
+    </div>
+
+    <script>
+
+        function abrirPanelPersonal() {
+            window.location.href = "panel.html";
+        }
+
+        function abrirPanelEquipos() {
+            window.location.href = "panel-equipos.html";
+        }
+
+        function abrirEdicionDatos() {
+            window.location.href = "panel-admin-datos.html";
+        }
+
+        function volverInicio() {
+            window.location.href = "index.html";
+        }
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SD Erandio - Panel del jugador</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            color: #222;
+        }
+
+        .contenedor {
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.10);
+        }
+
+        .cabecera {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .cabecera h1 {
+            margin: 0 0 8px 0;
+            font-size: 30px;
+        }
+
+        .cabecera p {
+            margin: 0;
+            color: #666;
+        }
+
+        .formulario {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 22px;
+            margin-bottom: 8px;
+        }
+
+        #formularioWellness label {
+            margin-top: 25px;
+            margin-bottom: 8px;
+        }
+
+        #formularioWellness input,
+        #formularioWellness select,
+        #formularioWellness textarea {
+            margin-bottom: 15px;
+        }
+
+        select,
+        input,
+        textarea {
+            width: 100%;
+            padding: 13px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: white;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        select:focus,
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #222;
+        }
+
+        hr {
+            width: 100%;
+            border: 0;
+            border-top: 1px solid #ddd;
+            margin: 30px 0 10px 0;
+        }
+
+        .titulo-seccion {
+            font-size: 20px;
+            margin-top: 20px;
+            margin-bottom: 5px;
+        }
+
+        .ayuda {
+            color: #777;
+            font-size: 14px;
+            margin-top: 0;
+        }
+
+        .botones-tipo {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .boton-tipo {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 9px;
+            background: #222;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .boton-tipo:hover {
+            opacity: 0.85;
+        }
+
+        .boton-tipo.activo {
+            background: #555;
+        }
+
+        .formulario-registro {
+            display: none;
+            margin-top: 20px;
+            padding-top: 10px;
+        }
+
+        .boton-enviar {
+            width: 100%;
+            padding: 16px;
+            margin-top: 30px;
+            border: none;
+            border-radius: 9px;
+            background: #222;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .boton-enviar:hover {
+            opacity: 0.85;
+        }
+
+        .boton-volver {
+            width: 100%;
+            padding: 13px;
+            margin-top: 12px;
+            border: 1px solid #ccc;
+            border-radius: 9px;
+            background: white;
+            color: #222;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .boton-volver:hover {
+            background: #f1f1f1;
+        }
+
+        .mensaje {
+            display: none;
+            padding: 14px;
+            margin-top: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .mensaje.exito {
+            display: block;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .mensaje.error {
+            display: block;
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .oculto {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 10px;
+            }
+
+            .contenedor {
+                margin: 10px auto;
+                padding: 25px 20px;
+            }
+
+            .cabecera h1 {
+                font-size: 26px;
+            }
+
+            .botones-tipo {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <div class="contenedor">
+
+        <div class="cabecera">
+
+            <h1>SD Erandio</h1>
+
+            <p>Registro diario del jugador</p>
+
+        </div>
+
+
+        <div class="formulario">
+
+
+            <!-- EQUIPO -->
+
+            <label for="equipo">
+                Equipo
+            </label>
+
+            <select id="equipo" onchange="actualizarJugadores()">
+
+                <option value="">
+                    Selecciona tu equipo
+                </option>
+
+                <option value="juvenil-a">
+                    Juvenil A
+                </option>
+
+            </select>
+
+
+            <!-- JUGADOR -->
+
+            <label for="jugador">
+                Jugador
+            </label>
+
+            <select id="jugador" onchange="comprobarJugador()">
+
+                <option value="">
+                    Selecciona tu nombre
+                </option>
+
+            </select>
+
+
+            <!-- ELECCIÓN DEL REGISTRO -->
+
+            <div id="seleccionRegistro" class="oculto">
+
+                <hr>
+
+                <h2 class="titulo-seccion">
+                    ¿Qué quieres registrar?
+                </h2>
+
+                <div class="botones-tipo">
+
+                    <button
+                        type="button"
+                        id="botonRPE"
+                        class="boton-tipo"
+                        onclick="mostrarRPE()"
+                    >
+                        RPE
+                    </button>
+
+                    <button
+                        type="button"
+                        id="botonWellness"
+                        class="boton-tipo"
+                        onclick="mostrarWellness()"
+                    >
+                        WELLNESS
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- FORMULARIO RPE -->
+
+            <div
+                id="formularioRPE"
+                class="formulario-registro"
+            >
+
+                <h2 class="titulo-seccion">
+                    RPE
+                </h2>
+
+                <p class="ayuda">
+                    Indica la intensidad que has percibido en el entrenamiento.
+                </p>
+
+
+                <label for="rpe">
+                    RPE del entrenamiento
+                </label>
+
+                <input
+                    type="number"
+                    id="rpe"
+                    min="1"
+                    max="10"
+                    placeholder="Del 1 al 10"
+                >
+
+            </div>
+
+
+            <!-- FORMULARIO WELLNESS -->
+
+            <div
+                id="formularioWellness"
+                class="formulario-registro"
+            >
+
+                <h2 class="titulo-seccion">
+                    Wellness
+                </h2>
+
+                <p class="ayuda">
+                    Responde a las siguientes preguntas del 1 al 5.
+                </p>
+
+
+                <!-- SUEÑO -->
+
+                <label for="sueno">
+                    Sueño
+                </label>
+
+                <input
+                    type="number"
+                    id="sueno"
+                    min="1"
+                    max="5"
+                    placeholder="Del 1 al 5"
+                >
+
+
+                <!-- FATIGA -->
+
+                <label for="fatiga">
+                    Fatiga
+                </label>
+
+                <input
+                    type="number"
+                    id="fatiga"
+                    min="1"
+                    max="5"
+                    placeholder="Del 1 al 5"
+                >
+
+
+                <!-- ESTRÉS -->
+
+                <label for="estres">
+                    Estrés
+                </label>
+
+                <input
+                    type="number"
+                    id="estres"
+                    min="1"
+                    max="5"
+                    placeholder="Del 1 al 5"
+                >
+
+
+                <!-- DOLOR MUSCULAR -->
+
+                <label for="dolorMuscular">
+                    Dolor muscular
+                </label>
+
+                <input
+                    type="number"
+                    id="dolorMuscular"
+                    min="1"
+                    max="5"
+                    placeholder="Del 1 al 5"
+                >
+
+
+                <!-- MOLESTIAS -->
+
+                <label for="molestias">
+                    ¿Tienes molestias?
+                </label>
+
+                <select id="molestias">
+
+                    <option value="">
+                        Selecciona una opción
+                    </option>
+
+                    <option value="si">
+                        Sí
+                    </option>
+
+                    <option value="no">
+                        No
+                    </option>
+
+                </select>
+
+
+                <!-- COMENTARIO -->
+
+                <label for="comentario">
+                    Comentario
+                </label>
+
+                <textarea
+                    id="comentario"
+                    placeholder="¿Quieres añadir algún comentario?"
+                ></textarea>
+
+            </div>
+
+
+            <!-- MENSAJE -->
+
+            <div
+                id="mensaje"
+                class="mensaje"
+            ></div>
+
+
+            <!-- BOTÓN ENVIAR -->
+
+            <button
+                type="button"
+                id="botonEnviar"
+                class="boton-enviar"
+                style="display: none;"
+                onclick="enviarRegistro()"
+            >
+                Enviar registro
+            </button>
+
+
+            <!-- VOLVER -->
+
+            <button
+                type="button"
+                class="boton-volver"
+                onclick="window.location.href='index.html'"
+            >
+                Volver
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- SUPABASE -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <script>
+
+        /*
+        =====================================================
+        CONEXIÓN CON SUPABASE
+        =====================================================
+        */
+
+        const SUPABASE_URL =
+            "https://alprdcjaexllelxthhbv.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable_6kF4hhGM3bwqgwv6Fz3mmw__HvkPXiD";
+
+
+        const supabaseClient =
+            supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        /*
+        =====================================================
+        CONFIGURACIÓN
+        =====================================================
+        */
+
+        let tipoRegistro = "";
+
+
+        /*
+        =====================================================
+        JUGADORES POR EQUIPO
+        =====================================================
+        */
+
+        const jugadoresPorEquipo = {
+
+            "juvenil-a": [
+
+                "Oier Roman",
+                "Markel Navas",
+                "Asier Zabal",
+                "Rayan El Armaoui",
+                "Iker García",
+                "Aimar Martinez",
+                "Liher Martinez",
+                "Alex Clavero",
+                "Xabi Losada",
+                "Markel Alonso",
+                "Ibon Lanseros",
+                "Nahuel Churruca",
+                "Unai Zarraga",
+                "Enaitz Posada",
+                "Aitzol Estarlich",
+                "Ibai Pineda",
+                "Mikel Zorriketa",
+                "Luken Rivas",
+                "Peio Alcubilla",
+                "Xabier Santiesteban",
+                "Eder García",
+                "Unai Hernandez",
+                "Ander Elortegi"
+
+            ]
+
+        };
+
+
+        /*
+        =====================================================
+        ACTUALIZAR JUGADORES
+        =====================================================
+        */
+
+        function actualizarJugadores() {
+
+            const equipo =
+                document.getElementById("equipo").value;
+
+            const jugador =
+                document.getElementById("jugador");
+
+
+            // Reiniciar jugador
+
+            jugador.innerHTML =
+                '<option value="">Selecciona tu nombre</option>';
+
+
+            // Ocultar selección de registro
+
+            document
+                .getElementById("seleccionRegistro")
+                .classList.add("oculto");
+
+
+            ocultarFormularios();
+
+
+            // Si no hay equipo seleccionado, terminar
+
+            if (!equipo) {
+
+                return;
+
+            }
+
+
+            // Añadir jugadores del equipo
+
+            if (jugadoresPorEquipo[equipo]) {
+
+                jugadoresPorEquipo[equipo].forEach(
+                    function(nombre) {
+
+                        const opcion =
+                            document.createElement("option");
+
+                        opcion.value = nombre;
+
+                        opcion.textContent = nombre;
+
+                        jugador.appendChild(opcion);
+
+                    }
+                );
+
+            }
+
+        }
+
+
+        /*
+        =====================================================
+        COMPROBAR JUGADOR
+        =====================================================
+        */
+
+        function comprobarJugador() {
+
+            const jugador =
+                document.getElementById("jugador").value;
+
+
+            ocultarFormularios();
+
+
+            if (jugador) {
+
+                document
+                    .getElementById("seleccionRegistro")
+                    .classList.remove("oculto");
+
+            } else {
+
+                document
+                    .getElementById("seleccionRegistro")
+                    .classList.add("oculto");
+
+            }
+
+        }
+
+
+        /*
+        =====================================================
+        MOSTRAR RPE
+        =====================================================
+        */
+
+        function mostrarRPE() {
+
+            tipoRegistro = "rpe";
+
+
+            document
+                .getElementById("formularioRPE")
+                .style.display = "block";
+
+
+            document
+                .getElementById("formularioWellness")
+                .style.display = "none";
+
+
+            document
+                .getElementById("botonEnviar")
+                .style.display = "block";
+
+
+            document
+                .getElementById("botonRPE")
+                .classList.add("activo");
+
+
+            document
+                .getElementById("botonWellness")
+                .classList.remove("activo");
+
+
+            limpiarMensaje();
+
+        }
+
+
+        /*
+        =====================================================
+        MOSTRAR WELLNESS
+        =====================================================
+        */
+
+        function mostrarWellness() {
+
+            tipoRegistro = "wellness";
+
+
+            document
+                .getElementById("formularioRPE")
+                .style.display = "none";
+
+
+            document
+                .getElementById("formularioWellness")
+                .style.display = "block";
+
+
+            document
+                .getElementById("botonEnviar")
+                .style.display = "block";
+
+
+            document
+                .getElementById("botonWellness")
+                .classList.add("activo");
+
+
+            document
+                .getElementById("botonRPE")
+                .classList.remove("activo");
+
+
+            limpiarMensaje();
+
+        }
+
+
+        /*
+        =====================================================
+        OCULTAR FORMULARIOS
+        =====================================================
+        */
+
+        function ocultarFormularios() {
+
+            tipoRegistro = "";
+
+
+            document
+                .getElementById("formularioRPE")
+                .style.display = "none";
+
+
+            document
+                .getElementById("formularioWellness")
+                .style.display = "none";
+
+
+            document
+                .getElementById("botonEnviar")
+                .style.display = "none";
+
+
+            document
+                .getElementById("botonRPE")
+                .classList.remove("activo");
+
+
+            document
+                .getElementById("botonWellness")
+                .classList.remove("activo");
+
+        }
+
+
+        /*
+        =====================================================
+        ENVIAR REGISTRO
+        =====================================================
+        */
+
+        async function enviarRegistro() {
+
+            const equipo =
+                document.getElementById("equipo").value;
+
+            const jugador =
+                document.getElementById("jugador").value;
+
+
+            /*
+            VALIDAR EQUIPO
+            */
+
+            if (!equipo) {
+
+                mostrarMensaje(
+                    "Selecciona un equipo.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            /*
+            VALIDAR JUGADOR
+            */
+
+            if (!jugador) {
+
+                mostrarMensaje(
+                    "Selecciona un jugador.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            /*
+            VALIDAR TIPO
+            */
+
+            if (!tipoRegistro) {
+
+                mostrarMensaje(
+                    "Selecciona RPE o Wellness.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            /*
+            =================================================
+            RPE
+            =================================================
+            */
+
+            if (tipoRegistro === "rpe") {
+
+                const rpe =
+                    document
+                        .getElementById("rpe")
+                        .value;
+
+
+                if (!rpe) {
+
+                    mostrarMensaje(
+                        "Introduce el RPE.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                if (rpe < 1 || rpe > 10) {
+
+                    mostrarMensaje(
+                        "El RPE debe estar entre 1 y 10.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                const registro = {
+
+                    equipo: equipo,
+
+                    jugador: jugador,
+
+                    tipo: "rpe",
+
+                    fecha:
+                        new Date().toISOString(),
+
+                    respuestas: {
+
+                        rpe: Number(rpe)
+
+                    }
+
+                };
+
+
+                const { error } =
+                    await supabaseClient
+                        .from("respuestas")
+                        .insert([registro]);
+
+
+                if (error) {
+
+                    console.error(
+                        "Error al guardar RPE:",
+                        error
+                    );
+
+                    mostrarMensaje(
+                        "Error al guardar el registro RPE.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                mostrarMensaje(
+                    "Registro RPE guardado correctamente.",
+                    "exito"
+                );
+
+
+                document
+                    .getElementById("rpe")
+                    .value = "";
+
+
+                return;
+
+            }
+
+
+            /*
+            =================================================
+            WELLNESS
+            =================================================
+            */
+
+            if (tipoRegistro === "wellness") {
+
+                const sueno =
+                    document
+                        .getElementById("sueno")
+                        .value;
+
+                const fatiga =
+                    document
+                        .getElementById("fatiga")
+                        .value;
+
+                const estres =
+                    document
+                        .getElementById("estres")
+                        .value;
+
+                const dolor =
+                    document
+                        .getElementById("dolorMuscular")
+                        .value;
+
+                const molestias =
+                    document
+                        .getElementById("molestias")
+                        .value;
+
+                const comentario =
+                    document
+                        .getElementById("comentario")
+                        .value;
+
+
+                /*
+                VALIDAR PREGUNTAS
+                */
+
+                if (
+                    !sueno ||
+                    !fatiga ||
+                    !estres ||
+                    !dolor
+                ) {
+
+                    mostrarMensaje(
+                        "Completa todas las preguntas de Wellness.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                if (
+                    sueno < 1 || sueno > 5 ||
+                    fatiga < 1 || fatiga > 5 ||
+                    estres < 1 || estres > 5 ||
+                    dolor < 1 || dolor > 5
+                ) {
+
+                    mostrarMensaje(
+                        "Las respuestas de Wellness deben estar entre 1 y 5.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                if (!molestias) {
+
+                    mostrarMensaje(
+                        "Indica si tienes molestias.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                const registro = {
+
+                    equipo: equipo,
+
+                    jugador: jugador,
+
+                    tipo: "wellness",
+
+                    fecha:
+                        new Date().toISOString(),
+
+                    respuestas: {
+
+                        sueno: Number(sueno),
+
+                        fatiga: Number(fatiga),
+
+                        estres: Number(estres),
+
+                        dolor: Number(dolor),
+
+                        molestias: molestias,
+
+                        comentario: comentario
+
+                    }
+
+                };
+
+
+                const { error } =
+                    await supabaseClient
+                        .from("respuestas")
+                        .insert([registro]);
+
+
+                if (error) {
+
+                    console.error(
+                        "Error al guardar Wellness:",
+                        error
+                    );
+
+                    mostrarMensaje(
+                        "Error al guardar el registro Wellness.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                mostrarMensaje(
+                    "Registro Wellness guardado correctamente.",
+                    "exito"
+                );
+
+
+                /*
+                LIMPIAR WELLNESS
+                */
+
+                document
+                    .getElementById("sueno")
+                    .value = "";
+
+                document
+                    .getElementById("fatiga")
+                    .value = "";
+
+                document
+                    .getElementById("estres")
+                    .value = "";
+
+                document
+                    .getElementById("dolorMuscular")
+                    .value = "";
+
+                document
+                    .getElementById("molestias")
+                    .value = "";
+
+                document
+                    .getElementById("comentario")
+                    .value = "";
+
+            }
+
+        }
+
+
+        /*
+        =====================================================
+        MOSTRAR MENSAJE
+        =====================================================
+        */
+
+        function mostrarMensaje(texto, tipo) {
+
+            const mensaje =
+                document.getElementById("mensaje");
+
+
+            mensaje.textContent = texto;
+
+            mensaje.className =
+                "mensaje " + tipo;
+
+        }
+
+
+        /*
+        =====================================================
+        LIMPIAR MENSAJE
+        =====================================================
+        */
+
+        function limpiarMensaje() {
+
+            const mensaje =
+                document.getElementById("mensaje");
+
+
+            mensaje.textContent = "";
+
+            mensaje.className = "mensaje";
+
+        }
+
+    </script>
+
+</body>
+
+</html>

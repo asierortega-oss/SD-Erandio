@@ -1,0 +1,1808 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Panel de equipos</title>
+
+    <link rel="stylesheet" href="estilos.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        /* ======================================================
+           FILTROS
+        ====================================================== */
+
+        .filtros-fechas {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .filtro-fecha {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filtro-fecha label {
+            margin-bottom: 6px;
+        }
+
+        .filtro-fecha input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        #botonConsultar {
+            width: 100%;
+            padding: 10px;
+            border: 0;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+
+        /* ======================================================
+           TABLA
+        ====================================================== */
+
+        .tabla-contenedor {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: max-content;
+            table-layout: fixed;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 6px;
+            text-align: center;
+            white-space: nowrap;
+            box-sizing: border-box;
+        }
+
+
+        /* ======================================================
+           ANCHOS DE LAS COLUMNAS
+        ====================================================== */
+
+        .jugador-col {
+            width: 205px;
+            min-width: 205px;
+        }
+
+        .fecha-principal {
+            font-weight: bold;
+        }
+
+        .subcabecera {
+            width: 70px;
+            min-width: 70px;
+            font-size: 11px;
+        }
+
+        .carga-total-col {
+            width: 110px;
+            min-width: 110px;
+        }
+
+
+        /* ======================================================
+           CELDAS RPE / MIN / C
+        ====================================================== */
+
+        .celda-rpe {
+            width: 70px;
+            min-width: 70px;
+        }
+
+        .celda-min {
+            width: 90px;
+            min-width: 90px;
+        }
+
+        .celda-carga {
+            width: 70px;
+            min-width: 70px;
+            font-weight: bold;
+        }
+
+
+        /* ======================================================
+           CAMPOS DE RPE Y MINUTOS
+        ====================================================== */
+
+        .celda-rpe input,
+        .celda-min input {
+            display: block;
+            width: 58px;
+            height: 34px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            padding: 4px;
+            text-align: center;
+        }
+
+
+        /* ======================================================
+           CABECERAS
+        ====================================================== */
+
+        th {
+            background: #f5f5f5;
+        }
+
+        .jugador-col {
+            position: sticky;
+            left: 0;
+            background: white;
+            z-index: 2;
+        }
+
+        .carga-total-col {
+            position: sticky;
+            right: 0;
+            background: white;
+            z-index: 2;
+            font-weight: bold;
+        }
+
+
+        /* ======================================================
+           FILA MEDIA
+        ====================================================== */
+
+        .fila-media td {
+            background: #f7f7f7;
+            font-weight: bold;
+        }
+
+
+        /* ======================================================
+           MENSAJE
+        ====================================================== */
+
+        .mensaje {
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+
+        /* ======================================================
+           MÓVIL
+        ====================================================== */
+
+        @media (max-width: 600px) {
+
+            .filtros-fechas {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        /* ======================================================
+   COLORES DE ESCALA
+====================================================== */
+
+.celda-rpe.coloreada,
+.carga-total.coloreada {
+    transition: background-color 0.2s ease;
+}
+
+.celda-rpe.coloreada input {
+    background: transparent;
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="contenedor">
+
+
+    <div class="cabecera">
+
+        <h1>Panel de equipos</h1>
+
+        <p>
+            Consulta de carga del equipo
+        </p>
+
+    </div>
+
+
+    <div class="formulario">
+
+
+        <label>Equipo</label>
+
+
+        <select id="equipo">
+
+            <option value="">
+                Selecciona un equipo
+            </option>
+
+            <option value="juvenil-a">
+                Juvenil A
+            </option>
+
+        </select>
+
+
+        <div class="filtros-fechas">
+
+
+            <div class="filtro-fecha">
+
+                <label for="fechaInicio">
+                    Desde
+                </label>
+
+                <input
+                    type="date"
+                    id="fechaInicio"
+                >
+
+            </div>
+
+
+            <div class="filtro-fecha">
+
+                <label for="fechaFin">
+                    Hasta
+                </label>
+
+                <input
+                    type="date"
+                    id="fechaFin"
+                >
+
+            </div>
+
+
+        </div>
+
+
+        <button
+            id="botonConsultar"
+            type="button"
+        >
+
+            Consultar
+
+        </button>
+
+
+        <div
+            id="mensaje"
+            class="mensaje"
+        ></div>
+
+
+        <div class="tabla-contenedor">
+
+
+            <table id="tablaPrincipal">
+
+                <!--
+                    Las columnas se crean aquí mediante JavaScript.
+                    Esto obliga al navegador a respetar el ancho
+                    individual de RPE, Min y C.
+                -->
+
+                <colgroup id="columnasTabla"></colgroup>
+
+                <thead id="cabeceraTabla"></thead>
+
+                <tbody id="tablaJugadores"></tbody>
+
+                <tfoot id="pieTabla"></tfoot>
+
+            </table>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+// ======================================================
+// SUPABASE
+// ======================================================
+
+
+const SUPABASE_URL =
+    "https://alprdcjaexllelxthhbv.supabase.co";
+
+
+const SUPABASE_KEY =
+    "sb_publishable_6kF4hhGM3bwqgwv6Fz3mmw__HvkPXiD";
+
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+
+// ======================================================
+// JUGADORES
+// ======================================================
+
+
+const jugadoresPorEquipo = {
+
+    "juvenil-a": [
+
+        "Oier Roman",
+        "Markel Navas",
+        "Asier Zabal",
+        "Rayan El Armaoui",
+        "Iker García",
+        "Aimar Martinez",
+        "Liher Martinez",
+        "Alex Clavero",
+        "Xabi Losada",
+        "Markel Alonso",
+        "Ibon Lanseros",
+        "Nahuel Churruca",
+        "Unai Zarraga",
+        "Enaitz Posada",
+        "Aitzol Estarlich",
+        "Ibai Pineda",
+        "Mikel Zorriketa",
+        "Luken Rivas",
+        "Peio Alcubilla",
+        "Xabier Santiesteban",
+        "Eder García",
+        "Unai Hernandez",
+        "Ander Elortegi"
+
+    ]
+
+};
+
+
+
+// ======================================================
+// CREAR FECHA LOCAL
+// ======================================================
+
+
+function fechaLocal(texto) {
+
+    const partes =
+        texto.split("-");
+
+    return new Date(
+
+        Number(partes[0]),
+        Number(partes[1]) - 1,
+        Number(partes[2])
+
+    );
+
+}
+
+
+
+// ======================================================
+// CLAVE DE FECHA
+// ======================================================
+
+
+function claveFecha(fecha) {
+
+    return (
+
+        fecha.getFullYear() +
+
+        "-" +
+
+        String(
+            fecha.getMonth() + 1
+        ).padStart(2, "0") +
+
+        "-" +
+
+        String(
+            fecha.getDate()
+        ).padStart(2, "0")
+
+    );
+
+}
+
+
+
+// ======================================================
+// FORMATO DE FECHA
+// ======================================================
+
+
+function formatearFecha(fecha) {
+
+    return fecha.toLocaleDateString(
+
+        "es-ES",
+
+        {
+            day: "2-digit",
+            month: "2-digit"
+        }
+
+    );
+
+}
+
+
+
+// ======================================================
+// OBTENER TODAS LAS FECHAS
+// ======================================================
+
+
+function obtenerFechas(
+    inicioTexto,
+    finTexto
+) {
+
+    const inicio =
+        fechaLocal(inicioTexto);
+
+    const fin =
+        fechaLocal(finTexto);
+
+    const fechas = [];
+
+    const fechaActual =
+        new Date(inicio);
+
+
+    while (fechaActual <= fin) {
+
+        fechas.push(
+            new Date(fechaActual)
+        );
+
+        fechaActual.setDate(
+            fechaActual.getDate() + 1
+        );
+
+    }
+
+
+    return fechas;
+
+}
+
+
+
+// ======================================================
+// CARGAR TABLA
+// ======================================================
+
+
+async function cargarTabla() {
+
+
+    const equipo =
+        document.getElementById(
+            "equipo"
+        ).value;
+
+
+    const fechaInicio =
+        document.getElementById(
+            "fechaInicio"
+        ).value;
+
+
+    const fechaFin =
+        document.getElementById(
+            "fechaFin"
+        ).value;
+
+
+    const tabla =
+        document.getElementById(
+            "tablaJugadores"
+        );
+
+
+    const cabecera =
+        document.getElementById(
+            "cabeceraTabla"
+        );
+
+
+    const pie =
+        document.getElementById(
+            "pieTabla"
+        );
+
+
+    const columnasTabla =
+        document.getElementById(
+            "columnasTabla"
+        );
+
+
+    const mensaje =
+        document.getElementById(
+            "mensaje"
+        );
+
+
+    tabla.innerHTML = "";
+
+    cabecera.innerHTML = "";
+
+    pie.innerHTML = "";
+
+    columnasTabla.innerHTML = "";
+
+    mensaje.textContent = "";
+
+
+
+    // --------------------------------------------------
+    // COMPROBAR FILTROS
+    // --------------------------------------------------
+
+
+    if (
+        !equipo ||
+        !fechaInicio ||
+        !fechaFin
+    ) {
+
+        mensaje.textContent =
+            "Selecciona el equipo y las dos fechas.";
+
+        return;
+
+    }
+
+
+
+    if (
+        fechaInicio > fechaFin
+    ) {
+
+        mensaje.textContent =
+            "La fecha inicial no puede ser posterior a la fecha final.";
+
+        return;
+
+    }
+
+
+
+    const fechas =
+        obtenerFechas(
+            fechaInicio,
+            fechaFin
+        );
+
+
+    mensaje.textContent =
+        "Cargando datos...";
+
+
+
+    // --------------------------------------------------
+    // RANGO DE FECHAS PARA SUPABASE
+    // --------------------------------------------------
+
+
+    const desde =
+        fechaInicio +
+        "T00:00:00";
+
+
+    const fechaFinal =
+        fechaLocal(fechaFin);
+
+
+    fechaFinal.setDate(
+        fechaFinal.getDate() + 1
+    );
+
+
+    const hasta =
+        claveFecha(fechaFinal) +
+        "T00:00:00";
+
+
+
+    // --------------------------------------------------
+    // CONSULTAR SUPABASE
+    // --------------------------------------------------
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("respuestas")
+
+        .select("*")
+
+        .eq(
+            "equipo",
+            equipo
+        )
+
+        .eq(
+            "tipo",
+            "rpe"
+        )
+
+        .gte(
+            "fecha",
+            desde
+        )
+
+        .lt(
+            "fecha",
+            hasta
+        )
+
+        .order(
+            "fecha",
+            {
+                ascending: true
+            }
+        );
+
+
+
+    if (error) {
+
+        console.error(error);
+
+        mensaje.textContent =
+            "Error al consultar Supabase.";
+
+        return;
+
+    }
+
+
+
+    // --------------------------------------------------
+    // ORGANIZAR REGISTROS
+    // --------------------------------------------------
+
+
+    const registros = {};
+
+
+    (data || []).forEach(
+        function(registro) {
+
+            const fechaRegistro =
+                new Date(
+                    registro.fecha
+                );
+
+
+            const fecha =
+                claveFecha(
+                    fechaRegistro
+                );
+
+
+            const clave =
+                registro.jugador +
+                "|" +
+                fecha;
+
+
+            registros[clave] =
+                registro;
+
+        }
+    );
+
+
+
+    // ==================================================
+    // CREAR COLUMNAS REALES DE LA TABLA
+    // ==================================================
+
+    let columnasHTML = "";
+
+    columnasHTML += `
+        <col style="width:205px; min-width:205px;">
+    `;
+
+
+    fechas.forEach(
+        function() {
+
+            // RPE
+            columnasHTML += `
+                <col style="width:70px; min-width:70px;">
+            `;
+
+            // MIN
+            columnasHTML += `
+                <col style="width:90px; min-width:90px;">
+            `;
+
+            // CARGA
+            columnasHTML += `
+                <col style="width:70px; min-width:70px;">
+            `;
+
+        }
+    );
+
+
+    // Carga total
+    columnasHTML += `
+        <col style="width:110px; min-width:110px;">
+    `;
+
+
+    columnasTabla.innerHTML =
+        columnasHTML;
+
+
+
+    // ==================================================
+    // CABECERA
+    // ==================================================
+
+
+    let cabecera1 = `
+
+        <tr>
+
+            <th
+                rowspan="2"
+                class="jugador-col"
+            >
+                Jugador
+            </th>
+
+    `;
+
+
+    let cabecera2 =
+        "<tr>";
+
+
+    fechas.forEach(
+        function(fecha) {
+
+            cabecera1 += `
+
+                <th
+                    colspan="3"
+                    class="fecha-principal"
+                >
+                    ${formatearFecha(fecha)}
+                </th>
+
+            `;
+
+
+            cabecera2 += `
+
+                <th class="subcabecera">
+                    RPE
+                </th>
+
+                <th class="subcabecera">
+                    Min
+                </th>
+
+                <th class="subcabecera">
+                    C
+                </th>
+
+            `;
+
+        }
+    );
+
+
+    cabecera1 += `
+
+            <th
+                rowspan="2"
+                class="carga-total-col"
+            >
+                Carga total
+            </th>
+
+        </tr>
+
+    `;
+
+
+    cabecera2 +=
+        "</tr>";
+
+
+    cabecera.innerHTML =
+        cabecera1 +
+        cabecera2;
+
+
+
+    // ==================================================
+    // MEDIAS
+    // ==================================================
+
+
+    const medias = {};
+
+
+    fechas.forEach(
+        function(fecha) {
+
+            const clave =
+                claveFecha(fecha);
+
+
+            medias[clave] = {
+
+                suma: 0,
+
+                cantidad: 0
+
+            };
+
+        }
+    );
+
+
+
+    // ==================================================
+    // JUGADORES
+    // ==================================================
+
+
+    jugadoresPorEquipo[equipo]
+        .forEach(
+            function(nombre) {
+
+
+                const fila =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                let html = `
+
+                    <td class="jugador-col">
+                        ${nombre}
+                    </td>
+
+                `;
+
+
+                let cargaTotal = 0;
+
+
+
+                // --------------------------------------
+                // CADA DÍA
+                // --------------------------------------
+
+
+                fechas.forEach(
+                    function(fecha) {
+
+
+                        const fechaClave =
+                            claveFecha(
+                                fecha
+                            );
+
+
+                        const clave =
+                            nombre +
+                            "|" +
+                            fechaClave;
+
+
+                        const registro =
+                            registros[clave];
+
+
+                        const respuestas =
+                            registro
+                                ? (
+                                    registro.respuestas ||
+                                    {}
+                                )
+                                : {};
+
+
+                        const rpe =
+                            respuestas.rpe ??
+                            "";
+
+
+                        const minutos =
+                            respuestas.minutos ??
+                            "";
+
+
+                        const carga =
+
+                            Number(rpe) > 0 &&
+
+                            Number(minutos) > 0
+
+                                ? Number(rpe) *
+                                  Number(minutos)
+
+                                : 0;
+
+
+
+                        // ------------------------------
+                        // MEDIA RPE DEL DÍA
+                        // ------------------------------
+
+
+                        if (
+
+                            Number(rpe) >= 1 &&
+
+                            Number(rpe) <= 10
+
+                        ) {
+
+                            medias[
+                                fechaClave
+                            ].suma +=
+                                Number(rpe);
+
+
+                            medias[
+                                fechaClave
+                            ].cantidad++;
+
+                        }
+
+
+
+                        // ------------------------------
+                        // CARGA TOTAL
+                        // ------------------------------
+
+
+                        cargaTotal +=
+                            carga;
+
+
+
+                        // ------------------------------
+                        // HTML
+                        // ------------------------------
+
+
+                        html += `
+
+                            <td class="celda-rpe">
+
+                                <input
+                                    class="input-rpe"
+                                    type="number"
+                                    min="1"
+                                    max="10"
+                                    value="${rpe}"
+                                    readonly
+                                >
+
+                            </td>
+
+
+                            <td class="celda-min">
+
+                                <input
+                                    class="input-minutos"
+                                    type="number"
+                                    min="0"
+                                    value="${minutos}"
+                                    data-id="${
+                                        registro
+                                            ? registro.id
+                                            : ""
+                                    }"
+                                    ${
+                                        registro
+                                            ? ""
+                                            : "disabled"
+                                    }
+                                >
+
+                            </td>
+
+
+                            <td class="celda-carga">
+
+                                ${carga || ""}
+
+                            </td>
+
+                        `;
+
+                    }
+                );
+
+
+
+                // --------------------------------------
+                // CARGA TOTAL
+                // --------------------------------------
+
+
+                html += `
+
+                    <td
+                        class="
+                            carga-total-col
+                            carga-total
+                        "
+                    >
+                        ${cargaTotal || ""}
+                    </td>
+
+                `;
+
+
+                fila.innerHTML =
+                    html;
+
+
+                tabla.appendChild(
+                    fila
+                );
+
+            }
+        );
+
+
+
+    // ==================================================
+    // FILA MEDIA RPE
+    // ==================================================
+
+
+    const filaMedia =
+        document.createElement(
+            "tr"
+        );
+
+
+    filaMedia.className =
+        "fila-media";
+
+
+    let htmlMedia = `
+
+        <td class="jugador-col">
+            Media RPE
+        </td>
+
+    `;
+
+
+    fechas.forEach(
+        function(fecha) {
+
+
+            const clave =
+                claveFecha(
+                    fecha
+                );
+
+
+            const datos =
+                medias[clave];
+
+
+            const media =
+
+                datos.cantidad > 0
+
+                    ? (
+
+                        datos.suma /
+                        datos.cantidad
+
+                    ).toFixed(1)
+
+                    : "-";
+
+
+            htmlMedia += `
+
+                <td>
+                    ${media}
+                </td>
+
+                <td></td>
+
+                <td></td>
+
+            `;
+
+        }
+    );
+
+
+    htmlMedia += `
+
+        <td class="carga-total-col">
+        </td>
+
+    `;
+
+
+    filaMedia.innerHTML =
+        htmlMedia;
+
+
+    pie.appendChild(
+        filaMedia
+    );
+
+
+
+    // ==================================================
+    // EVENTOS DE MINUTOS
+    // ==================================================
+
+
+    document
+        .querySelectorAll(
+            ".input-minutos"
+        )
+        .forEach(
+            function(input) {
+
+
+                input.addEventListener(
+                    "input",
+                    function() {
+
+                        actualizarCargas();
+
+                    }
+                );
+
+
+                input.addEventListener(
+                    "change",
+                    function() {
+
+                        guardarMinutos(
+                            this
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+aplicarEscalasColores();
+
+
+    mensaje.textContent =
+
+        (data || []).length +
+
+        " registros RPE encontrados.";
+
+}
+
+
+
+// ======================================================
+// GUARDAR MINUTOS
+// ======================================================
+
+
+async function guardarMinutos(
+    input
+) {
+
+
+    const id =
+        input.dataset.id;
+
+
+    if (!id) {
+
+        return;
+
+    }
+
+
+    const minutos =
+
+        input.value === ""
+
+            ? null
+
+            : Number(
+                input.value
+            );
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("respuestas")
+
+        .select("respuestas")
+
+        .eq(
+            "id",
+            id
+        )
+
+        .single();
+
+
+    if (error) {
+
+        console.error(error);
+
+        return;
+
+    }
+
+
+    const respuestas =
+        data.respuestas || {};
+
+
+    respuestas.minutos =
+        minutos;
+
+
+    const resultado =
+        await supabaseClient
+
+            .from("respuestas")
+
+            .update({
+
+                respuestas:
+                    respuestas
+
+            })
+
+            .eq(
+                "id",
+                id
+            );
+
+
+    if (resultado.error) {
+
+        console.error(
+            resultado.error
+        );
+
+
+        alert(
+            "No se han podido guardar los minutos. " +
+            "Comprueba la política UPDATE de Supabase."
+        );
+
+        return;
+
+    }
+
+
+    actualizarCargas();
+
+}
+// ======================================================
+// COLOR DEL RPE
+// ESCALA FIJA 1 - 10
+// ======================================================
+
+function colorRPE(valor) {
+
+    if (!Number.isFinite(valor)) {
+        return "";
+    }
+
+    // 1 = verde
+    // 5,5 = naranja
+    // 10 = rojo
+
+    const minimo = 1;
+    const maximo = 10;
+    const mitad = 5.5;
+
+    let porcentaje;
+    let r;
+    let g;
+    let b;
+
+
+    // ------------------------------
+    // VERDE -> NARANJA
+    // ------------------------------
+
+    if (valor <= mitad) {
+
+        porcentaje =
+            (valor - minimo) /
+            (mitad - minimo);
+
+        r =
+            Math.round(
+                76 +
+                (255 - 76) * porcentaje
+            );
+
+        g =
+            Math.round(
+                175 +
+                (152 - 175) * porcentaje
+            );
+
+        b =
+            Math.round(
+                80 +
+                (0 - 80) * porcentaje
+            );
+
+    }
+
+
+    // ------------------------------
+    // NARANJA -> ROJO
+    // ------------------------------
+
+    else {
+
+        porcentaje =
+            (valor - mitad) /
+            (maximo - mitad);
+
+        r =
+            Math.round(
+                255 +
+                (244 - 255) * porcentaje
+            );
+
+        g =
+            Math.round(
+                152 +
+                (67 - 152) * porcentaje
+            );
+
+        b =
+            Math.round(
+                0 +
+                (54 - 0) * porcentaje
+            );
+
+    }
+
+
+    return `rgb(${r}, ${g}, ${b})`;
+}
+
+
+
+// ======================================================
+// COLOREAR RPE
+// ======================================================
+
+function colorearRPE() {
+
+    const celdas =
+        document.querySelectorAll(
+            "#tablaJugadores .celda-rpe"
+        );
+
+
+    celdas.forEach(
+        function(celda) {
+
+            const input =
+                celda.querySelector(
+                    ".input-rpe"
+                );
+
+
+            const valor =
+                Number(input?.value);
+
+
+            if (
+                Number.isFinite(valor) &&
+                valor >= 1 &&
+                valor <= 10
+            ) {
+
+                celda.style.backgroundColor =
+                    colorRPE(valor);
+
+            }
+
+        }
+    );
+
+}
+
+
+
+// ======================================================
+// COLOREAR CARGA TOTAL
+// ESCALA RELATIVA A LOS JUGADORES
+// ======================================================
+
+function colorearCargaTotal() {
+
+    const celdas =
+        document.querySelectorAll(
+            "#tablaJugadores .carga-total"
+        );
+
+
+    const valores = [];
+
+
+    // --------------------------------------
+    // OBTENER CARGAS DE TODOS LOS JUGADORES
+    // --------------------------------------
+
+    celdas.forEach(
+        function(celda) {
+
+            const valor =
+                Number(
+                    celda.textContent.trim()
+                );
+
+
+            if (
+                Number.isFinite(valor) &&
+                valor >= 0
+            ) {
+
+                valores.push(valor);
+
+            }
+
+        }
+    );
+
+
+    // Si no hay cargas, no hacemos nada
+
+    if (valores.length === 0) {
+        return;
+    }
+
+
+    // --------------------------------------
+    // MÍNIMO Y MÁXIMO DEL EQUIPO
+    // --------------------------------------
+
+    const minimo =
+        Math.min(...valores);
+
+
+    const maximo =
+        Math.max(...valores);
+
+
+    // --------------------------------------
+    // COLOREAR CADA JUGADOR
+    // --------------------------------------
+
+    celdas.forEach(
+        function(celda) {
+
+            const valor =
+                Number(
+                    celda.textContent.trim()
+                );
+
+
+            if (
+                !Number.isFinite(valor) ||
+                valor < 0
+            ) {
+                return;
+            }
+
+
+            // Si todos tienen exactamente
+            // la misma carga, naranja
+
+            if (maximo === minimo) {
+
+                celda.style.backgroundColor =
+                    "rgb(255, 152, 0)";
+
+                return;
+
+            }
+
+
+            // ----------------------------------
+            // NORMALIZAR ENTRE 0 Y 1
+            // ----------------------------------
+
+            const porcentaje =
+                (valor - minimo) /
+                (maximo - minimo);
+
+
+            // ----------------------------------
+            // VERDE -> NARANJA -> ROJO
+            // ----------------------------------
+
+            let r;
+            let g;
+            let b;
+
+
+            if (porcentaje <= 0.5) {
+
+                const p =
+                    porcentaje / 0.5;
+
+
+                r =
+                    Math.round(
+                        76 +
+                        (255 - 76) * p
+                    );
+
+                g =
+                    Math.round(
+                        175 +
+                        (152 - 175) * p
+                    );
+
+                b =
+                    Math.round(
+                        80 +
+                        (0 - 80) * p
+                    );
+
+            }
+
+
+            else {
+
+                const p =
+                    (porcentaje - 0.5) / 0.5;
+
+
+                r =
+                    Math.round(
+                        255 +
+                        (244 - 255) * p
+                    );
+
+                g =
+                    Math.round(
+                        152 +
+                        (67 - 152) * p
+                    );
+
+                b =
+                    Math.round(
+                        0 +
+                        (54 - 0) * p
+                    );
+
+            }
+
+
+            celda.style.backgroundColor =
+                `rgb(${r}, ${g}, ${b})`;
+
+        }
+    );
+
+}
+
+
+
+// ======================================================
+// APLICAR LAS DOS ESCALAS
+// ======================================================
+
+function aplicarEscalasColores() {
+
+    // RPE → escala fija 1-10
+    colorearRPE();
+
+    // Carga total → escala relativa al equipo
+    colorearCargaTotal();
+
+}
+// ======================================================
+// ACTUALIZAR CARGAS
+// ======================================================
+
+
+function actualizarCargas() {
+
+
+    document
+        .querySelectorAll(
+            "#tablaJugadores tr"
+        )
+        .forEach(
+            function(fila) {
+
+
+                const rpes =
+                    fila.querySelectorAll(
+                        ".input-rpe"
+                    );
+
+
+                const minutos =
+                    fila.querySelectorAll(
+                        ".input-minutos"
+                    );
+
+
+                const cargas =
+                    fila.querySelectorAll(
+                        ".celda-carga"
+                    );
+
+
+                const total =
+                    fila.querySelector(
+                        ".carga-total"
+                    );
+
+
+                let suma = 0;
+
+
+                for (
+
+                    let i = 0;
+
+                    i < rpes.length;
+
+                    i++
+
+                ) {
+
+
+                    const rpe =
+                        Number(
+                            rpes[i].value
+                        ) || 0;
+
+
+                    const min =
+                        Number(
+                            minutos[i].value
+                        ) || 0;
+
+
+                    const carga =
+                        rpe * min;
+
+
+                    cargas[i].textContent =
+                        carga || "";
+
+
+                    suma +=
+                        carga;
+
+                }
+
+
+                if (total) {
+
+                    total.textContent =
+                        suma || "";
+
+                }
+
+            }
+        );
+
+}
+
+
+
+// ======================================================
+// BOTÓN CONSULTAR
+// ======================================================
+
+
+document
+    .getElementById(
+        "botonConsultar"
+    )
+    .addEventListener(
+        "click",
+        cargarTabla
+    );
+
+
+
+// ======================================================
+// FECHAS DE PRUEBA
+// ======================================================
+
+
+document
+    .getElementById(
+        "fechaInicio"
+    )
+    .value =
+        "2026-09-07";
+
+
+document
+    .getElementById(
+        "fechaFin"
+    )
+    .value =
+        "2026-09-13";
+
+
+</script>
+
+
+</body>
+
+</html>

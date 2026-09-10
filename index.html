@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SD Erandio - Acceso</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .contenedor {
+            max-width: 500px;
+            margin: 80px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 35px;
+        }
+
+        .botones {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        button {
+            padding: 18px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .boton-jugador {
+            background: #222;
+            color: white;
+        }
+
+        .boton-administrador {
+            background: #ddd;
+            color: #222;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <h1>SD Erandio</h1>
+
+        <p>Selecciona cómo quieres acceder</p>
+
+        <div class="botones">
+
+            <button class="boton-jugador" onclick="entrarJugador()">
+                JUGADOR
+            </button>
+
+            <button class="boton-administrador" onclick="entrarAdministrador()">
+                ADMINISTRADOR
+            </button>
+
+        </div>
+
+    </div>
+
+<script>
+
+   function entrarJugador() {
+    window.location.href = "panel-jugador.html";
+}
+
+    function entrarAdministrador() {
+        window.location.href = "panel-admin.html";
+    }
+
+</script>
+
+
+</body>
+
+</html>

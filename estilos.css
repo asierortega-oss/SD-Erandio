@@ -1,0 +1,366 @@
+/* =========================================================
+   GENERAL
+   ========================================================= */
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f4f7;
+    margin: 0;
+    padding: 30px 15px;
+}
+
+.contenedor {
+    max-width: 600px;
+    margin: auto;
+}
+
+
+/* =========================================================
+   CABECERA
+   ========================================================= */
+
+.cabecera {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.cabecera h1 {
+    margin-bottom: 5px;
+}
+
+.cabecera p {
+    color: #666;
+}
+
+
+/* =========================================================
+   FORMULARIO
+   ========================================================= */
+
+.formulario {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================================================
+   PREGUNTAS
+   ========================================================= */
+
+label {
+    display: block;
+    font-weight: bold;
+
+    /* Más espacio antes de cada pregunta */
+    margin-top: 25px;
+
+    /* Separación entre la pregunta y la respuesta */
+    margin-bottom: 20px;
+}
+
+
+/* Primera pregunta sin tanto espacio arriba */
+
+.formulario > label:first-child {
+    margin-top: 0;
+}
+
+
+/* =========================================================
+   CAMPOS DE RESPUESTA
+   ========================================================= */
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    box-sizing: border-box;
+    font-size: 15px;
+    background: white;
+}
+
+
+/* Al seleccionar un campo */
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #888;
+}
+
+
+/* =========================================================
+   WELLNESS
+   ========================================================= */
+
+/*
+   Añadimos todavía un poco más de separación
+   entre cada pregunta de Wellness.
+*/
+
+#formularioWellness label {
+    display: block;
+    margin-top: 35px;
+    margin-bottom: 18px;
+}
+
+
+/*
+   Dejamos espacio después de cada respuesta
+   antes de la siguiente pregunta.
+*/
+
+#formularioWellness input,
+#formularioWellness select,
+#formularioWellness textarea {
+    margin-bottom: 25px;
+}
+
+
+/* Primera pregunta de Wellness */
+
+#formularioWellness label:first-of-type {
+    margin-top: 15px;
+}
+
+
+/* =========================================================
+   TEXTAREA
+   ========================================================= */
+
+textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+
+/* =========================================================
+   TÍTULOS
+   ========================================================= */
+
+h2 {
+    margin-top: 30px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+
+/* =========================================================
+   TEXTO DE AYUDA
+   ========================================================= */
+
+.ayuda {
+    margin: 0 0 12px;
+    color: #777;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   BOTONES
+   ========================================================= */
+
+button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 13px;
+    border: none;
+    border-radius: 7px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   OCULTAR RPE Y WELLNESS AL ENTRAR
+   ========================================================= */
+
+#formularioRPE,
+#formularioWellness {
+    display: none;
+}
+
+
+/* =========================================================
+   REGISTROS
+   ========================================================= */
+
+.registro {
+    background: #f8f9fa;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.registro p {
+    margin: 6px 0;
+}
+
+
+/* =========================================================
+   RESULTADOS
+   ========================================================= */
+
+#resultados {
+    margin-top: 25px;
+}
+
+#resultados h2 {
+    margin-top: 30px;
+}
+
+
+/* =========================================================
+   TABLAS
+   ========================================================= */
+
+.tabla-contenedor {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tabla-contenedor table {
+    width: 100%;
+    min-width: 1000px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    background: white;
+}
+
+.tabla-contenedor th,
+.tabla-contenedor td {
+    border: 1px solid #ddd;
+    padding: 8px 4px;
+    text-align: center;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   COLUMNA JUGADOR
+   ========================================================= */
+
+.tabla-contenedor th:first-child,
+.tabla-contenedor td:first-child {
+    width: 60px;
+    min-width: 60px;
+    text-align: left;
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   COLUMNAS RPE, MIN Y C
+   ========================================================= */
+
+.tabla-contenedor th:not(:first-child),
+.tabla-contenedor td:not(:first-child) {
+    width: 45px;
+    min-width: 45px;
+}
+
+
+/* =========================================================
+   CAMPOS DE MINUTOS
+   ========================================================= */
+
+.tabla-contenedor input.minutos {
+    width: 38px;
+    padding: 5px 2px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   CAMPOS RPE
+   ========================================================= */
+
+.tabla-contenedor input.rpeL {
+    width: 38px;
+    padding: 5px 2px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   BOTÓN NR
+   ========================================================= */
+
+.boton-nr {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+    cursor: pointer;
+}
+
+.boton-nr input {
+    display: none;
+}
+
+.boton-nr span {
+    display: inline-block;
+    padding: 3px 6px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #f5f5f5;
+    color: #666;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.boton-nr input:checked + span {
+    background: #ddd;
+    border-color: #999;
+    color: #222;
+}
+
+
+/* =========================================================
+   MÓVIL
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 20px 10px;
+    }
+
+    .formulario {
+        padding: 22px;
+    }
+
+    label {
+        margin-top: 22px;
+        margin-bottom: 10px;
+    }
+
+    #formularioWellness label {
+        margin-top: 26px;
+        margin-bottom: 10px;
+    }
+
+    input,
+    textarea,
+    select {
+        padding: 13px;
+        font-size: 16px;
+    }
+
+}
+

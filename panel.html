@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del personal</title>
+
+    <link rel="stylesheet" href="estilos.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <div class="cabecera">
+        <h1>Panel del personal</h1>
+        <p>Consulta de RPE y Wellness</p>
+    </div>
+
+    <div class="formulario">
+
+        <label>Equipo</label>
+
+        <select id="equipo">
+            <option value="">Selecciona un equipo</option>
+            <option value="juvenil-a">Juvenil A</option>
+        </select>
+
+        <label>Jugador</label>
+
+        <select id="jugador">
+            <option value="">Selecciona un jugador</option>
+        </select>
+
+        <label>¿Qué quieres consultar?</label>
+
+        <select id="tipoConsulta">
+            <option value="">Selecciona una opción</option>
+            <option value="rpe">RPE</option>
+            <option value="wellness">Wellness</option>
+        </select>
+
+        <div id="resultados"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+// ===============================
+// SUPABASE
+// ===============================
+
+const SUPABASE_URL =
+    "https://alprdcjaexllelxthhbv.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_6kF4hhGM3bwqgwv6Fz3mmw__HvkPXiD";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+// ===============================
+// JUGADORES
+// ===============================
+
+const jugadoresPorEquipo = {
+
+    "juvenil-a": [
+        "Oier Roman",
+        "Markel Navas",
+        "Asier Zabal",
+        "Rayan El Armaoui",
+        "Iker García",
+        "Aimar Martinez",
+        "Liher Martinez",
+        "Alex Clavero",
+        "Xabi Losada",
+        "Markel Alonso",
+        "Ibon Lanseros",
+        "Nahuel Churruca",
+        "Unai Zarraga",
+        "Enaitz Posada",
+        "Aitzol Estarlich",
+        "Ibai Pineda",
+        "Mikel Zorriketa",
+        "Luken Rivas",
+        "Peio Alcubilla",
+        "Xabier Santiesteban",
+        "Eder García",
+        "Unai Hernandez",
+        "Ander Elortegi"
+    ]
+
+};
+
+
+// ===============================
+// CAMBIO DE EQUIPO
+// ===============================
+
+document.getElementById("equipo").addEventListener("change", function() {
+
+    const jugador =
+        document.getElementById("jugador");
+
+    jugador.innerHTML =
+        '<option value="">Selecciona un jugador</option>';
+
+    if (jugadoresPorEquipo[this.value]) {
+
+        jugadoresPorEquipo[this.value].forEach(function(nombre) {
+
+            const opcion =
+                document.createElement("option");
+
+            opcion.value = nombre;
+            opcion.textContent = nombre;
+
+            jugador.appendChild(opcion);
+
+        });
+
+    }
+
+    document.getElementById("tipoConsulta").value = "";
+    document.getElementById("resultados").innerHTML = "";
+
+});
+
+
+// ===============================
+// CAMBIO DE JUGADOR
+// ===============================
+
+document.getElementById("jugador").addEventListener("change", function() {
+
+    document.getElementById("tipoConsulta").value = "";
+
+    document.getElementById("resultados").innerHTML = "";
+
+});
+
+
+// ===============================
+// CONSULTAR SUPABASE
+// ===============================
+
+async function consultarRegistros() {
+
+    const equipoSeleccionado =
+        document.getElementById("equipo").value;
+
+    const jugadorSeleccionado =
+        document.getElementById("jugador").value;
+
+    const tipoSeleccionado =
+        document.getElementById("tipoConsulta").value;
+
+    const resultados =
+        document.getElementById("resultados");
+
+
+    if (
+        equipoSeleccionado === "" ||
+        jugadorSeleccionado === "" ||
+        tipoSeleccionado === ""
+    ) {
+
+        resultados.innerHTML = "";
+        return;
+
+    }
+
+
+    resultados.innerHTML =
+        "<p>Cargando datos...</p>";
+
+
+    const { data, error } =
+    await supabaseClient
+        .from("respuestas")
+        .select("*")
+        .eq("jugador", jugadorSeleccionado)
+        .order("fecha", {
+            ascending: false
+        });
+
+    if (error) {
+
+        console.error(error);
+
+        resultados.innerHTML =
+            "<p>Error al consultar los datos.</p>";
+
+        return;
+
+    }
+
+
+    if (!data || data.length === 0) {
+
+        resultados.innerHTML =
+            "<p>No hay registros para este jugador.</p>";
+
+        return;
+
+    }
+
+
+    resultados.innerHTML = "";
+
+
+    // ===============================
+    // RPE
+    // ===============================
+
+    if (tipoSeleccionado === "rpe") {
+
+        resultados.innerHTML =
+            "<h2>RPE</h2>";
+
+        data.forEach(function(registro) {
+
+            const respuestas =
+                registro.respuestas || {};
+
+            const fecha =
+                new Date(registro.fecha)
+                    .toLocaleString("es-ES");
+
+            resultados.innerHTML += `
+
+                <div class="registro">
+
+                    <p>
+                        <strong>Fecha:</strong>
+                        ${fecha}
+                    </p>
+
+                    <p>
+                        <strong>RPE:</strong>
+                        ${respuestas.rpe ?? "-"}
+                    </p>
+
+                </div>
+
+            `;
+
+        });
+
+    }
+
+
+    // ===============================
+    // WELLNESS
+    // ===============================
+
+    if (tipoSeleccionado === "wellness") {
+
+        resultados.innerHTML =
+            "<h2>Wellness</h2>";
+
+        data.forEach(function(registro) {
+
+            const respuestas =
+                registro.respuestas || {};
+
+            const fecha =
+                new Date(registro.fecha)
+                    .toLocaleString("es-ES");
+
+            resultados.innerHTML += `
+
+                <div class="registro">
+
+                    <p>
+                        <strong>Fecha:</strong>
+                        ${fecha}
+                    </p>
+
+                    <p>
+                        <strong>Sueño:</strong>
+                        ${respuestas.sueno ?? "-"}
+                    </p>
+
+                    <p>
+                        <strong>Fatiga:</strong>
+                        ${respuestas.fatiga ?? "-"}
+                    </p>
+
+                    <p>
+                        <strong>Estrés:</strong>
+                        ${respuestas.estres ?? "-"}
+                    </p>
+
+                    <p>
+                        <strong>Dolor muscular:</strong>
+                        ${respuestas.dolor ?? "-"}
+                    </p>
+
+                    <p>
+                        <strong>Molestias:</strong>
+                        ${respuestas.molestias ?? "-"}
+                    </p>
+
+                    <p>
+                        <strong>Comentario:</strong>
+                        ${respuestas.comentario || "-"}
+                    </p>
+
+                </div>
+
+            `;
+
+        });
+
+    }
+
+}
+
+
+// ===============================
+// CAMBIO DE TIPO DE CONSULTA
+// ===============================
+
+document.getElementById("tipoConsulta").addEventListener("change", function() {
+    consultarRegistros();
+});
+
+</script>
+
+</body>
+</html>
