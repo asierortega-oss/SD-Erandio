@@ -87,18 +87,54 @@
 
     </div>
 
-<script>
 
-   function entrarJugador() {
-    window.location.href = "panel-jugador.html";
-}
+    <script>
 
-    function entrarAdministrador() {
-        window.location.href = "panel-admin.html";
-    }
+        // ==========================================
+        // ENTRAR COMO JUGADOR
+        // ==========================================
 
-</script>
+        function entrarJugador() {
 
+            window.location.href = "panel-jugador.html";
+
+        }
+
+
+        // ==========================================
+        // ENTRAR COMO ADMINISTRADOR
+        // ==========================================
+
+        function entrarAdministrador() {
+
+            const contraseña =
+                prompt("Introduce la contraseña de administrador:");
+
+
+            // ==========================================
+            // CAMBIA ESTA CONTRASEÑA POR LA QUE QUIERAS
+            // ==========================================
+
+            const contraseñaCorrecta = "erandio123";
+
+
+            // ==========================================
+            // COMPROBAR CONTRASEÑA
+            // ==========================================
+
+            if (contraseña === contraseñaCorrecta) {
+
+                window.location.href = "panel-admin.html";
+
+            } else {
+
+                alert("Contraseña incorrecta.");
+
+            }
+
+        }
+
+    </script>
 
 </body>
 
