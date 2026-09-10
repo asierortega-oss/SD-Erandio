@@ -12,6 +12,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
+
     body {
       background: #f4f4f4;
     }
@@ -128,7 +129,9 @@
       color: #a00000;
     }
 
+    /* TABLA OCULTA AL ENTRAR */
     .tabla-contenedor {
+      display: none;
       width: 100%;
       overflow-x: auto;
       border: 1px solid #ddd;
@@ -198,11 +201,7 @@
       font-weight: bold;
     }
 
-    /*
-      SUEÑO:
-      1 = peor
-      5 = mejor
-    */
+    /* SUEÑO: 1 peor - 5 mejor */
 
     .sueno-1,
     .sueno-2 {
@@ -221,11 +220,7 @@
       color: #176b2c;
     }
 
-    /*
-      FATIGA, ESTRÉS Y DOLOR:
-      1 = mejor
-      5 = peor
-    */
+    /* FATIGA, ESTRÉS Y DOLOR: 1 mejor - 5 peor */
 
     .riesgo-1,
     .riesgo-2 {
@@ -281,6 +276,7 @@
     }
 
     @media (max-width: 700px) {
+
       .contenedor {
         margin: 15px;
         padding: 18px;
@@ -301,79 +297,150 @@
       .cabecera h1 {
         font-size: 24px;
       }
+
     }
+
   </style>
+
 </head>
+
 
 <body>
 
   <div class="contenedor">
 
     <div class="cabecera">
+
       <h1>Panel Wellness</h1>
-      <p>Consulta las respuestas Wellness de los jugadores por equipo y día.</p>
+
+      <p>
+        Consulta las respuestas Wellness de los jugadores por equipo y día.
+      </p>
+
     </div>
+
+
+    <!-- FILTROS -->
 
     <div class="filtros">
 
       <div class="campo">
-        <label for="equipo">Equipo</label>
+
+        <label for="equipo">
+          Equipo
+        </label>
 
         <select id="equipo">
-          <option value="juvenil-a">Juvenil A</option>
+
+          <option value="juvenil-a">
+            Juvenil A
+          </option>
+
         </select>
+
       </div>
+
 
       <div class="campo">
-        <label for="fecha">Día</label>
-        <input type="date" id="fecha">
+
+        <label for="fecha">
+          Día
+        </label>
+
+        <input
+          type="date"
+          id="fecha"
+        >
+
       </div>
 
-      <button class="boton-consultar" onclick="consultarWellness()">
+
+      <button
+        class="boton-consultar"
+        onclick="consultarWellness()"
+      >
         CONSULTAR
       </button>
 
     </div>
 
-    <div id="mensaje" class="mensaje"></div>
+
+    <!-- MENSAJE DE ERROR -->
+
+    <div
+      id="mensaje"
+      class="mensaje"
+    ></div>
+
+
+    <!-- CONTADOR -->
 
     <div class="info">
-      <div id="contador" class="contador">
-        Selecciona un equipo y un día.
-      </div>
+
+      <div
+        id="contador"
+        class="contador"
+      ></div>
+
     </div>
+
+
+    <!-- TABLA -->
 
     <div class="tabla-contenedor">
 
       <table>
 
         <thead>
+
           <tr>
-            <th>Jugador</th>
-            <th>Sueño</th>
-            <th>Fatiga</th>
-            <th>Estrés</th>
-            <th>Dolor</th>
-            <th>Molestias</th>
-            <th>Comentario</th>
+
+            <th>
+              Jugador
+            </th>
+
+            <th>
+              Sueño
+            </th>
+
+            <th>
+              Fatiga
+            </th>
+
+            <th>
+              Estrés
+            </th>
+
+            <th>
+              Dolor
+            </th>
+
+            <th>
+              Molestias
+            </th>
+
+            <th>
+              Comentario
+            </th>
+
           </tr>
+
         </thead>
 
-        <tbody id="tablaWellness">
 
-          <tr>
-            <td colspan="7" class="cargando">
-              Selecciona un día y pulsa CONSULTAR.
-            </td>
-          </tr>
-
-        </tbody>
+        <tbody id="tablaWellness"></tbody>
 
       </table>
 
     </div>
 
-    <button class="boton-volver" onclick="volverAdmin()">
+
+    <!-- VOLVER -->
+
+    <button
+      class="boton-volver"
+      onclick="volverAdmin()"
+    >
       VOLVER
     </button>
 
@@ -386,13 +453,17 @@
     // SUPABASE
     // =========================================================
 
-    const SUPABASE_URL = "https://alprdcjaexllelxthhbv.supabase.co";
+    const SUPABASE_URL =
+      "https://alprdcjaexllelxthhbv.supabase.co";
 
     const SUPABASE_KEY =
       "sb_publishable_6kF4hhGM3bwqgwv6Fz3mmw__HvkPXiD";
 
     const supabaseClient =
-      supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
 
 
     // =========================================================
@@ -433,34 +504,48 @@
 
 
     // =========================================================
-    // FECHA LOCAL
+    // FECHA DE HOY EN LOCAL
     // =========================================================
 
     function fechaHoyLocal() {
 
       const ahora = new Date();
 
-      const año = ahora.getFullYear();
+      const año =
+        ahora.getFullYear();
 
-      const mes = String(
-        ahora.getMonth() + 1
-      ).padStart(2, "0");
+      const mes =
+        String(
+          ahora.getMonth() + 1
+        ).padStart(2, "0");
 
-      const dia = String(
-        ahora.getDate()
-      ).padStart(2, "0");
+      const dia =
+        String(
+          ahora.getDate()
+        ).padStart(2, "0");
 
       return `${año}-${mes}-${dia}`;
+
     }
 
 
+    // =========================================================
+    // CONVERTIR FECHA LOCAL A DATE
+    // =========================================================
+
     function fechaLocalAISO(fechaTexto) {
 
-      const partes = fechaTexto.split("-");
+      const partes =
+        fechaTexto.split("-");
 
-      const año = Number(partes[0]);
-      const mes = Number(partes[1]) - 1;
-      const dia = Number(partes[2]);
+      const año =
+        Number(partes[0]);
+
+      const mes =
+        Number(partes[1]) - 1;
+
+      const dia =
+        Number(partes[2]);
 
       return new Date(
         año,
@@ -476,20 +561,30 @@
 
 
     // =========================================================
-    // ESCAPAR TEXTO
+    // ESCAPAR HTML
     // =========================================================
 
     function escaparHTML(texto) {
 
-      if (texto === null || texto === undefined) {
+      if (
+        texto === null ||
+        texto === undefined
+      ) {
+
         return "";
+
       }
 
       return String(texto)
+
         .replace(/&/g, "&amp;")
+
         .replace(/</g, "&lt;")
+
         .replace(/>/g, "&gt;")
+
         .replace(/"/g, "&quot;")
+
         .replace(/'/g, "&#039;");
 
     }
@@ -499,36 +594,51 @@
     // MOSTRAR MENSAJE
     // =========================================================
 
-    function mostrarMensaje(texto, error = false) {
+    function mostrarMensaje(
+      texto,
+      error = false
+    ) {
 
       const mensaje =
         document.getElementById("mensaje");
 
-      mensaje.textContent = texto;
+      mensaje.textContent =
+        texto;
 
-      mensaje.className = "mensaje";
+      mensaje.className =
+        "mensaje";
 
       if (error) {
-        mensaje.classList.add("error");
+
+        mensaje.classList.add(
+          "error"
+        );
+
       }
 
-      mensaje.style.display = "block";
+      mensaje.style.display =
+        "block";
 
     }
 
+
+    // =========================================================
+    // OCULTAR MENSAJE
+    // =========================================================
 
     function ocultarMensaje() {
 
       const mensaje =
         document.getElementById("mensaje");
 
-      mensaje.style.display = "none";
+      mensaje.style.display =
+        "none";
 
     }
 
 
     // =========================================================
-    // CLASE PARA LOS VALORES
+    // PINTAR SUEÑO
     // =========================================================
 
     function pintarSueno(valor) {
@@ -538,10 +648,17 @@
         valor === undefined ||
         valor === ""
       ) {
-        return '<span class="sin-respuesta">—</span>';
+
+        return `
+          <span class="sin-respuesta">
+            —
+          </span>
+        `;
+
       }
 
-      const numero = Number(valor);
+      const numero =
+        Number(valor);
 
       return `
         <span class="valor sueno-${numero}">
@@ -552,6 +669,10 @@
     }
 
 
+    // =========================================================
+    // PINTAR FATIGA / ESTRÉS / DOLOR
+    // =========================================================
+
     function pintarRiesgo(valor) {
 
       if (
@@ -559,10 +680,17 @@
         valor === undefined ||
         valor === ""
       ) {
-        return '<span class="sin-respuesta">—</span>';
+
+        return `
+          <span class="sin-respuesta">
+            —
+          </span>
+        `;
+
       }
 
-      const numero = Number(valor);
+      const numero =
+        Number(valor);
 
       return `
         <span class="valor riesgo-${numero}">
@@ -573,6 +701,10 @@
     }
 
 
+    // =========================================================
+    // PINTAR MOLESTIAS
+    // =========================================================
+
     function pintarMolestias(valor) {
 
       if (
@@ -580,11 +712,18 @@
         valor === undefined ||
         valor === ""
       ) {
-        return '<span class="sin-respuesta">—</span>';
+
+        return `
+          <span class="sin-respuesta">
+            —
+          </span>
+        `;
+
       }
 
       const texto =
         String(valor).toLowerCase();
+
 
       if (texto === "si") {
 
@@ -595,6 +734,7 @@
         `;
 
       }
+
 
       return `
         <span class="molestias-no">
@@ -613,20 +753,40 @@
 
       ocultarMensaje();
 
+
       const equipo =
-        document.getElementById("equipo").value;
+        document.getElementById(
+          "equipo"
+        ).value;
+
 
       const fecha =
-        document.getElementById("fecha").value;
+        document.getElementById(
+          "fecha"
+        ).value;
+
 
       const tabla =
-        document.getElementById("tablaWellness");
+        document.getElementById(
+          "tablaWellness"
+        );
+
 
       const contador =
-        document.getElementById("contador");
+        document.getElementById(
+          "contador"
+        );
 
 
-      // Comprobar fecha
+      const tablaContenedor =
+        document.querySelector(
+          ".tabla-contenedor"
+        );
+
+
+      // =======================================================
+      // COMPROBAR FECHA
+      // =======================================================
 
       if (!fecha) {
 
@@ -635,20 +795,36 @@
           true
         );
 
+        tablaContenedor.style.display =
+          "none";
+
+        contador.textContent =
+          "";
+
         return;
 
       }
 
 
-      // Mostrar cargando
+      // =======================================================
+      // MOSTRAR TABLA SOLO AL CONSULTAR
+      // =======================================================
+
+      tablaContenedor.style.display =
+        "block";
+
 
       tabla.innerHTML = `
         <tr>
-          <td colspan="7" class="cargando">
+          <td
+            colspan="7"
+            class="cargando"
+          >
             Cargando respuestas...
           </td>
         </tr>
       `;
+
 
       contador.textContent =
         "Consultando...";
@@ -657,23 +833,20 @@
       try {
 
         // =====================================================
-        // CREAR RANGO DEL DÍA
+        // INICIO DEL DÍA
         // =====================================================
-
-        /*
-          El formulario Wellness guarda:
-
-          new Date().toISOString()
-
-          Por eso convertimos el inicio y final
-          del día local a ISO UTC.
-        */
 
         const desde =
           fechaLocalAISO(fecha);
 
+
+        // =====================================================
+        // FINAL DEL DÍA
+        // =====================================================
+
         const hasta =
           new Date(desde);
+
 
         hasta.setDate(
           hasta.getDate() + 1
@@ -684,33 +857,41 @@
         // CONSULTA SUPABASE
         // =====================================================
 
-        const { data, error } =
-          await supabaseClient
+        const {
+          data,
+          error
+        } = await supabaseClient
 
-            .from("respuestas")
+          .from("respuestas")
 
-            .select("*")
+          .select("*")
 
-            .eq("equipo", equipo)
+          .eq(
+            "equipo",
+            equipo
+          )
 
-            .eq("tipo", "wellness")
+          .eq(
+            "tipo",
+            "wellness"
+          )
 
-            .gte(
-              "fecha",
-              desde.toISOString()
-            )
+          .gte(
+            "fecha",
+            desde.toISOString()
+          )
 
-            .lt(
-              "fecha",
-              hasta.toISOString()
-            )
+          .lt(
+            "fecha",
+            hasta.toISOString()
+          )
 
-            .order(
-              "fecha",
-              {
-                ascending: true
-              }
-            );
+          .order(
+            "fecha",
+            {
+              ascending: true
+            }
+          );
 
 
         // =====================================================
@@ -730,51 +911,56 @@
 
 
         // =====================================================
-        // LISTA DE JUGADORES
+        // JUGADORES DEL EQUIPO
         // =====================================================
 
         const jugadores =
-          jugadoresPorEquipo[equipo] || [];
+          jugadoresPorEquipo[
+            equipo
+          ] || [];
 
 
         // =====================================================
-        // ORGANIZAR RESPUESTAS POR JUGADOR
+        // ORGANIZAR RESPUESTAS
         // =====================================================
 
         const respuestasPorJugador = {};
 
 
-        /*
-          Si un jugador tiene más de una respuesta
-          el mismo día, nos quedamos con la última.
-        */
+        data.forEach(
+          registro => {
 
-        data.forEach(registro => {
+            respuestasPorJugador[
+              registro.jugador
+            ] = registro;
 
-          respuestasPorJugador[
-            registro.jugador
-          ] = registro;
-
-        });
+          }
+        );
 
 
         // =====================================================
         // CONTADOR
         // =====================================================
 
-        let numeroRespuestas = 0;
+        let numeroRespuestas =
+          0;
 
-        jugadores.forEach(jugador => {
 
-          if (
-            respuestasPorJugador[jugador]
-          ) {
+        jugadores.forEach(
+          jugador => {
 
-            numeroRespuestas++;
+            if (
+              respuestasPorJugador[
+                jugador
+              ]
+            ) {
+
+              numeroRespuestas++;
+
+            }
 
           }
-
-        });
+        );
 
 
         contador.textContent =
@@ -785,12 +971,18 @@
         // SI NO HAY JUGADORES
         // =====================================================
 
-        if (jugadores.length === 0) {
+        if (
+          jugadores.length === 0
+        ) {
 
           tabla.innerHTML = `
             <tr>
-              <td colspan="7" class="cargando">
-                No hay jugadores configurados para este equipo.
+              <td
+                colspan="7"
+                class="cargando"
+              >
+                No hay jugadores configurados
+                para este equipo.
               </td>
             </tr>
           `;
@@ -801,26 +993,161 @@
 
 
         // =====================================================
-        // CREAR TABLA
+        // LIMPIAR TABLA
         // =====================================================
 
-        tabla.innerHTML = "";
+        tabla.innerHTML =
+          "";
 
 
-        jugadores.forEach(jugador => {
+        // =====================================================
+        // CREAR UNA FILA POR JUGADOR
+        // =====================================================
 
-          const registro =
-            respuestasPorJugador[jugador];
+        jugadores.forEach(
+          jugador => {
 
 
-          // ---------------------------------------------------
-          // SIN RESPUESTA
-          // ---------------------------------------------------
+            const registro =
+              respuestasPorJugador[
+                jugador
+              ];
 
-          if (!registro) {
+
+            // =================================================
+            // JUGADOR SIN RESPUESTA
+            // =================================================
+
+            if (!registro) {
+
+              const fila =
+                document.createElement(
+                  "tr"
+                );
+
+
+              fila.innerHTML = `
+
+                <td>
+                  ${escaparHTML(jugador)}
+                </td>
+
+                <td>
+                  <span class="sin-respuesta">
+                    —
+                  </span>
+                </td>
+
+                <td>
+                  <span class="sin-respuesta">
+                    —
+                  </span>
+                </td>
+
+                <td>
+                  <span class="sin-respuesta">
+                    —
+                  </span>
+                </td>
+
+                <td>
+                  <span class="sin-respuesta">
+                    —
+                  </span>
+                </td>
+
+                <td>
+                  <span class="sin-respuesta">
+                    —
+                  </span>
+                </td>
+
+                <td class="comentario">
+                  <span class="sin-respuesta">
+                    Sin respuesta
+                  </span>
+                </td>
+
+              `;
+
+
+              tabla.appendChild(
+                fila
+              );
+
+
+              return;
+
+            }
+
+
+            // =================================================
+            // RESPUESTAS
+            // =================================================
+
+            const respuestas =
+              registro.respuestas || {};
+
+
+            const sueño =
+              respuestas.sueno;
+
+
+            const fatiga =
+              respuestas.fatiga;
+
+
+            const estres =
+              respuestas.estres;
+
+
+            const dolor =
+              respuestas.dolor;
+
+
+            const molestias =
+              respuestas.molestias;
+
+
+            const comentario =
+              respuestas.comentario;
+
+
+            // =================================================
+            // COMENTARIO
+            // =================================================
+
+            let comentarioHTML =
+              `
+                <span class="sin-respuesta">
+                  —
+                </span>
+              `;
+
+
+            if (
+              comentario !== null &&
+              comentario !== undefined &&
+              String(comentario).trim() !== ""
+            ) {
+
+              comentarioHTML =
+                escaparHTML(
+                  comentario
+                );
+
+            }
+
+
+            // =================================================
+            // CREAR FILA
+            // =================================================
 
             const fila =
-              document.createElement("tr");
+              document.createElement(
+                "tr"
+              );
+
 
             fila.innerHTML = `
 
@@ -829,147 +1156,63 @@
               </td>
 
               <td>
-                <span class="sin-respuesta">—</span>
+                ${pintarSueno(sueño)}
               </td>
 
               <td>
-                <span class="sin-respuesta">—</span>
+                ${pintarRiesgo(fatiga)}
               </td>
 
               <td>
-                <span class="sin-respuesta">—</span>
+                ${pintarRiesgo(estres)}
               </td>
 
               <td>
-                <span class="sin-respuesta">—</span>
+                ${pintarRiesgo(dolor)}
               </td>
 
               <td>
-                <span class="sin-respuesta">—</span>
+                ${pintarMolestias(molestias)}
               </td>
 
               <td class="comentario">
-                <span class="sin-respuesta">
-                  Sin respuesta
-                </span>
+                ${comentarioHTML}
               </td>
 
             `;
 
-            tabla.appendChild(fila);
 
-            return;
-
-          }
-
-
-          // ---------------------------------------------------
-          // RESPUESTAS
-          // ---------------------------------------------------
-
-          const respuestas =
-            registro.respuestas || {};
-
-
-          const sueño =
-            respuestas.sueno;
-
-          const fatiga =
-            respuestas.fatiga;
-
-          const estres =
-            respuestas.estres;
-
-          const dolor =
-            respuestas.dolor;
-
-          const molestias =
-            respuestas.molestias;
-
-          const comentario =
-            respuestas.comentario;
-
-
-          // ---------------------------------------------------
-          // COMENTARIO
-          // ---------------------------------------------------
-
-          let comentarioHTML =
-            '<span class="sin-respuesta">—</span>';
-
-
-          if (
-            comentario !== null &&
-            comentario !== undefined &&
-            String(comentario).trim() !== ""
-          ) {
-
-            comentarioHTML =
-              escaparHTML(comentario);
+            tabla.appendChild(
+              fila
+            );
 
           }
-
-
-          // ---------------------------------------------------
-          // CREAR FILA
-          // ---------------------------------------------------
-
-          const fila =
-            document.createElement("tr");
-
-
-          fila.innerHTML = `
-
-            <td>
-              ${escaparHTML(jugador)}
-            </td>
-
-            <td>
-              ${pintarSueno(sueño)}
-            </td>
-
-            <td>
-              ${pintarRiesgo(fatiga)}
-            </td>
-
-            <td>
-              ${pintarRiesgo(estres)}
-            </td>
-
-            <td>
-              ${pintarRiesgo(dolor)}
-            </td>
-
-            <td>
-              ${pintarMolestias(molestias)}
-            </td>
-
-            <td class="comentario">
-              ${comentarioHTML}
-            </td>
-
-          `;
-
-
-          tabla.appendChild(fila);
-
-        });
+        );
 
 
       } catch (error) {
 
-        console.error(error);
+        console.error(
+          error
+        );
+
 
         tabla.innerHTML = `
           <tr>
-            <td colspan="7" class="cargando">
-              No se han podido cargar las respuestas.
+            <td
+              colspan="7"
+              class="cargando"
+            >
+              No se han podido cargar
+              las respuestas.
             </td>
           </tr>
         `;
 
+
         contador.textContent =
           "Error al consultar los datos.";
+
 
         mostrarMensaje(
           "Ha ocurrido un error al consultar Supabase. Revisa la consola del navegador.",
@@ -982,7 +1225,7 @@
 
 
     // =========================================================
-    // VOLVER AL PANEL DE ADMINISTRADOR
+    // VOLVER AL PANEL ADMINISTRADOR
     // =========================================================
 
     function volverAdmin() {
@@ -994,7 +1237,7 @@
 
 
     // =========================================================
-    // INICIAR FECHA DE HOY
+    // PONER FECHA DE HOY
     // =========================================================
 
     document.addEventListener(
@@ -1003,7 +1246,8 @@
 
         document.getElementById(
           "fecha"
-        ).value = fechaHoyLocal();
+        ).value =
+          fechaHoyLocal();
 
       }
     );
