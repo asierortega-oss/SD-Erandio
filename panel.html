@@ -13,6 +13,26 @@
 
 <style>
 
+    .boton-volver {
+    display: block;
+    margin: 25px auto 0;
+    padding: 11px 18px;
+    border: 2px solid #334155;
+    border-radius: 12px;
+    background: transparent;
+    color: #334155;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.boton-volver:hover {
+    background: #0f172a;
+    color: white;
+    transform: translateY(-2px);
+}
+
     body {
         margin: 0;
         min-height: 100vh;
@@ -146,6 +166,50 @@
         color: #1e293b;
     }
 
+    .botones-consulta {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+}
+
+.boton-consulta {
+    flex: 1;
+    height: 58px;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    background: #f8fafc;
+    color: #334155;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.boton-consulta:hover {
+    transform: translateY(-2px);
+    border-color: #94a3b8;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+.boton-consulta.activo {
+    background: #0f172a;
+    color: white;
+    border-color: #0f172a;
+    box-shadow: 0 7px 18px rgba(15, 23, 42, 0.20);
+}
+
+@media (max-width: 600px) {
+
+    .botones-consulta {
+        gap: 10px;
+    }
+
+    .boton-consulta {
+        height: 54px;
+        font-size: 15px;
+    }
+}
+
     @media (max-width: 600px) {
 
         body {
@@ -177,6 +241,7 @@
 
 <div class="contenedor">
 
+
     <div class="cabecera">
         <h1>Panel del personal</h1>
         <p>Consulta de RPE y Wellness</p>
@@ -198,13 +263,29 @@
 
         <label>¿Qué quieres consultar?</label>
 
-        <select id="tipoConsulta">
-            <option value="">Selecciona una opción</option>
-            <option value="rpe">RPE</option>
-            <option value="wellness">Wellness</option>
-        </select>
+<div class="botones-consulta">
+
+    <button type="button" class="boton-consulta" id="botonRPE">
+        RPE
+    </button>
+
+    <button type="button" class="boton-consulta" id="botonWellness">
+        Wellness
+    </button>
+
+</div>
+
+<select id="tipoConsulta" style="display: none;">
+    <option value="">Selecciona una opción</option>
+    <option value="rpe">RPE</option>
+    <option value="wellness">Wellness</option>
+</select>
 
         <div id="resultados"></div>
+
+        <button type="button" class="boton-volver" onclick="history.back()">
+    ← Volver
+</button>
 
     </div>
 
@@ -557,6 +638,31 @@ async function consultarRegistros() {
 // ===============================
 
 document.getElementById("tipoConsulta").addEventListener("change", function() {
+
+    consultarRegistros();
+
+});
+
+document.getElementById("botonRPE").addEventListener("click", function() {
+
+    document.getElementById("tipoConsulta").value = "rpe";
+
+    document.getElementById("botonRPE").classList.add("activo");
+
+    document.getElementById("botonWellness").classList.remove("activo");
+
+    consultarRegistros();
+
+});
+
+
+document.getElementById("botonWellness").addEventListener("click", function() {
+
+    document.getElementById("tipoConsulta").value = "wellness";
+
+    document.getElementById("botonWellness").classList.add("activo");
+
+    document.getElementById("botonRPE").classList.remove("activo");
 
     consultarRegistros();
 
