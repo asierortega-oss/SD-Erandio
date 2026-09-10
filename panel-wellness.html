@@ -202,64 +202,94 @@
       font-weight: bold;
     }
 
-    /* SUEÑO: 1 peor - 5 mejor */
+
+    /* =========================================================
+       ESCALA DE COLORES
+       1 = ROJO
+       2 = ROJO CLARO
+       3 = AMARILLO
+       4 = VERDE CLARO
+       5 = VERDE
+       ========================================================= */
+
+
+    /* VALOR 1 */
 
     .sueno-1,
-    .sueno-2 {
-      background: #ffd6d6;
-      color: #a00000;
+    .riesgo-1 {
+      background: #ff4d4d;
+      color: white;
     }
 
-    .sueno-3 {
-      background: #fff0c2;
-      color: #775500;
+
+    /* VALOR 2 */
+
+    .sueno-2,
+    .riesgo-2 {
+      background: #ff9999;
+      color: #7a0000;
     }
+
+
+    /* VALOR 3 */
+
+    .sueno-3,
+    .riesgo-3 {
+      background: #ffd966;
+      color: #665000;
+    }
+
+
+    /* VALOR 4 */
 
     .sueno-4,
-    .sueno-5 {
-      background: #d9f5df;
-      color: #176b2c;
+    .riesgo-4 {
+      background: #a9df9c;
+      color: #205c18;
     }
 
-    /* FATIGA, ESTRÉS Y DOLOR: 1 mejor - 5 peor */
 
-    .riesgo-1,
-    .riesgo-2 {
-      background: #d9f5df;
-      color: #176b2c;
-    }
+    /* VALOR 5 */
 
-    .riesgo-3 {
-      background: #fff0c2;
-      color: #775500;
-    }
-
-    .riesgo-4,
+    .sueno-5,
     .riesgo-5 {
-      background: #ffd6d6;
-      color: #a00000;
+      background: #4caf50;
+      color: white;
     }
+
+
+    /* =========================================================
+       MOLESTIAS
+       SÍ = ROJO
+       NO = VERDE
+       ========================================================= */
 
     .molestias-si {
-      background: #ffd6d6;
-      color: #a00000;
+      background: #ff4d4d;
+      color: white;
       font-weight: bold;
       padding: 6px 10px;
       border-radius: 6px;
     }
 
     .molestias-no {
-      background: #d9f5df;
-      color: #176b2c;
+      background: #4caf50;
+      color: white;
       font-weight: bold;
       padding: 6px 10px;
       border-radius: 6px;
     }
 
+
+    /* SIN RESPUESTA */
+
     .sin-respuesta {
       color: #aaa;
       font-weight: normal;
     }
+
+
+    /* COMENTARIO */
 
     .comentario {
       min-width: 230px;
@@ -270,11 +300,19 @@
       line-height: 1.4;
     }
 
+
+    /* CARGANDO */
+
     .cargando {
       text-align: center;
       padding: 30px;
       color: #666;
     }
+
+
+    /* =========================================================
+       MÓVIL
+       ========================================================= */
 
     @media (max-width: 700px) {
 
@@ -321,7 +359,9 @@
     </div>
 
 
-    <!-- FILTROS -->
+    <!-- =======================================================
+         FILTROS
+         ======================================================= -->
 
     <div class="filtros">
 
@@ -366,7 +406,9 @@
     </div>
 
 
-    <!-- MENSAJE DE ERROR -->
+    <!-- =======================================================
+         MENSAJE
+         ======================================================= -->
 
     <div
       id="mensaje"
@@ -374,7 +416,9 @@
     ></div>
 
 
-    <!-- CONTADOR -->
+    <!-- =======================================================
+         CONTADOR
+         ======================================================= -->
 
     <div class="info">
 
@@ -386,7 +430,9 @@
     </div>
 
 
-    <!-- TABLA -->
+    <!-- =======================================================
+         TABLA
+         ======================================================= -->
 
     <div class="tabla-contenedor">
 
@@ -436,7 +482,9 @@
     </div>
 
 
-    <!-- VOLVER -->
+    <!-- =======================================================
+         VOLVER
+         ======================================================= -->
 
     <button
       class="boton-volver"
@@ -468,7 +516,7 @@
 
 
     // =========================================================
-    // EQUIPOS CARGADOS DESDE SUPABASE
+    // EQUIPOS
     // =========================================================
 
     let equipos = [];
@@ -690,12 +738,10 @@
               );
 
 
-            // El value es el UUID
             opcion.value =
               equipo.id;
 
 
-            // Lo que ve el usuario es el nombre
             opcion.textContent =
               equipo.nombre;
 
@@ -708,7 +754,9 @@
         );
 
 
-        // Si hay equipos, seleccionar el primero
+        // Seleccionar automáticamente
+        // el primer equipo
+
         if (equipos.length > 0) {
 
           selectEquipo.value =
@@ -923,7 +971,9 @@
 
 
       const texto =
-        String(valor).toLowerCase();
+        String(valor)
+          .trim()
+          .toLowerCase();
 
 
       if (texto === "si") {
@@ -1513,6 +1563,7 @@
 
 
         // Ocultar resultados anteriores
+
         document.querySelector(
           ".tabla-contenedor"
         ).style.display =
@@ -1536,7 +1587,8 @@
       "DOMContentLoaded",
       async function () {
 
-        // Poner fecha de hoy
+        // Fecha de hoy
+
         document.getElementById(
           "fecha"
         ).value =
@@ -1544,6 +1596,7 @@
 
 
         // Cargar equipos
+
         await cargarEquipos();
 
       }
