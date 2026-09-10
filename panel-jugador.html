@@ -250,11 +250,7 @@
             <select id="equipo" onchange="actualizarJugadores()">
 
                 <option value="">
-                    Selecciona tu equipo
-                </option>
-
-                <option value="juvenil-a">
-                    Juvenil A
+                    Cargando equipos...
                 </option>
 
             </select>
@@ -528,41 +524,92 @@
 
         /*
         =====================================================
-        JUGADORES POR EQUIPO
+        CARGAR EQUIPOS DESDE SUPABASE
         =====================================================
         */
 
-        const jugadoresPorEquipo = {
+        async function cargarEquipos() {
 
-            "juvenil-a": [
+            const selector =
+                document.getElementById("equipo");
 
-                "Oier Roman",
-                "Markel Navas",
-                "Asier Zabal",
-                "Rayan El Armaoui",
-                "Iker García",
-                "Aimar Martinez",
-                "Liher Martinez",
-                "Alex Clavero",
-                "Xabi Losada",
-                "Markel Alonso",
-                "Ibon Lanseros",
-                "Nahuel Churruca",
-                "Unai Zarraga",
-                "Enaitz Posada",
-                "Aitzol Estarlich",
-                "Ibai Pineda",
-                "Mikel Zorriketa",
-                "Luken Rivas",
-                "Peio Alcubilla",
-                "Xabier Santiesteban",
-                "Eder García",
-                "Unai Hernandez",
-                "Ander Elortegi"
 
-            ]
+            const { data, error } =
+                await supabaseClient
+                    .from("equipos")
+                    .select("*")
+                    .order("nombre", {
+                        ascending: true
+                    });
 
-        };
+
+            if (error) {
+
+                console.error(
+                    "Error al cargar equipos:",
+                    error
+                );
+
+                selector.innerHTML =
+                    '<option value="">Error al cargar equipos</option>';
+
+                mostrarMensaje(
+                    "No se han podido cargar los equipos.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            selector.innerHTML =
+                '<option value="">Selecciona tu equipo</option>';
+
+
+            if (!data || data.length === 0) {
+
+                selector.innerHTML =
+                    '<option value="">No hay equipos disponibles</option>';
+
+                return;
+
+            }
+
+
+            data.forEach(function(equipo) {
+
+                const opcion =
+                    document.createElement("option");
+
+                /*
+                Guardamos el ID real de Supabase
+                */
+
+                opcion.value =
+                    equipo.id;
+
+                /*
+                Mostramos el nombre del equipo
+                */
+
+                opcion.textContent =
+                    equipo.nombre;
+
+                selector.appendChild(opcion);
+
+            });
+
+        }
+
+
+        /*
+        =====================================================
+        CARGAR EQUIPOS AL ABRIR LA PÁGINA
+        =====================================================
+        */
+
+        cargarEquipos();
 
 
         /*
@@ -571,22 +618,27 @@
         =====================================================
         */
 
-        function actualizarJugadores() {
+        async function actualizarJugadores() {
 
-            const equipo =
+            const equipoId =
                 document.getElementById("equipo").value;
+
 
             const jugador =
                 document.getElementById("jugador");
 
 
-            // Reiniciar jugador
+            /*
+            Reiniciar jugador
+            */
 
             jugador.innerHTML =
-                '<option value="">Selecciona tu nombre</option>';
+                '<option value="">Cargando jugadores...</option>';
 
 
-            // Ocultar selección de registro
+            /*
+            Ocultar selección de registro
+            */
 
             document
                 .getElementById("seleccionRegistro")
@@ -596,35 +648,94 @@
             ocultarFormularios();
 
 
-            // Si no hay equipo seleccionado, terminar
+            /*
+            Si no hay equipo seleccionado
+            */
 
-            if (!equipo) {
+            if (!equipoId) {
+
+                jugador.innerHTML =
+                    '<option value="">Selecciona tu nombre</option>';
 
                 return;
 
             }
 
 
-            // Añadir jugadores del equipo
+            /*
+            Buscar jugadores de ese equipo
+            */
 
-            if (jugadoresPorEquipo[equipo]) {
+            const { data, error } =
+                await supabaseClient
+                    .from("jugadores")
+                    .select("*")
+                    .eq("equipo_id", equipoId)
+                    .order("nombre", {
+                        ascending: true
+                    });
 
-                jugadoresPorEquipo[equipo].forEach(
-                    function(nombre) {
 
-                        const opcion =
-                            document.createElement("option");
+            if (error) {
 
-                        opcion.value = nombre;
-
-                        opcion.textContent = nombre;
-
-                        jugador.appendChild(opcion);
-
-                    }
+                console.error(
+                    "Error al cargar jugadores:",
+                    error
                 );
 
+                jugador.innerHTML =
+                    '<option value="">Error al cargar jugadores</option>';
+
+                mostrarMensaje(
+                    "No se han podido cargar los jugadores.",
+                    "error"
+                );
+
+                return;
+
             }
+
+
+            /*
+            Reiniciar selector
+            */
+
+            jugador.innerHTML =
+                '<option value="">Selecciona tu nombre</option>';
+
+
+            /*
+            Si no hay jugadores
+            */
+
+            if (!data || data.length === 0) {
+
+                jugador.innerHTML =
+                    '<option value="">No hay jugadores en este equipo</option>';
+
+                return;
+
+            }
+
+
+            /*
+            Añadir jugadores
+            */
+
+            data.forEach(function(jugadorDatos) {
+
+                const opcion =
+                    document.createElement("option");
+
+                opcion.value =
+                    jugadorDatos.nombre;
+
+                opcion.textContent =
+                    jugadorDatos.nombre;
+
+                jugador.appendChild(opcion);
+
+            });
 
         }
 
@@ -789,18 +900,31 @@
 
         async function enviarRegistro() {
 
-            const equipo =
+            const equipoId =
                 document.getElementById("equipo").value;
+
+            const equipoSelect =
+                document.getElementById("equipo");
 
             const jugador =
                 document.getElementById("jugador").value;
 
 
             /*
+            Obtener el nombre visible del equipo
+            */
+
+            const equipoNombre =
+                equipoSelect.options[
+                    equipoSelect.selectedIndex
+                ]?.textContent || "";
+
+
+            /*
             VALIDAR EQUIPO
             */
 
-            if (!equipo) {
+            if (!equipoId) {
 
                 mostrarMensaje(
                     "Selecciona un equipo.",
@@ -884,7 +1008,12 @@
 
                 const registro = {
 
-                    equipo: equipo,
+                    /*
+                    Guardamos el nombre del equipo,
+                    igual que en tus registros actuales.
+                    */
+
+                    equipo: equipoNombre,
 
                     jugador: jugador,
 
@@ -1032,7 +1161,12 @@
 
                 const registro = {
 
-                    equipo: equipo,
+                    /*
+                    Guardamos el nombre del equipo,
+                    igual que en tus registros actuales.
+                    */
+
+                    equipo: equipoNombre,
 
                     jugador: jugador,
 
