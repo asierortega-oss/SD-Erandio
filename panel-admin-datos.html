@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SD Erandio - Editar datos</title>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .contenedor {
+            max-width: 900px;
+            margin: 30px auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .descripcion {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .bloque {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .bloque h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .fila {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input,
+        select {
+            flex: 1;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 12px 18px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        .btn-principal {
+            background: #222;
+            color: white;
+        }
+
+        .btn-editar {
+            background: #ddd;
+            color: #222;
+        }
+
+        .btn-desactivar {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-borrar {
+            background: #8e0000;
+            color: white;
+        }
+
+        .btn-cancelar {
+            background: #bbb;
+            color: #222;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .nombre {
+            font-weight: bold;
+            flex: 1;
+        }
+
+        .codigo {
+            display: block;
+            color: #888;
+            font-size: 12px;
+            margin-top: 4px;
+            font-weight: normal;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .formulario {
+            display: none;
+            background: #f7f7f7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .formulario.visible {
+            display: block;
+        }
+
+        .mensaje {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .mensaje.exito {
+            display: block;
+            background: #dff5e3;
+            color: #176b2c;
+        }
+
+        .mensaje.error {
+            display: block;
+            background: #fde2e2;
+            color: #9b1c1c;
+        }
+
+        .sin-datos {
+            color: #777;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .volver {
+            display: block;
+            margin: 20px auto;
+            background: #ddd;
+            color: #222;
+        }
+
+        .aviso-borrado {
+            background: #fff0f0;
+            border: 1px solid #ffcccc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #8e0000;
+            font-size: 14px;
+        }
+
+        @media (max-width: 650px) {
+
+            .fila {
+                flex-direction: column;
+            }
+
+            .item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .acciones {
+                width: 100%;
+            }
+
+            .acciones button {
+                flex: 1;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <h1>Editar datos</h1>
+
+    <p class="descripcion">
+        Gestiona los equipos y jugadores de SD Erandio
+    </p>
+
+    <div id="mensaje" class="mensaje"></div>
+
+
+    <!-- ================================================= -->
+    <!-- EQUIPOS -->
+    <!-- ================================================= -->
+
+    <div class="bloque">
+
+        <h2>⚽ Equipos</h2>
+
+        <button
+            class="btn-principal"
+            onclick="mostrarFormularioEquipo()">
+            + AÑADIR EQUIPO
+        </button>
+
+        <div id="formularioEquipo" class="formulario">
+
+            <h3 id="tituloFormularioEquipo">
+                Añadir equipo
+            </h3>
+
+            <div class="fila">
+
+                <input
+                    type="text"
+                    id="nombreEquipo"
+                    placeholder="Ejemplo: Juvenil B"
+                >
+
+                <button
+                    class="btn-principal"
+                    onclick="guardarEquipo()">
+                    GUARDAR
+                </button>
+
+                <button
+                    class="btn-cancelar"
+                    onclick="cancelarEquipo()">
+                    CANCELAR
+                </button>
+
+            </div>
+
+        </div>
+
+        <div id="listaEquipos">
+
+            <p class="sin-datos">
+                Cargando equipos...
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- JUGADORES -->
+    <!-- ================================================= -->
+
+    <div class="bloque">
+
+        <h2>👤 Jugadores</h2>
+
+        <div class="aviso-borrado">
+
+            ⚠️ <strong>Importante:</strong>
+            "Desactivar" conserva todo el historial.
+            "Borrar TODO" elimina definitivamente al jugador
+            y sus respuestas de RPE y Wellness.
+
+        </div>
+
+
+        <div class="fila">
+
+            <select
+                id="selectorEquipo"
+                onchange="cargarJugadores()">
+
+                <option value="">
+                    Selecciona un equipo
+                </option>
+
+            </select>
+
+            <button
+                class="btn-principal"
+                onclick="mostrarFormularioJugador()">
+                + AÑADIR JUGADOR
+            </button>
+
+        </div>
+
+
+        <div id="formularioJugador" class="formulario">
+
+            <h3 id="tituloFormularioJugador">
+                Añadir jugador
+            </h3>
+
+            <div class="fila">
+
+                <input
+                    type="text"
+                    id="nombreJugador"
+                    placeholder="Ejemplo: Jon García"
+                >
+
+                <button
+                    class="btn-principal"
+                    onclick="guardarJugador()">
+                    GUARDAR
+                </button>
+
+                <button
+                    class="btn-cancelar"
+                    onclick="cancelarJugador()">
+                    CANCELAR
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div id="listaJugadores">
+
+            <p class="sin-datos">
+                Selecciona un equipo para ver sus jugadores.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- VOLVER -->
+    <!-- ================================================= -->
+
+    <button
+        class="volver"
+        onclick="volverAdmin()">
+        ← VOLVER AL PANEL ADMIN
+    </button>
+
+</div>
+
+
+<script>
+
+    // =====================================================
+    // SUPABASE
+    // =====================================================
+
+    const SUPABASE_URL =
+        "https://alprdcjaexllelxthhbv.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_6kF4hhGM3bwqgwv6F3zmmw__HvkPXiD";
+
+    const supabaseClient =
+        supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+    // =====================================================
+    // VARIABLES
+    // =====================================================
+
+    let equipos = [];
+
+    let equipoEditando = null;
+
+    let jugadorEditando = null;
+
+
+    // =====================================================
+    // AL CARGAR
+    // =====================================================
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function() {
+
+            cargarEquipos();
+
+        }
+    );
+
+
+    // =====================================================
+    // MENSAJES
+    // =====================================================
+
+    function mostrarMensaje(texto, tipo) {
+
+        const mensaje =
+            document.getElementById("mensaje");
+
+        mensaje.textContent = texto;
+
+        mensaje.className =
+            "mensaje " + tipo;
+
+        setTimeout(function() {
+
+            mensaje.className = "mensaje";
+
+        }, 4000);
+
+    }
+
+
+    // =====================================================
+    // CREAR CÓDIGO
+    // =====================================================
+
+    function crearCodigo(texto) {
+
+        return texto
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-|-$/g, "");
+
+    }
+
+
+    // =====================================================
+    // CARGAR EQUIPOS
+    // =====================================================
+
+    async function cargarEquipos() {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("equipos")
+            .select("*")
+            .eq("activo", true)
+            .order("nombre", {
+                ascending: true
+            });
+
+
+        if (error) {
+
+            console.error(error);
+
+            mostrarMensaje(
+                "Error al cargar los equipos.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        equipos = data || [];
+
+
+        pintarEquipos();
+
+        llenarSelectorEquipos();
+
+    }
+
+
+    // =====================================================
+    // PINTAR EQUIPOS
+    // =====================================================
+
+    function pintarEquipos() {
+
+        const contenedor =
+            document.getElementById("listaEquipos");
+
+
+        if (equipos.length === 0) {
+
+            contenedor.innerHTML = `
+                <p class="sin-datos">
+                    No hay equipos creados.
+                </p>
+            `;
+
+            return;
+
+        }
+
+
+        contenedor.innerHTML = "";
+
+
+        equipos.forEach(function(equipo) {
+
+            const div =
+                document.createElement("div");
+
+            div.className = "item";
+
+
+            div.innerHTML = `
+
+                <div class="nombre">
+
+                    ${escapeHTML(equipo.nombre)}
+
+                    <span class="codigo">
+                        Código:
+                        ${escapeHTML(equipo.codigo || "")}
+                    </span>
+
+                </div>
+
+                <div class="acciones">
+
+                    <button
+                        class="btn-editar"
+                        onclick="editarEquipo(${equipo.id})">
+                        EDITAR
+                    </button>
+
+                    <button
+                        class="btn-desactivar"
+                        onclick="desactivarEquipo(${equipo.id})">
+                        DESACTIVAR
+                    </button>
+
+                </div>
+
+            `;
+
+
+            contenedor.appendChild(div);
+
+        });
+
+    }
+
+
+    // =====================================================
+    // SELECTOR DE EQUIPOS
+    // =====================================================
+
+    function llenarSelectorEquipos() {
+
+        const selector =
+            document.getElementById(
+                "selectorEquipo"
+            );
+
+
+        const equipoSeleccionado =
+            selector.value;
+
+
+        selector.innerHTML = `
+            <option value="">
+                Selecciona un equipo
+            </option>
+        `;
+
+
+        equipos.forEach(function(equipo) {
+
+            const option =
+                document.createElement("option");
+
+            option.value =
+                equipo.id;
+
+            option.textContent =
+                equipo.nombre;
+
+            selector.appendChild(option);
+
+        });
+
+
+        if (equipoSeleccionado) {
+
+            selector.value =
+                equipoSeleccionado;
+
+        }
+
+    }
+
+
+    // =====================================================
+    // FORMULARIO EQUIPO
+    // =====================================================
+
+    function mostrarFormularioEquipo() {
+
+        equipoEditando = null;
+
+
+        document.getElementById(
+            "tituloFormularioEquipo"
+        ).textContent =
+            "Añadir equipo";
+
+
+        document.getElementById(
+            "nombreEquipo"
+        ).value = "";
+
+
+        document.getElementById(
+            "formularioEquipo"
+        ).classList.add("visible");
+
+
+        document.getElementById(
+            "nombreEquipo"
+        ).focus();
+
+    }
+
+
+    function cancelarEquipo() {
+
+        equipoEditando = null;
+
+
+        document.getElementById(
+            "formularioEquipo"
+        ).classList.remove("visible");
+
+    }
+
+
+    // =====================================================
+    // GUARDAR EQUIPO
+    // =====================================================
+
+    async function guardarEquipo() {
+
+        const nombre =
+            document.getElementById(
+                "nombreEquipo"
+            ).value.trim();
+
+
+        if (!nombre) {
+
+            alert(
+                "Escribe el nombre del equipo."
+            );
+
+            return;
+
+        }
+
+
+        // ================================================
+        // EDITAR EQUIPO
+        // ================================================
+
+        if (equipoEditando !== null) {
+
+            const equipoAnterior =
+                equipos.find(function(e) {
+
+                    return e.id === equipoEditando;
+
+                });
+
+
+            if (!equipoAnterior) {
+
+                return;
+
+            }
+
+
+            const {
+                error
+            } = await supabaseClient
+                .from("equipos")
+                .update({
+                    nombre: nombre
+                })
+                .eq(
+                    "id",
+                    equipoEditando
+                );
+
+
+            if (error) {
+
+                console.error(error);
+
+                mostrarMensaje(
+                    "No se pudo modificar el equipo.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            mostrarMensaje(
+                "Equipo modificado correctamente.",
+                "exito"
+            );
+
+        }
+
+
+        // ================================================
+        // CREAR EQUIPO
+        // ================================================
+
+        else {
+
+            const codigo =
+                crearCodigo(nombre);
+
+
+            const {
+                error
+            } = await supabaseClient
+                .from("equipos")
+                .insert([{
+
+                    nombre: nombre,
+
+                    codigo: codigo,
+
+                    activo: true
+
+                }]);
+
+
+            if (error) {
+
+                console.error(error);
+
+
+                if (
+                    error.code === "23505"
+                ) {
+
+                    mostrarMensaje(
+                        "Ya existe un equipo con ese código.",
+                        "error"
+                    );
+
+                } else {
+
+                    mostrarMensaje(
+                        "No se pudo crear el equipo.",
+                        "error"
+                    );
+
+                }
+
+                return;
+
+            }
+
+
+            mostrarMensaje(
+                "Equipo creado correctamente.",
+                "exito"
+            );
+
+        }
+
+
+        cancelarEquipo();
+
+        await cargarEquipos();
+
+    }
+
+
+    // =====================================================
+    // EDITAR EQUIPO
+    // =====================================================
+
+    function editarEquipo(id) {
+
+        const equipo =
+            equipos.find(function(e) {
+
+                return e.id === id;
+
+            });
+
+
+        if (!equipo) {
+
+            return;
+
+        }
+
+
+        equipoEditando = id;
+
+
+        document.getElementById(
+            "tituloFormularioEquipo"
+        ).textContent =
+            "Editar equipo";
+
+
+        document.getElementById(
+            "nombreEquipo"
+        ).value =
+            equipo.nombre;
+
+
+        document.getElementById(
+            "formularioEquipo"
+        ).classList.add("visible");
+
+
+        document.getElementById(
+            "nombreEquipo"
+        ).focus();
+
+    }
+
+
+    // =====================================================
+    // DESACTIVAR EQUIPO
+    // =====================================================
+
+    async function desactivarEquipo(id) {
+
+        const equipo =
+            equipos.find(function(e) {
+
+                return e.id === id;
+
+            });
+
+
+        if (!equipo) {
+
+            return;
+
+        }
+
+
+        const confirmar =
+            confirm(
+                "¿Seguro que quieres desactivar " +
+                equipo.nombre +
+                "?\n\n" +
+                "El equipo dejará de aparecer en los paneles, " +
+                "pero sus datos históricos se conservarán."
+            );
+
+
+        if (!confirmar) {
+
+            return;
+
+        }
+
+
+        const {
+            error
+        } = await supabaseClient
+            .from("equipos")
+            .update({
+                activo: false
+            })
+            .eq(
+                "id",
+                id
+            );
+
+
+        if (error) {
+
+            console.error(error);
+
+            mostrarMensaje(
+                "No se pudo desactivar el equipo.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        mostrarMensaje(
+            "Equipo desactivado.",
+            "exito"
+        );
+
+
+        await cargarEquipos();
+
+
+        document.getElementById(
+            "listaJugadores"
+        ).innerHTML = `
+            <p class="sin-datos">
+                Selecciona un equipo para ver sus jugadores.
+            </p>
+        `;
+
+    }
+
+
+    // =====================================================
+    // CARGAR JUGADORES
+    // =====================================================
+
+    async function cargarJugadores() {
+
+        const equipoId =
+            document.getElementById(
+                "selectorEquipo"
+            ).value;
+
+
+        const contenedor =
+            document.getElementById(
+                "listaJugadores"
+            );
+
+
+        if (!equipoId) {
+
+            contenedor.innerHTML = `
+                <p class="sin-datos">
+                    Selecciona un equipo para ver sus jugadores.
+                </p>
+            `;
+
+            return;
+
+        }
+
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("jugadores")
+            .select("*")
+            .eq(
+                "equipo_id",
+                equipoId
+            )
+            .eq(
+                "activo",
+                true
+            )
+            .order("nombre", {
+                ascending: true
+            });
+
+
+        if (error) {
+
+            console.error(error);
+
+            mostrarMensaje(
+                "Error al cargar los jugadores.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        pintarJugadores(
+            data || []
+        );
+
+    }
+
+
+    // =====================================================
+    // PINTAR JUGADORES
+    // =====================================================
+
+    function pintarJugadores(jugadores) {
+
+        const contenedor =
+            document.getElementById(
+                "listaJugadores"
+            );
+
+
+        if (jugadores.length === 0) {
+
+            contenedor.innerHTML = `
+                <p class="sin-datos">
+                    Este equipo todavía no tiene jugadores.
+                </p>
+            `;
+
+            return;
+
+        }
+
+
+        contenedor.innerHTML = "";
+
+
+        jugadores.forEach(function(jugador) {
+
+            const div =
+                document.createElement("div");
+
+            div.className = "item";
+
+
+            div.innerHTML = `
+
+                <div class="nombre">
+
+                    ${escapeHTML(jugador.nombre)}
+
+                </div>
+
+                <div class="acciones">
+
+                    <button
+                        class="btn-editar"
+                        onclick="editarJugador(${jugador.id})">
+                        EDITAR
+                    </button>
+
+                    <button
+                        class="btn-desactivar"
+                        onclick="desactivarJugador(${jugador.id})">
+                        DESACTIVAR
+                    </button>
+
+                    <button
+                        class="btn-borrar"
+                        onclick="borrarJugadorTodo(${jugador.id})">
+                        🗑️ BORRAR TODO
+                    </button>
+
+                </div>
+
+            `;
+
+
+            contenedor.appendChild(div);
+
+        });
+
+    }
+
+
+    // =====================================================
+    // FORMULARIO JUGADOR
+    // =====================================================
+
+    function mostrarFormularioJugador() {
+
+        const equipoId =
+            document.getElementById(
+                "selectorEquipo"
+            ).value;
+
+
+        if (!equipoId) {
+
+            alert(
+                "Primero selecciona un equipo."
+            );
+
+            return;
+
+        }
+
+
+        jugadorEditando = null;
+
+
+        document.getElementById(
+            "tituloFormularioJugador"
+        ).textContent =
+            "Añadir jugador";
+
+
+        document.getElementById(
+            "nombreJugador"
+        ).value = "";
+
+
+        document.getElementById(
+            "formularioJugador"
+        ).classList.add("visible");
+
+
+        document.getElementById(
+            "nombreJugador"
+        ).focus();
+
+    }
+
+
+    function cancelarJugador() {
+
+        jugadorEditando = null;
+
+
+        document.getElementById(
+            "formularioJugador"
+        ).classList.remove("visible");
+
+    }
+
+
+    // =====================================================
+    // GUARDAR JUGADOR
+    // =====================================================
+
+    async function guardarJugador() {
+
+        const nombre =
+            document.getElementById(
+                "nombreJugador"
+            ).value.trim();
+
+
+        const equipoId =
+            document.getElementById(
+                "selectorEquipo"
+            ).value;
+
+
+        if (!equipoId) {
+
+            alert(
+                "Primero selecciona un equipo."
+            );
+
+            return;
+
+        }
+
+
+        if (!nombre) {
+
+            alert(
+                "Escribe el nombre del jugador."
+            );
+
+            return;
+
+        }
+
+
+        // ================================================
+        // EDITAR JUGADOR
+        // ================================================
+
+        if (jugadorEditando !== null) {
+
+            const {
+                data: jugadorAnterior
+            } = await supabaseClient
+                .from("jugadores")
+                .select("nombre")
+                .eq(
+                    "id",
+                    jugadorEditando
+                )
+                .single();
+
+
+            const {
+                error
+            } = await supabaseClient
+                .from("jugadores")
+                .update({
+                    nombre: nombre
+                })
+                .eq(
+                    "id",
+                    jugadorEditando
+                );
+
+
+            if (error) {
+
+                console.error(error);
+
+                mostrarMensaje(
+                    "No se pudo modificar el jugador.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            // --------------------------------------------
+            // Actualizar historial antiguo
+            // --------------------------------------------
+
+            if (jugadorAnterior) {
+
+                const equipo =
+                    equipos.find(function(e) {
+
+                        return String(e.id) ===
+                            String(equipoId);
+
+                    });
+
+
+                if (equipo) {
+
+                    const {
+                        error: errorRespuestas
+                    } = await supabaseClient
+                        .from("respuestas")
+                        .update({
+                            jugador: nombre
+                        })
+                        .eq(
+                            "jugador",
+                            jugadorAnterior.nombre
+                        )
+                        .eq(
+                            "equipo",
+                            equipo.codigo
+                        );
+
+
+                    if (errorRespuestas) {
+
+                        console.warn(
+                            "No se pudieron actualizar respuestas antiguas:",
+                            errorRespuestas
+                        );
+
+                    }
+
+                }
+
+            }
+
+
+            mostrarMensaje(
+                "Jugador modificado correctamente.",
+                "exito"
+            );
+
+        }
+
+
+        // ================================================
+        // CREAR JUGADOR
+        // ================================================
+
+        else {
+
+            const {
+                error
+            } = await supabaseClient
+                .from("jugadores")
+                .insert([{
+
+                    equipo_id:
+                        Number(equipoId),
+
+                    nombre:
+                        nombre,
+
+                    activo:
+                        true
+
+                }]);
+
+
+            if (error) {
+
+                console.error(error);
+
+                mostrarMensaje(
+                    "No se pudo crear el jugador.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            mostrarMensaje(
+                "Jugador añadido correctamente.",
+                "exito"
+            );
+
+        }
+
+
+        cancelarJugador();
+
+        await cargarJugadores();
+
+    }
+
+
+    // =====================================================
+    // EDITAR JUGADOR
+    // =====================================================
+
+    async function editarJugador(id) {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("jugadores")
+            .select("*")
+            .eq(
+                "id",
+                id
+            )
+            .single();
+
+
+        if (error || !data) {
+
+            console.error(error);
+
+            return;
+
+        }
+
+
+        jugadorEditando = id;
+
+
+        document.getElementById(
+            "tituloFormularioJugador"
+        ).textContent =
+            "Editar jugador";
+
+
+        document.getElementById(
+            "nombreJugador"
+        ).value =
+            data.nombre;
+
+
+        document.getElementById(
+            "formularioJugador"
+        ).classList.add("visible");
+
+
+        document.getElementById(
+            "nombreJugador"
+        ).focus();
+
+    }
+
+
+    // =====================================================
+    // DESACTIVAR JUGADOR
+    // =====================================================
+
+    async function desactivarJugador(id) {
+
+        const confirmar =
+            confirm(
+                "¿Seguro que quieres desactivar este jugador?\n\n" +
+                "El jugador desaparecerá de los paneles, " +
+                "pero TODO su historial se conservará."
+            );
+
+
+        if (!confirmar) {
+
+            return;
+
+        }
+
+
+        const {
+            error
+        } = await supabaseClient
+            .from("jugadores")
+            .update({
+                activo: false
+            })
+            .eq(
+                "id",
+                id
+            );
+
+
+        if (error) {
+
+            console.error(error);
+
+            mostrarMensaje(
+                "No se pudo desactivar el jugador.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        mostrarMensaje(
+            "Jugador desactivado.",
+            "exito"
+        );
+
+
+        await cargarJugadores();
+
+    }
+
+
+    // =====================================================
+    // BORRAR JUGADOR + TODO SU HISTORIAL
+    // =====================================================
+
+    async function borrarJugadorTodo(id) {
+
+        // -----------------------------------------------
+        // Primero obtenemos los datos del jugador
+        // -----------------------------------------------
+
+        const {
+            data: jugador,
+            error: errorJugador
+        } = await supabaseClient
+            .from("jugadores")
+            .select("*")
+            .eq(
+                "id",
+                id
+            )
+            .single();
+
+
+        if (errorJugador || !jugador) {
+
+            console.error(errorJugador);
+
+            mostrarMensaje(
+                "No se pudo encontrar el jugador.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        // -----------------------------------------------
+        // Primera confirmación
+        // -----------------------------------------------
+
+        const primeraConfirmacion =
+            confirm(
+                "⚠️ ATENCIÓN\n\n" +
+                "Vas a borrar a:\n\n" +
+                jugador.nombre +
+                "\n\n" +
+                "Esto eliminará también TODO su historial " +
+                "guardado en RPE y Wellness.\n\n" +
+                "¿Quieres continuar?"
+            );
+
+
+        if (!primeraConfirmacion) {
+
+            return;
+
+        }
+
+
+        // -----------------------------------------------
+        // Segunda confirmación
+        // -----------------------------------------------
+
+        const segundaConfirmacion =
+            confirm(
+                "🚨 ÚLTIMA CONFIRMACIÓN\n\n" +
+                "Se eliminarán definitivamente:\n\n" +
+                "• El jugador\n" +
+                "• Sus registros de RPE\n" +
+                "• Sus registros de Wellness\n" +
+                "• Todo su historial de respuestas\n\n" +
+                "ESTA ACCIÓN NO SE PUEDE DESHACER.\n\n" +
+                "¿BORRAR TODO?"
+            );
+
+
+        if (!segundaConfirmacion) {
+
+            return;
+
+        }
+
+
+        // -----------------------------------------------
+        // Primero borrar respuestas
+        // -----------------------------------------------
+
+        const {
+            error: errorRespuestas
+        } = await supabaseClient
+            .from("respuestas")
+            .delete()
+            .eq(
+                "jugador",
+                jugador.nombre
+            );
+
+
+        if (errorRespuestas) {
+
+            console.error(
+                errorRespuestas
+            );
+
+            mostrarMensaje(
+                "No se pudo borrar el historial. El jugador NO se ha borrado.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        // -----------------------------------------------
+        // Después borrar jugador
+        // -----------------------------------------------
+
+        const {
+            error: errorBorrado
+        } = await supabaseClient
+            .from("jugadores")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+
+        if (errorBorrado) {
+
+            console.error(
+                errorBorrado
+            );
+
+            mostrarMensaje(
+                "Se borró el historial, pero no se pudo borrar el jugador.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        // -----------------------------------------------
+        // Todo correcto
+        // -----------------------------------------------
+
+        mostrarMensaje(
+            "Jugador y todo su historial borrados correctamente.",
+            "exito"
+        );
+
+
+        await cargarJugadores();
+
+    }
+
+
+    // =====================================================
+    // ESCAPAR HTML
+    // =====================================================
+
+    function escapeHTML(texto) {
+
+        return String(texto)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    // =====================================================
+    // VOLVER
+    // =====================================================
+
+    function volverAdmin() {
+
+        window.location.href =
+            "panel-admin.html";
+
+    }
+
+</script>
+
+</body>
+</html>
