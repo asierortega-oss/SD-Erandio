@@ -477,16 +477,24 @@
 
         if (error) {
 
-            console.error(error);
+    console.error("ERROR COMPLETO DE SUPABASE:", error);
 
-            mostrarMensaje(
-                "Error al cargar los equipos.",
-                "error"
-            );
+    alert(
+        "ERROR DE SUPABASE:\n\n" +
+        "Código: " + (error.code || "sin código") + "\n" +
+        "Mensaje: " + (error.message || "sin mensaje") + "\n" +
+        "Detalles: " + (error.details || "sin detalles") + "\n" +
+        "Hint: " + (error.hint || "sin pista")
+    );
 
-            return;
+    mostrarMensaje(
+        "Error al cargar los equipos.",
+        "error"
+    );
 
-        }
+    return;
+
+}
 
 
         equipos = data || [];
