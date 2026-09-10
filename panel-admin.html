@@ -2,223 +2,157 @@
 <html lang="es">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Panel Administrador</title>
-
-    <link
-        rel="stylesheet"
-        href="estilos.css"
-    >
+    <title>SD Erandio - Administrador</title>
 
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
 
-        /* =====================================================
-           PANEL ADMINISTRADOR
-           ===================================================== */
-
-        .menu-admin {
-            max-width: 500px;
-            margin: auto;
+        .contenedor {
+            max-width: 600px;
+            margin: 60px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
 
-
-        /* =====================================================
-           BOTONES PRINCIPALES
-           ===================================================== */
-
-        .menu-admin > button {
-            display: block;
-            width: 100%;
-            margin: 15px 0;
+        h1 {
+            margin-bottom: 10px;
         }
 
-
-        /* =====================================================
-           BOTÓN PANEL DE EQUIPOS
-           ===================================================== */
-
-        .boton-equipos {
-            display: block;
-            width: 100%;
-            margin: 15px 0;
+        p {
+            color: #666;
+            margin-bottom: 35px;
         }
 
+        .botones {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
-        /* =====================================================
-           OPCIONES RPE / WELLNESS
-           ===================================================== */
+        button {
+            padding: 18px;
+            font-size: 17px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #222;
+            color: white;
+        }
 
+        button:hover {
+            opacity: 0.85;
+        }
+
+        .volver {
+            margin-top: 30px;
+            background: #ddd;
+            color: #222;
+        }
+
+        /* Opciones RPE y WELLNESS */
         .opciones-equipos {
             display: none;
+            gap: 10px;
             margin-top: -5px;
-            margin-bottom: 15px;
         }
-
 
         .opciones-equipos button {
-            width: 100%;
-            margin: 6px 0;
-            padding: 10px;
+            flex: 1;
+            padding: 12px;
             font-size: 14px;
         }
-
-
-        /* =====================================================
-           ESTILO DIFERENTE PARA LAS OPCIONES
-           ===================================================== */
-
-        .opciones-equipos button:first-child {
-            margin-top: 0;
-        }
-
-
-        /* =====================================================
-           CABECERA
-           ===================================================== */
-
-        .cabecera {
-            margin-bottom: 30px;
-        }
-
     </style>
-
 </head>
-
 
 <body>
 
+    <div class="contenedor">
 
-    <div class="menu-admin">
+        <h1>Panel de administrador</h1>
 
+        <p>Selecciona qué zona quieres abrir</p>
 
-        <!-- =================================================
-             CABECERA
-             ================================================= -->
+        <div class="botones">
 
-        <div class="cabecera">
-
-            <h1>
-                Panel Administrador
-            </h1>
-
-            <p>
-                Selecciona una opción
-            </p>
-
-        </div>
-
-
-        <!-- =================================================
-             PANEL PERSONAL
-             ================================================= -->
-
-        <button
-            onclick="window.location.href='panel.html'"
-        >
-            PANEL PERSONAL
-        </button>
-
-
-        <!-- =================================================
-             PANEL DE EQUIPOS
-             ================================================= -->
-
-        <button
-            class="boton-equipos"
-            onclick="mostrarOpcionesEquipos()"
-        >
-            PANEL DE EQUIPOS
-        </button>
-
-
-        <!-- =================================================
-             OPCIONES DE EQUIPOS
-             ================================================= -->
-
-        <div
-            id="opcionesEquipos"
-            class="opciones-equipos"
-        >
-
-            <button
-                onclick="window.location.href='panel-equipos.html'"
-            >
-                RPE
+            <button onclick="abrirPanelPersonal()">
+                PANEL PERSONAL
             </button>
 
+            <button onclick="mostrarOpcionesEquipos()">
+                PANEL DE EQUIPOS
+            </button>
 
-            <button
-                onclick="window.location.href='panel-wellness.html'"
-            >
-                WELLNESS
+            <div id="opcionesEquipos" class="opciones-equipos">
+
+                <button onclick="abrirPanelRPE()">
+                    RPE
+                </button>
+
+                <button onclick="abrirPanelWellness()">
+                    WELLNESS
+                </button>
+
+            </div>
+
+            <button onclick="abrirEdicionDatos()">
+                EDITAR DATOS
             </button>
 
         </div>
 
-
-        <!-- =================================================
-             EDITAR DATOS
-             ================================================= -->
-
-        <button
-            onclick="window.location.href='panel-admin-datos.html'"
-        >
-            EDITAR DATOS
-        </button>
-
-
-        <!-- =================================================
-             VOLVER
-             ================================================= -->
-
-        <button
-            onclick="window.location.href='index.html'"
-        >
+        <button class="volver" onclick="volverInicio()">
             VOLVER
         </button>
 
-
     </div>
-
-
-    <!-- =====================================================
-         JAVASCRIPT
-         ===================================================== -->
 
     <script>
 
+        function abrirPanelPersonal() {
+            window.location.href = "panel.html";
+        }
+
         function mostrarOpcionesEquipos() {
 
-            const opciones =
-                document.getElementById(
-                    "opcionesEquipos"
-                );
+            const opciones = document.getElementById("opcionesEquipos");
 
-
-            if (
-                opciones.style.display === "block"
-            ) {
-
+            if (opciones.style.display === "flex") {
                 opciones.style.display = "none";
-
             } else {
-
-                opciones.style.display = "block";
-
+                opciones.style.display = "flex";
             }
 
         }
 
-    </script>
+        function abrirPanelRPE() {
+            window.location.href = "panel-equipos.html";
+        }
 
+        function abrirPanelWellness() {
+            window.location.href = "panel-wellness.html";
+        }
+
+        function abrirEdicionDatos() {
+            window.location.href = "panel-admin-datos.html";
+        }
+
+        function volverInicio() {
+            window.location.href = "index.html";
+        }
+
+    </script>
 
 </body>
 
