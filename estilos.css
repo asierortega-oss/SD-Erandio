@@ -52,7 +52,6 @@ body {
 label {
     display: block;
     font-weight: bold;
-
     margin-top: 25px;
     margin-bottom: 20px;
 }
@@ -101,7 +100,6 @@ select:focus {
     margin-top: 35px;
     margin-bottom: 18px;
 }
-
 
 #formularioWellness input,
 #formularioWellness select,
@@ -298,13 +296,11 @@ button {
     max-width: 40px !important;
 
     height: 27px;
-
     padding: 2px;
     margin: 0 auto;
 
     text-align: center;
     box-sizing: border-box;
-
     background: transparent;
 }
 
@@ -325,7 +321,6 @@ button {
     max-width: 40px !important;
 
     height: 27px;
-
     padding: 2px;
     margin: 0 auto;
 
@@ -369,16 +364,13 @@ button {
 #tablaPrincipal .jugador-col {
     position: sticky;
     left: 0;
-
     background: white;
     z-index: 2;
 }
 
-
 #tablaPrincipal .carga-total-col {
     position: sticky;
     right: 0;
-
     background: white;
     z-index: 2;
 }
@@ -406,27 +398,31 @@ button {
 
 
 /* =========================================================
-   OTRAS TABLAS
+   CAMPOS DE MINUTOS
    ========================================================= */
 
-/*
-   Las tablas Wellness mantienen un ancho total de 950px
-   y cada columna tiene su propio tamaño.
-*/
-
-
-
-
-/* Tamaño general del texto */
-
+.tabla-contenedor input.minutos {
+    width: 38px;
+    padding: 5px 2px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
 
 
 /* =========================================================
-   COLUMNAS WELLNESS
+   CAMPOS RPE
    ========================================================= */
 
-/* 1. JUGADOR */
-
+.tabla-contenedor input.rpeL {
+    width: 38px;
+    padding: 5px 2px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
 
 
 /* =========================================================

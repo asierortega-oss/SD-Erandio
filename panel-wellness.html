@@ -13,55 +13,81 @@
 
   <style>
 
+    /* =========================================================
+       GENERAL
+       ========================================================= */
+
     body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(135deg, #0f172a, #1e293b);
-  padding: 30px 15px;
-  color: #1e293b;
-}
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      padding: 30px 15px;
+      color: #1e293b;
+      box-sizing: border-box;
+    }
 
-.contenedor {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  background: white;
-  padding: 32px;
-  border-radius: 22px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.30);
-}
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
 
-.cabecera {
-  text-align: center;
-  margin-bottom: 28px;
-}
 
-.cabecera h1 {
-  margin: 0;
-  font-size: 36px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  color: #0f172a;
-}
+    /* =========================================================
+       CONTENEDOR
+       ========================================================= */
 
-.cabecera p {
-  margin: 8px 0 0;
-  color: #64748b;
-  font-size: 16px;
-}
+    .contenedor {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      padding: 32px;
+      border-radius: 22px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.30);
+    }
+
+
+    /* =========================================================
+       CABECERA
+       ========================================================= */
+
+    .cabecera {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .cabecera h1 {
+      margin: 0;
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #0f172a;
+    }
+
+    .cabecera p {
+      margin: 8px 0 0;
+      color: #64748b;
+      font-size: 16px;
+    }
+
+
+    /* =========================================================
+       FILTROS
+       ========================================================= */
 
     .filtros {
-  display: flex;
-  gap: 15px;
-  align-items: end;
-  flex-wrap: wrap;
-  margin-bottom: 25px;
-  padding: 22px;
-  background: #f8fafc;
-  border: 2px solid #e2e8f0;
-  border-radius: 16px;
-}
+      display: flex;
+      gap: 15px;
+      align-items: end;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+      padding: 22px;
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+    }
 
     .campo {
       display: flex;
@@ -70,165 +96,320 @@
     }
 
     .campo label {
-  font-weight: 700;
-  font-size: 14px;
-  color: #334155;
-}
+      font-weight: 700;
+      font-size: 14px;
+      color: #334155;
+    }
 
-.campo select,
-.campo input {
-  padding: 13px 14px;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  font-size: 15px;
-  background: white;
-  color: #1e293b;
-  transition: all 0.2s ease;
-}
+    .campo select,
+    .campo input {
+      padding: 13px 14px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 15px;
+      background: white;
+      color: #1e293b;
+      transition: all 0.2s ease;
+    }
 
-.campo select:focus,
-.campo input:focus {
-  outline: none;
-  border-color: #0f172a;
-  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
-}
+    .campo select:focus,
+    .campo input:focus {
+      outline: none;
+      border-color: #0f172a;
+      box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+    }
+
+
+    /* =========================================================
+       BOTÓN CONSULTAR
+       ========================================================= */
 
     .boton-consultar {
-  padding: 13px 22px;
-  border: none;
-  border-radius: 12px;
-  background: #0f172a;
-  color: white;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 6px 15px rgba(15, 23, 42, 0.18);
-}
+      padding: 13px 22px;
+      border: none;
+      border-radius: 12px;
+      background: #0f172a;
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 15px rgba(15, 23, 42, 0.18);
+    }
 
-.boton-consultar:hover {
-  background: #1e293b;
-  transform: translateY(-2px);
-  box-shadow: 0 9px 20px rgba(15, 23, 42, 0.23);
-}
+    .boton-consultar:hover {
+      background: #1e293b;
+      transform: translateY(-2px);
+      box-shadow: 0 9px 20px rgba(15, 23, 42, 0.23);
+    }
+
+
+    /* =========================================================
+       BOTÓN VOLVER
+       ========================================================= */
 
     .boton-volver {
-  display: block;
-  margin: 25px auto 0;
-  padding: 11px 18px;
-  border: 2px solid #334155;
-  border-radius: 12px;
-  background: transparent;
-  color: #334155;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.2s;
-}
+      display: block;
+      margin: 25px auto 0;
+      padding: 11px 18px;
+      border: 2px solid #334155;
+      border-radius: 12px;
+      background: transparent;
+      color: #334155;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
 
-.boton-volver:hover {
-  background: #0f172a;
-  color: white;
-  transform: translateY(-2px);
-}
+    .boton-volver:hover {
+      background: #0f172a;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+
+    /* =========================================================
+       INFORMACIÓN
+       ========================================================= */
 
     .info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
-}
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
 
-.contador {
-  font-weight: 700;
-  color: #334155;
-  font-size: 15px;
-}
+    .contador {
+      font-weight: 700;
+      color: #334155;
+      font-size: 15px;
+    }
+
+
+    /* =========================================================
+       MENSAJES
+       ========================================================= */
 
     .mensaje {
-  padding: 15px 18px;
-  border-radius: 12px;
-  background: #f8fafc;
-  border: 2px solid #e2e8f0;
-  color: #475569;
-  margin-bottom: 15px;
-  display: none;
-}
+      padding: 15px 18px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      color: #475569;
+      margin-bottom: 15px;
+      display: none;
+    }
 
-.mensaje.error {
-  background: #fef2f2;
-  border-color: #fecaca;
-  color: #b91c1c;
-}
+    .mensaje.error {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: #b91c1c;
+    }
 
-    /* TABLA OCULTA AL ENTRAR */
+
+    /* =========================================================
+       CONTENEDOR TABLA
+       ========================================================= */
 
     .tabla-contenedor {
-  display: none;
-  width: 100%;
-  overflow-x: auto;
-  border: 2px solid #e2e8f0;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
-}
-
-    table {
+      display: none;
       width: 100%;
-      min-width: 950px;
-      border-collapse: collapse;
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: visible;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
       background: white;
     }
 
-    thead th {
-  background: #0f172a;
-  color: white;
-  padding: 14px 10px;
-  font-size: 14px;
-  font-weight: 700;
-  text-align: center;
-  white-space: nowrap;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
+
+    /* =========================================================
+       TABLA WELLNESS
+       ========================================================= */
+
+    .tabla-contenedor table {
+      width: 1160px;
+      min-width: 1160px;
+      max-width: none;
+      border-collapse: collapse;
+      border-spacing: 0;
+      table-layout: fixed;
+      background: white;
+    }
 
 
-    tbody td {
-  padding: 12px 10px;
-  border-bottom: 1px solid #e2e8f0;
-  text-align: center;
-  font-size: 14px;
-  color: #334155;
-}
+    /* =========================================================
+       CABECERA TABLA
+       ========================================================= */
 
-tbody tr:hover {
-  background: #f8fafc;
-}
+    .tabla-contenedor thead th {
+      background: #0f172a;
+      color: white;
+      padding: 14px 10px;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 4;
+      border: 1px solid #334155;
+      box-sizing: border-box;
+    }
 
-    th:first-child,
-    td:first-child {
+
+    /* =========================================================
+       CELDAS
+       ========================================================= */
+
+    .tabla-contenedor tbody td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #e2e8f0;
+      border-right: 1px solid #e2e8f0;
+      text-align: center;
+      font-size: 14px;
+      color: #334155;
+      vertical-align: middle;
+      box-sizing: border-box;
+    }
+
+    .tabla-contenedor tbody tr:hover {
+      background: #f8fafc;
+    }
+
+
+    /* =========================================================
+       COLUMNA JUGADOR
+       ========================================================= */
+
+    .tabla-contenedor th:nth-child(1),
+    .tabla-contenedor td:nth-child(1) {
+      width: 250px;
+      min-width: 250px;
+      max-width: 250px;
+    }
+
+    .tabla-contenedor thead th:nth-child(1) {
       text-align: left;
+      background: #222;
       position: sticky;
       left: 0;
-      z-index: 3;
+      z-index: 6;
     }
 
-    thead th:first-child {
-      background: #222;
+    .tabla-contenedor tbody td:nth-child(1) {
+      text-align: left;
+      background: #f8fafc;
+      font-weight: 700;
+      color: #0f172a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      position: sticky;
+      left: 0;
+      z-index: 5;
     }
 
-    tbody td:first-child {
-  background: #f8fafc;
-  font-weight: 700;
-  color: #0f172a;
-  min-width: 170px;
-}
 
-    tbody tr:hover td:first-child {
-  background: #f8fafc;
-}
+    /* =========================================================
+       SUEÑO
+       ========================================================= */
+
+    .tabla-contenedor th:nth-child(2),
+    .tabla-contenedor td:nth-child(2) {
+      width: 90px;
+      min-width: 90px;
+      max-width: 90px;
+    }
+
+
+    /* =========================================================
+       FATIGA
+       ========================================================= */
+
+    .tabla-contenedor th:nth-child(3),
+    .tabla-contenedor td:nth-child(3) {
+      width: 90px;
+      min-width: 90px;
+      max-width: 90px;
+    }
+
+
+    /* =========================================================
+       ESTRÉS
+       ========================================================= */
+
+    .tabla-contenedor th:nth-child(4),
+    .tabla-contenedor td:nth-child(4) {
+      width: 90px;
+      min-width: 90px;
+      max-width: 90px;
+    }
+
+
+    /* =========================================================
+       DOLOR
+       ========================================================= */
+
+    .tabla-contenedor th:nth-child(5),
+    .tabla-contenedor td:nth-child(5) {
+      width: 90px;
+      min-width: 90px;
+      max-width: 90px;
+    }
+
+
+    /* =========================================================
+       MOLESTIAS
+       ========================================================= */
+
+    .tabla-contenedor th:nth-child(6),
+    .tabla-contenedor td:nth-child(6) {
+      width: 100px;
+      min-width: 100px;
+      max-width: 100px;
+    }
+
+
+    /* =========================================================
+       COMENTARIO
+       ========================================================= */
+
+    .tabla-contenedor th:nth-child(7),
+    .tabla-contenedor td:nth-child(7) {
+      width: 450px;
+      min-width: 450px;
+      max-width: 450px;
+
+      text-align: left !important;
+      vertical-align: top;
+
+      white-space: normal !important;
+
+      overflow: hidden;
+
+      overflow-wrap: anywhere !important;
+      word-break: break-word !important;
+
+      line-height: 1.5;
+
+      padding: 12px 10px;
+
+      box-sizing: border-box;
+    }
+
+    .tabla-contenedor td:nth-child(7) {
+      height: auto;
+    }
+
+
+    /* =========================================================
+       VALORES
+       ========================================================= */
 
     .valor {
       display: inline-flex;
@@ -251,17 +432,11 @@ tbody tr:hover {
        5 = VERDE
        ========================================================= */
 
-
-    /* VALOR 1 */
-
     .sueno-1,
     .riesgo-1 {
       background: #ff4d4d;
       color: white;
     }
-
-
-    /* VALOR 2 */
 
     .sueno-2,
     .riesgo-2 {
@@ -269,26 +444,17 @@ tbody tr:hover {
       color: #7a0000;
     }
 
-
-    /* VALOR 3 */
-
     .sueno-3,
     .riesgo-3 {
       background: #ffd966;
       color: #665000;
     }
 
-
-    /* VALOR 4 */
-
     .sueno-4,
     .riesgo-4 {
       background: #a9df9c;
       color: #205c18;
     }
-
-
-    /* VALOR 5 */
 
     .sueno-5,
     .riesgo-5 {
@@ -299,8 +465,6 @@ tbody tr:hover {
 
     /* =========================================================
        MOLESTIAS
-       SÍ = ROJO
-       NO = VERDE
        ========================================================= */
 
     .molestias-si {
@@ -320,7 +484,9 @@ tbody tr:hover {
     }
 
 
-    /* SIN RESPUESTA */
+    /* =========================================================
+       SIN RESPUESTA
+       ========================================================= */
 
     .sin-respuesta {
       color: #aaa;
@@ -328,39 +494,15 @@ tbody tr:hover {
     }
 
 
-    /* COMENTARIO */
-
-    .comentario {
-  width: 400px;
-  min-width: 400px;
-  max-width: 400px;
-  box-sizing: border-box;
-
-  text-align: left !important;
-
-  white-space: normal;
-  overflow-wrap: break-word;
-  word-break: normal;
-
-  line-height: 1.5;
-  vertical-align: top;
-  font-size: 14px;
-}
-
-.comentario span {
-  display: block;
-  width: 100%;
-  white-space: normal;
-  overflow-wrap: break-word;
-}
-
-
-    /* CARGANDO */
+    /* =========================================================
+       CARGANDO
+       ========================================================= */
 
     .cargando {
-      text-align: center;
-      padding: 30px;
+      text-align: center !important;
+      padding: 30px !important;
       color: #666;
+      white-space: normal !important;
     }
 
 
@@ -370,61 +512,61 @@ tbody tr:hover {
 
     @media (max-width: 700px) {
 
-  body {
-    padding: 15px 10px;
-  }
+      body {
+        padding: 15px 10px;
+      }
 
-  .contenedor {
-    margin: 0 auto;
-    padding: 22px 18px;
-    border-radius: 18px;
-  }
+      .contenedor {
+        margin: 0 auto;
+        padding: 22px 18px;
+        border-radius: 18px;
+      }
 
-  .cabecera {
-    margin-bottom: 22px;
-  }
+      .cabecera {
+        margin-bottom: 22px;
+      }
 
-  .cabecera h1 {
-    font-size: 28px;
-  }
+      .cabecera h1 {
+        font-size: 28px;
+      }
 
-  .cabecera p {
-    font-size: 14px;
-    line-height: 1.5;
-  }
+      .cabecera p {
+        font-size: 14px;
+        line-height: 1.5;
+      }
 
-  .filtros {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    padding: 18px;
-  }
+      .filtros {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 18px;
+      }
 
-  .campo {
-    width: 100%;
-  }
+      .campo {
+        width: 100%;
+      }
 
-  .campo select,
-  .campo input,
-  .boton-consultar {
-    width: 100%;
-    box-sizing: border-box;
-  }
+      .campo select,
+      .campo input,
+      .boton-consultar {
+        width: 100%;
+        box-sizing: border-box;
+      }
 
-  .boton-consultar {
-    margin-top: 5px;
-    height: 48px;
-  }
+      .boton-consultar {
+        margin-top: 5px;
+        height: 48px;
+      }
 
-  .tabla-contenedor {
-    border-radius: 12px;
-  }
+      .tabla-contenedor {
+        border-radius: 12px;
+      }
 
-  .boton-volver {
-    margin-top: 22px;
-  }
+      .boton-volver {
+        margin-top: 22px;
+      }
 
-}
+    }
 
   </style>
 
@@ -610,14 +752,14 @@ tbody tr:hover {
 
 
     // =========================================================
-    // JUGADORES DEL EQUIPO SELECCIONADO
+    // JUGADORES
     // =========================================================
 
     let jugadoresActuales = [];
 
 
     // =========================================================
-    // FECHA DE HOY EN LOCAL
+    // FECHA DE HOY
     // =========================================================
 
     function fechaHoyLocal() {
@@ -644,7 +786,7 @@ tbody tr:hover {
 
 
     // =========================================================
-    // CONVERTIR FECHA LOCAL A DATE
+    // FECHA LOCAL A ISO
     // =========================================================
 
     function fechaLocalAISO(fechaTexto) {
@@ -690,15 +832,10 @@ tbody tr:hover {
       }
 
       return String(texto)
-
         .replace(/&/g, "&amp;")
-
         .replace(/</g, "&lt;")
-
         .replace(/>/g, "&gt;")
-
         .replace(/"/g, "&quot;")
-
         .replace(/'/g, "&#039;");
 
     }
@@ -756,7 +893,7 @@ tbody tr:hover {
 
 
     // =========================================================
-    // CARGAR EQUIPOS DESDE SUPABASE
+    // CARGAR EQUIPOS
     // =========================================================
 
     async function cargarEquipos() {
@@ -766,13 +903,11 @@ tbody tr:hover {
           "equipo"
         );
 
-
       selectEquipo.innerHTML = `
         <option value="">
           Cargando equipos...
         </option>
       `;
-
 
       try {
 
@@ -792,7 +927,6 @@ tbody tr:hover {
             }
           );
 
-
         if (error) {
 
           console.error(
@@ -804,17 +938,14 @@ tbody tr:hover {
 
         }
 
-
         equipos =
           data || [];
-
 
         selectEquipo.innerHTML = `
           <option value="">
             Selecciona un equipo
           </option>
         `;
-
 
         equipos.forEach(
           equipo => {
@@ -824,14 +955,11 @@ tbody tr:hover {
                 "option"
               );
 
-
             opcion.value =
               equipo.id;
 
-
             opcion.textContent =
               equipo.nombre;
-
 
             selectEquipo.appendChild(
               opcion
@@ -840,15 +968,10 @@ tbody tr:hover {
           }
         );
 
-
-        // Seleccionar automáticamente
-        // el primer equipo
-
         if (equipos.length > 0) {
 
           selectEquipo.value =
             equipos[0].id;
-
 
           await cargarJugadores(
             equipos[0].id
@@ -863,20 +986,17 @@ tbody tr:hover {
 
         }
 
-
       } catch (error) {
 
         console.error(
           error
         );
 
-
         selectEquipo.innerHTML = `
           <option value="">
             Error al cargar equipos
           </option>
         `;
-
 
         mostrarMensaje(
           "No se han podido cargar los equipos desde Supabase.",
@@ -889,7 +1009,7 @@ tbody tr:hover {
 
 
     // =========================================================
-    // CARGAR JUGADORES DEL EQUIPO
+    // CARGAR JUGADORES
     // =========================================================
 
     async function cargarJugadores(
@@ -899,13 +1019,11 @@ tbody tr:hover {
       jugadoresActuales =
         [];
 
-
       if (!equipoId) {
 
         return;
 
       }
-
 
       try {
 
@@ -932,7 +1050,6 @@ tbody tr:hover {
             }
           );
 
-
         if (error) {
 
           console.error(
@@ -944,10 +1061,8 @@ tbody tr:hover {
 
         }
 
-
         jugadoresActuales =
           data || [];
-
 
       } catch (error) {
 
@@ -988,10 +1103,8 @@ tbody tr:hover {
 
       }
 
-
       const numero =
         Number(valor);
-
 
       return `
         <span class="valor sueno-${numero}">
@@ -1003,7 +1116,7 @@ tbody tr:hover {
 
 
     // =========================================================
-    // PINTAR FATIGA / ESTRÉS / DOLOR
+    // PINTAR RIESGO
     // =========================================================
 
     function pintarRiesgo(valor) {
@@ -1022,10 +1135,8 @@ tbody tr:hover {
 
       }
 
-
       const numero =
         Number(valor);
-
 
       return `
         <span class="valor riesgo-${numero}">
@@ -1056,12 +1167,10 @@ tbody tr:hover {
 
       }
 
-
       const texto =
         String(valor)
           .trim()
           .toLowerCase();
-
 
       if (texto === "si") {
 
@@ -1072,7 +1181,6 @@ tbody tr:hover {
         `;
 
       }
-
 
       return `
         <span class="molestias-no">
@@ -1091,30 +1199,25 @@ tbody tr:hover {
 
       ocultarMensaje();
 
-
       const equipoId =
         document.getElementById(
           "equipo"
         ).value;
-
 
       const fecha =
         document.getElementById(
           "fecha"
         ).value;
 
-
       const tabla =
         document.getElementById(
           "tablaWellness"
         );
 
-
       const contador =
         document.getElementById(
           "contador"
         );
-
 
       const tablaContenedor =
         document.querySelector(
@@ -1167,7 +1270,7 @@ tbody tr:hover {
 
 
       // =======================================================
-      // BUSCAR EQUIPO
+      // EQUIPO SELECCIONADO
       // =======================================================
 
       const equipoSeleccionado =
@@ -1175,7 +1278,6 @@ tbody tr:hover {
           equipo =>
             equipo.id === equipoId
         );
-
 
       if (!equipoSeleccionado) {
 
@@ -1188,13 +1290,12 @@ tbody tr:hover {
 
       }
 
-
       const equipoNombre =
         equipoSeleccionado.nombre;
 
 
       // =======================================================
-      // CARGAR JUGADORES ACTUALIZADOS
+      // CARGAR JUGADORES
       // =======================================================
 
       await cargarJugadores(
@@ -1209,7 +1310,6 @@ tbody tr:hover {
       tablaContenedor.style.display =
         "block";
 
-
       tabla.innerHTML = `
         <tr>
           <td
@@ -1220,7 +1320,6 @@ tbody tr:hover {
           </td>
         </tr>
       `;
-
 
       contador.textContent =
         "Consultando...";
@@ -1246,7 +1345,6 @@ tbody tr:hover {
           new Date(
             desde
           );
-
 
         hasta.setDate(
           hasta.getDate() + 1
@@ -1317,7 +1415,6 @@ tbody tr:hover {
         const respuestasPorJugador =
           {};
 
-
         (data || []).forEach(
           registro => {
 
@@ -1336,7 +1433,6 @@ tbody tr:hover {
         let numeroRespuestas =
           0;
 
-
         jugadoresActuales.forEach(
           jugador => {
 
@@ -1353,13 +1449,12 @@ tbody tr:hover {
           }
         );
 
-
         contador.textContent =
           `${numeroRespuestas} de ${jugadoresActuales.length} jugadores han respondido`;
 
 
         // =====================================================
-        // SI NO HAY JUGADORES
+        // SIN JUGADORES
         // =====================================================
 
         if (
@@ -1392,7 +1487,7 @@ tbody tr:hover {
 
 
         // =====================================================
-        // CREAR UNA FILA POR JUGADOR
+        // CREAR FILAS
         // =====================================================
 
         jugadoresActuales.forEach(
@@ -1401,7 +1496,6 @@ tbody tr:hover {
             const nombreJugador =
               jugador.nombre;
 
-
             const registro =
               respuestasPorJugador[
                 nombreJugador
@@ -1409,7 +1503,7 @@ tbody tr:hover {
 
 
             // =================================================
-            // JUGADOR SIN RESPUESTA
+            // SIN RESPUESTA
             // =================================================
 
             if (!registro) {
@@ -1418,7 +1512,6 @@ tbody tr:hover {
                 document.createElement(
                   "tr"
                 );
-
 
               fila.innerHTML = `
 
@@ -1456,7 +1549,7 @@ tbody tr:hover {
                   </span>
                 </td>
 
-                <td class="comentario">
+                <td>
                   <span class="sin-respuesta">
                     Sin respuesta
                   </span>
@@ -1464,11 +1557,9 @@ tbody tr:hover {
 
               `;
 
-
               tabla.appendChild(
                 fila
               );
-
 
               return;
 
@@ -1482,26 +1573,20 @@ tbody tr:hover {
             const respuestas =
               registro.respuestas || {};
 
-
             const sueño =
               respuestas.sueno;
-
 
             const fatiga =
               respuestas.fatiga;
 
-
             const estres =
               respuestas.estres;
-
 
             const dolor =
               respuestas.dolor;
 
-
             const molestias =
               respuestas.molestias;
-
 
             const comentario =
               respuestas.comentario;
@@ -1517,7 +1602,6 @@ tbody tr:hover {
                   —
                 </span>
               `;
-
 
             if (
               comentario !== null &&
@@ -1541,7 +1625,6 @@ tbody tr:hover {
               document.createElement(
                 "tr"
               );
-
 
             fila.innerHTML = `
 
@@ -1569,12 +1652,11 @@ tbody tr:hover {
                 ${pintarMolestias(molestias)}
               </td>
 
-              <td class="comentario">
+              <td>
                 ${comentarioHTML}
               </td>
 
             `;
-
 
             tabla.appendChild(
               fila
@@ -1590,7 +1672,6 @@ tbody tr:hover {
           error
         );
 
-
         tabla.innerHTML = `
           <tr>
             <td
@@ -1603,10 +1684,8 @@ tbody tr:hover {
           </tr>
         `;
 
-
         contador.textContent =
           "Error al consultar los datos.";
-
 
         mostrarMensaje(
           "Ha ocurrido un error al consultar Supabase. Revisa la consola del navegador.",
@@ -1619,7 +1698,7 @@ tbody tr:hover {
 
 
     // =========================================================
-    // VOLVER AL PANEL ADMINISTRADOR
+    // VOLVER
     // =========================================================
 
     function volverAdmin() {
@@ -1643,19 +1722,14 @@ tbody tr:hover {
         const equipoId =
           this.value;
 
-
         await cargarJugadores(
           equipoId
         );
-
-
-        // Ocultar resultados anteriores
 
         document.querySelector(
           ".tabla-contenedor"
         ).style.display =
           "none";
-
 
         document.getElementById(
           "contador"
@@ -1674,15 +1748,10 @@ tbody tr:hover {
       "DOMContentLoaded",
       async function () {
 
-        // Fecha de hoy
-
         document.getElementById(
           "fecha"
         ).value =
           fechaHoyLocal();
-
-
-        // Cargar equipos
 
         await cargarEquipos();
 
