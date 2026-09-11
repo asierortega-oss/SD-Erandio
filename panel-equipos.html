@@ -398,6 +398,34 @@
             max-width: 45px !important;
         }
     }
+
+    .boton-volver {
+    display: block;
+    margin: 25px auto 0;
+    padding: 11px 18px;
+    border: 2px solid #334155;
+    border-radius: 12px;
+    background: transparent;
+    color: #334155;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.boton-volver:hover {
+    background: #0f172a;
+    color: white;
+    border-color: #0f172a;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 700px) {
+    .boton-volver {
+        width: 100%;
+        margin-top: 22px;
+    }
+}
 </style>
 
 
@@ -509,6 +537,10 @@
 
 
 </div>
+
+<button type="button" class="boton-volver" onclick="history.back()">
+    ← Volver
+</button>
 
 
 
