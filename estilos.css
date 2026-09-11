@@ -492,3 +492,38 @@ button {
     }
 
 }
+/* =========================================================
+   CORRECCIÓN MÓVIL DEL FORMULARIO WELLNESS
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .filtros {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    .filtros .campo {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .filtros .campo select,
+    .filtros .campo input {
+        display: block;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .filtros .campo input[type="date"] {
+        height: 52px;
+        padding: 13px 12px;
+        font-size: 16px;
+    }
+
+}
