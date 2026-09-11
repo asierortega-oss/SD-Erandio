@@ -58,6 +58,7 @@
 
     .formulario {
         width: 100%;
+        min-width: 0;
     }
 
     .formulario > label {
@@ -71,6 +72,8 @@
     #equipo,
     .filtro-fecha input {
         width: 100%;
+        max-width: 100%;
+        min-width: 0;
         padding: 13px 14px;
         font-size: 15px;
         border: 2px solid #e2e8f0;
@@ -98,11 +101,15 @@
         background: #f8fafc;
         border: 2px solid #e2e8f0;
         border-radius: 16px;
+        width: 100%;
+        min-width: 0;
     }
 
     .filtro-fecha {
         display: flex;
         flex-direction: column;
+        min-width: 0;
+        width: 100%;
     }
 
     .filtro-fecha label {
@@ -358,16 +365,30 @@
     }
 
 
+    /* ==================================================
+       MÓVIL
+       ================================================== */
+
     @media (max-width: 700px) {
 
         body {
             padding: 15px 10px;
+            overflow-x: hidden;
         }
 
         .contenedor {
+            width: 100%;
+            max-width: 100%;
             margin: 0 auto;
             padding: 22px 18px;
             border-radius: 18px;
+            overflow: hidden;
+        }
+
+        .formulario {
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
         }
 
         .cabecera {
@@ -383,17 +404,60 @@
             line-height: 1.5;
         }
 
+
+        /* ==============================================
+           FECHAS EN MÓVIL
+           ============================================== */
+
         .filtros-fechas {
-            grid-template-columns: 1fr;
+            display: flex;
+            flex-direction: column;
+
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+
             gap: 12px;
             padding: 18px;
+
+            overflow: hidden;
+        }
+
+        .filtro-fecha {
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+        }
+
+        .filtro-fecha input[type="date"] {
+            display: block;
+
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+
+            height: 46px;
+
+            padding: 10px 8px;
+
+            font-size: 14px;
+
+            box-sizing: border-box;
         }
 
         #botonConsultar {
             height: 48px;
         }
 
+
+        /* ==============================================
+           TABLA
+           ============================================== */
+
         .tabla-contenedor {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
             border-radius: 12px;
         }
 
@@ -427,9 +491,41 @@
             max-width: 45px !important;
         }
 
+
+        /* ==============================================
+           BOTÓN VOLVER
+           ============================================== */
+
         .boton-volver {
             width: 100%;
             margin-top: 22px;
+        }
+
+    }
+
+
+    /* ==================================================
+       MÓVILES MUY PEQUEÑOS
+       ================================================== */
+
+    @media (max-width: 380px) {
+
+        body {
+            padding: 12px 8px;
+        }
+
+        .contenedor {
+            padding: 18px 12px;
+        }
+
+        .filtros-fechas {
+            padding: 14px;
+        }
+
+        .filtro-fecha input[type="date"] {
+            font-size: 13px;
+            padding-left: 6px;
+            padding-right: 6px;
         }
 
     }
@@ -550,7 +646,7 @@
     <button
         type="button"
         class="boton-volver"
-        onclick="window.location.href='index.html'"
+        onclick="window.location.href='panel-admin.html'"
     >
         ← Volver
     </button>
@@ -722,7 +818,9 @@ function fechaLocal(texto) {
     return new Date(
 
         Number(partes[0]),
+
         Number(partes[1]) - 1,
+
         Number(partes[2])
 
     );
