@@ -3,1314 +3,3210 @@
 
 <head>
 
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-    <title>SD Erandio - Panel Wellness</title>
+  <title>SD Erandio - Panel Wellness</title>
 
-    <link rel="stylesheet" href="estilos.css">
+  <link
+    rel="stylesheet"
+    href="estilos.css"
+  >
 
-    <style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-        /* =====================================================
-           PANEL WELLNESS
-           ===================================================== */
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: Arial, Helvetica, sans-serif;
+  <style>
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #0f172a,
-                    #1e293b
-                );
+    /* =========================================================
+       GENERAL
+       ========================================================= */
 
-            padding: 30px 15px;
-            color: #1e293b;
-        }
+    body {
 
+      margin: 0;
 
-        /* =====================================================
-           CONTENEDOR
-           ===================================================== */
+      min-height: 100vh;
 
-        .contenedor {
-            width: 100%;
-            max-width: 1250px;
-            margin: 0 auto;
-        }
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
+      background:
+        linear-gradient(
+          135deg,
+          #0f172a,
+          #1e293b
+        );
 
-        /* =====================================================
-           CABECERA
-           ===================================================== */
+      padding:
+        30px 15px;
 
-        .cabecera {
-            text-align: center;
-            color: white;
-            margin-bottom: 28px;
-        }
+      color:
+        #1e293b;
 
-        .cabecera h1 {
-            margin: 0 0 8px;
-            font-size: 32px;
-            color: white;
-        }
+      box-sizing:
+        border-box;
 
-        .cabecera p {
-            margin: 0;
-            color: #cbd5e1;
-            font-size: 15px;
-        }
+    }
 
 
-        /* =====================================================
-           PANEL PRINCIPAL
-           ===================================================== */
+    *,
+    *::before,
+    *::after {
 
-        .panel {
-            background: white;
-            border-radius: 22px;
-            padding: 30px;
+      box-sizing:
+        border-box;
 
-            box-shadow:
-                0 20px 50px rgba(0, 0, 0, 0.30);
-        }
+    }
 
 
-        /* =====================================================
-           FILTROS
-           ===================================================== */
+    /* =========================================================
+       CONTENEDOR
+       ========================================================= */
 
-        .filtros {
-            display: grid;
-            grid-template-columns:
-                minmax(200px, 1fr)
-                minmax(180px, 230px)
-                auto;
+    .contenedor {
 
-            gap: 15px;
-            align-items: end;
+      width:
+        100%;
 
-            margin-bottom: 20px;
-        }
+      max-width:
+        1400px;
 
-        .filtro {
-            min-width: 0;
-        }
+      margin:
+        0 auto;
 
-        .filtro label {
-            margin: 0 0 8px;
-            font-size: 14px;
-            color: #334155;
-        }
+      background:
+        white;
 
-        .filtro select,
-        .filtro input {
-            width: 100%;
-            min-width: 0;
-            height: 46px;
+      padding:
+        32px;
 
-            padding: 10px 12px;
+      border-radius:
+        22px;
 
-            border: 1px solid #cbd5e1;
-            border-radius: 10px;
+      box-shadow:
+        0 20px 50px
+        rgba(0, 0, 0, 0.30);
 
-            box-sizing: border-box;
-            background: white;
+      overflow:
+        hidden;
 
-            font-size: 15px;
-        }
+    }
 
-        .filtro select:focus,
-        .filtro input:focus {
-            outline: none;
-            border-color: #64748b;
-        }
 
+    /* =========================================================
+       CABECERA
+       ========================================================= */
 
-        /* =====================================================
-           BOTÓN CONSULTAR
-           ===================================================== */
+    .cabecera {
 
-        .boton-consultar {
-            width: auto;
-            min-width: 150px;
+      text-align:
+        center;
 
-            height: 46px;
+      margin-bottom:
+        28px;
 
-            margin: 0;
+    }
 
-            padding: 10px 20px;
 
-            border: none;
-            border-radius: 10px;
+    .cabecera h1 {
 
-            background: #0f172a;
-            color: white;
+      margin:
+        0;
 
-            font-size: 14px;
-            font-weight: bold;
+      font-size:
+        36px;
 
-            cursor: pointer;
+      font-weight:
+        800;
 
-            transition:
-                transform 0.15s ease,
-                background 0.15s ease;
-        }
+      letter-spacing:
+        -0.5px;
 
-        .boton-consultar:hover {
-            background: #1e293b;
-            transform: translateY(-1px);
-        }
+      color:
+        #0f172a;
 
+    }
 
-        /* =====================================================
-           MENSAJES
-           ===================================================== */
 
-        #mensaje {
-            text-align: center;
-            min-height: 22px;
+    .cabecera p {
 
-            margin: 10px 0;
+      margin:
+        8px 0 0;
 
-            font-weight: bold;
-            color: #475569;
-        }
+      color:
+        #64748b;
 
-        #contador {
-            text-align: center;
+      font-size:
+        16px;
 
-            margin: 8px 0 15px;
+    }
 
-            font-size: 14px;
-            color: #64748b;
-        }
 
+    /* =========================================================
+       FILTROS
+       ========================================================= */
 
-        /* =====================================================
-           TABLA
-           ===================================================== */
+    .filtros {
 
-        .tabla-contenedor {
-            width: 100%;
-            max-width: 100%;
+      display:
+        flex;
 
-            overflow-x: auto;
-            overflow-y: visible;
+      gap:
+        15px;
 
-            margin-top: 15px;
+      align-items:
+        end;
 
-            border-radius: 12px;
+      flex-wrap:
+        wrap;
 
-            -webkit-overflow-scrolling: touch;
-        }
+      margin-bottom:
+        25px;
 
-        .tabla-contenedor table {
-            width: 1160px;
-            min-width: 1160px;
+      padding:
+        22px;
 
-            border-collapse: separate;
-            border-spacing: 0;
+      background:
+        #f8fafc;
 
-            background: white;
-            table-layout: fixed;
-        }
+      border:
+        2px solid #e2e8f0;
 
-        .tabla-contenedor th,
-        .tabla-contenedor td {
-            border-right: 1px solid #e2e8f0;
-            border-bottom: 1px solid #e2e8f0;
+      border-radius:
+        16px;
 
-            padding: 10px 8px;
+      width:
+        100%;
 
-            text-align: center;
+      min-width:
+        0;
 
-            box-sizing: border-box;
+    }
 
-            white-space: nowrap;
-        }
 
+    .campo {
 
-        /* =====================================================
-           CABECERA TABLA
-           ===================================================== */
+      display:
+        flex;
 
-        .tabla-contenedor th {
-            background: #f1f5f9;
+      flex-direction:
+        column;
 
-            color: #334155;
+      gap:
+        6px;
 
-            font-size: 12px;
-            font-weight: bold;
+      min-width:
+        0;
 
-            position: sticky;
-            top: 0;
+    }
 
-            z-index: 3;
-        }
 
+    .campo label {
 
-        /* =====================================================
-           COLUMNA JUGADOR
-           ===================================================== */
+      font-weight:
+        700;
 
-        .tabla-contenedor th:first-child,
-        .tabla-contenedor td:first-child {
-            width: 190px;
-            min-width: 190px;
-            max-width: 190px;
+      font-size:
+        14px;
 
-            text-align: left;
+      color:
+        #334155;
 
-            overflow: hidden;
-            text-overflow: ellipsis;
+    }
 
-            position: sticky;
-            left: 0;
 
-            z-index: 4;
-        }
+    .campo select,
+    .campo input {
 
-        .tabla-contenedor th:first-child {
-            background: #e2e8f0;
-        }
+      padding:
+        13px 14px;
 
-        .tabla-contenedor td:first-child {
-            background: white;
-            font-weight: bold;
-        }
+      border:
+        2px solid #e2e8f0;
 
+      border-radius:
+        12px;
 
-        /* =====================================================
-           COLUMNAS WELLNESS
-           ===================================================== */
+      font-size:
+        15px;
 
-        .tabla-contenedor th:nth-child(2),
-        .tabla-contenedor td:nth-child(2),
-        .tabla-contenedor th:nth-child(3),
-        .tabla-contenedor td:nth-child(3),
-        .tabla-contenedor th:nth-child(4),
-        .tabla-contenedor td:nth-child(4),
-        .tabla-contenedor th:nth-child(5),
-        .tabla-contenedor td:nth-child(5) {
+      background:
+        white;
 
-            width: 85px;
-            min-width: 85px;
-            max-width: 85px;
-        }
+      color:
+        #1e293b;
 
+      transition:
+        all 0.2s ease;
 
-        /* =====================================================
-           MOLESTIAS
-           ===================================================== */
+      min-width:
+        0;
 
-        .tabla-contenedor th:nth-child(6),
-        .tabla-contenedor td:nth-child(6) {
+      max-width:
+        100%;
 
-            width: 100px;
-            min-width: 100px;
-            max-width: 100px;
+    }
 
-            white-space: normal;
-            word-break: break-word;
-        }
 
+    .campo select:focus,
+    .campo input:focus {
 
-        /* =====================================================
-           COMENTARIO
-           ===================================================== */
+      outline:
+        none;
 
-        .tabla-contenedor th:nth-child(7),
-        .tabla-contenedor td:nth-child(7) {
+      border-color:
+        #0f172a;
 
-            width: 450px;
-            min-width: 450px;
-            max-width: 450px;
+      box-shadow:
+        0 0 0 3px
+        rgba(15, 23, 42, 0.08);
 
-            text-align: left;
+    }
 
-            white-space: normal;
-            word-break: break-word;
 
-            line-height: 1.4;
-        }
+    /* =========================================================
+       BOTÓN CONSULTAR
+       ========================================================= */
 
+    .boton-consultar {
 
-        /* =====================================================
-           FILAS
-           ===================================================== */
+      padding:
+        13px 22px;
 
-        .tabla-contenedor tbody tr:hover td {
-            background: #f8fafc;
-        }
+      border:
+        none;
 
-        .tabla-contenedor tbody tr:hover td:first-child {
-            background: #f8fafc;
-        }
+      border-radius:
+        12px;
 
+      background:
+        #0f172a;
 
-        /* =====================================================
-           BOTÓN VOLVER
-           ===================================================== */
+      color:
+        white;
 
-        .volver {
-            width: 100%;
+      font-size:
+        15px;
 
-            margin-top: 25px;
+      font-weight:
+        700;
 
-            padding: 13px;
+      cursor:
+        pointer;
 
-            border: none;
-            border-radius: 10px;
+      transition:
+        all 0.2s ease;
 
-            background: #e2e8f0;
-            color: #1e293b;
+      box-shadow:
+        0 6px 15px
+        rgba(15, 23, 42, 0.18);
 
-            font-size: 15px;
-            font-weight: bold;
+      min-width:
+        0;
 
-            cursor: pointer;
+    }
 
-            transition:
-                background 0.15s ease,
-                transform 0.15s ease;
-        }
 
-        .volver:hover {
-            background: #cbd5e1;
-            transform: translateY(-1px);
-        }
+    .boton-consultar:hover {
 
+      background:
+        #1e293b;
 
-        /* =====================================================
-           MÓVIL
-           ===================================================== */
+      transform:
+        translateY(-2px);
 
-        @media (max-width: 700px) {
+      box-shadow:
+        0 9px 20px
+        rgba(15, 23, 42, 0.23);
 
-            body {
-                padding: 15px 8px;
-            }
+    }
 
-            .contenedor {
-                width: 100%;
-            }
 
-            .cabecera {
-                margin-bottom: 18px;
-            }
+    /* =========================================================
+       BOTÓN VOLVER
+       ========================================================= */
 
-            .cabecera h1 {
-                font-size: 25px;
-            }
+    .boton-volver {
 
-            .cabecera p {
-                font-size: 13px;
-                line-height: 1.4;
-            }
+      display:
+        block;
 
-            .panel {
-                padding: 18px 12px;
+      margin:
+        25px auto 0;
 
-                border-radius: 16px;
-            }
+      padding:
+        11px 18px;
 
+      border:
+        2px solid #334155;
 
-            /* -----------------------------
-               FILTROS
-               ----------------------------- */
+      border-radius:
+        12px;
 
-            .filtros {
-                display: flex;
-                flex-direction: column;
+      background:
+        transparent;
 
-                gap: 12px;
+      color:
+        #334155;
 
-                width: 100%;
-            }
+      font-size:
+        15px;
 
-            .filtro {
-                width: 100%;
-            }
+      font-weight:
+        700;
 
-            .filtro label {
-                margin-bottom: 6px;
-            }
+      cursor:
+        pointer;
 
-            .filtro select,
-            .filtro input {
-                width: 100%;
-                max-width: 100%;
-                min-width: 0;
+      transition:
+        0.2s;
 
-                height: 44px;
+    }
 
-                font-size: 15px;
-            }
 
-            .boton-consultar {
-                width: 100%;
-                min-width: 0;
+    .boton-volver:hover {
 
-                margin-top: 3px;
-            }
+      background:
+        #0f172a;
 
+      color:
+        white;
 
-            /* -----------------------------
-               TABLA
-               ----------------------------- */
+      transform:
+        translateY(-2px);
 
-            .tabla-contenedor {
-                width: 100%;
-                max-width: 100%;
+    }
 
-                overflow-x: auto;
-            }
 
-            .tabla-contenedor table {
-                width: 720px;
-                min-width: 720px;
-            }
+    /* =========================================================
+       INFORMACIÓN
+       ========================================================= */
 
+    .info {
 
-            /* -----------------------------
-               JUGADOR
-               ----------------------------- */
+      display:
+        flex;
 
-            .tabla-contenedor th:first-child,
-            .tabla-contenedor td:first-child {
+      justify-content:
+        space-between;
 
-                width: 125px;
-                min-width: 125px;
-                max-width: 125px;
+      align-items:
+        center;
 
-                padding-left: 6px;
-                padding-right: 5px;
+      gap:
+        15px;
 
-                font-size: 11px;
-            }
+      margin-bottom:
+        15px;
 
+      flex-wrap:
+        wrap;
 
-            /* -----------------------------
-               SUEÑO / FATIGA / ESTRÉS / DOLOR
-               ----------------------------- */
+    }
 
-            .tabla-contenedor th:nth-child(2),
-            .tabla-contenedor td:nth-child(2),
-            .tabla-contenedor th:nth-child(3),
-            .tabla-contenedor td:nth-child(3),
-            .tabla-contenedor th:nth-child(4),
-            .tabla-contenedor td:nth-child(4),
-            .tabla-contenedor th:nth-child(5),
-            .tabla-contenedor td:nth-child(5) {
 
-                width: 70px;
-                min-width: 70px;
-                max-width: 70px;
+    .contador {
 
-                padding: 7px 4px;
+      font-weight:
+        700;
 
-                font-size: 11px;
-            }
+      color:
+        #334155;
 
+      font-size:
+        15px;
 
-            /* -----------------------------
-               MOLESTIAS
-               ----------------------------- */
+    }
 
-            .tabla-contenedor th:nth-child(6),
-            .tabla-contenedor td:nth-child(6) {
 
-                width: 85px;
-                min-width: 85px;
-                max-width: 85px;
+    /* =========================================================
+       MENSAJES
+       ========================================================= */
 
-                padding: 7px 4px;
+    .mensaje {
 
-                font-size: 10px;
-            }
+      padding:
+        15px 18px;
 
+      border-radius:
+        12px;
 
-            /* -----------------------------
-               COMENTARIO
-               ----------------------------- */
+      background:
+        #f8fafc;
 
-            .tabla-contenedor th:nth-child(7),
-            .tabla-contenedor td:nth-child(7) {
+      border:
+        2px solid #e2e8f0;
 
-                width: 230px;
-                min-width: 230px;
-                max-width: 230px;
+      color:
+        #475569;
 
-                padding: 7px;
+      margin-bottom:
+        15px;
 
-                font-size: 10px;
-            }
+      display:
+        none;
 
+    }
 
-            /* -----------------------------
-               CABECERA TABLA
-               ----------------------------- */
 
-            .tabla-contenedor th {
-                font-size: 10px;
-                padding: 7px 4px;
-            }
+    .mensaje.error {
 
-            .tabla-contenedor td {
-                font-size: 10px;
-                padding: 7px 4px;
-            }
+      background:
+        #fef2f2;
 
+      border-color:
+        #fecaca;
 
-            /* -----------------------------
-               VOLVER
-               ----------------------------- */
+      color:
+        #b91c1c;
 
-            .volver {
-                margin-top: 20px;
-            }
-        }
+    }
 
 
-        /* =====================================================
-           MÓVILES MUY PEQUEÑOS
-           ===================================================== */
+    /* =========================================================
+       CONTENEDOR TABLA
+       ========================================================= */
 
-        @media (max-width: 380px) {
+    .tabla-contenedor {
 
-            .panel {
-                padding: 15px 8px;
-            }
+      display:
+        none;
 
-            .tabla-contenedor table {
-                width: 680px;
-                min-width: 680px;
-            }
+      width:
+        100%;
 
-            .tabla-contenedor th:first-child,
-            .tabla-contenedor td:first-child {
+      max-width:
+        100%;
 
-                width: 115px;
-                min-width: 115px;
-                max-width: 115px;
-            }
+      overflow-x:
+        auto;
 
-            .tabla-contenedor th:nth-child(2),
-            .tabla-contenedor td:nth-child(2),
-            .tabla-contenedor th:nth-child(3),
-            .tabla-contenedor td:nth-child(3),
-            .tabla-contenedor th:nth-child(4),
-            .tabla-contenedor td:nth-child(4),
-            .tabla-contenedor th:nth-child(5),
-            .tabla-contenedor td:nth-child(5) {
+      overflow-y:
+        visible;
 
-                width: 65px;
-                min-width: 65px;
-                max-width: 65px;
-            }
+      border:
+        2px solid #e2e8f0;
 
-            .tabla-contenedor th:nth-child(6),
-            .tabla-contenedor td:nth-child(6) {
+      border-radius:
+        16px;
 
-                width: 80px;
-                min-width: 80px;
-                max-width: 80px;
-            }
+      box-shadow:
+        0 8px 20px
+        rgba(15, 23, 42, 0.08);
 
-            .tabla-contenedor th:nth-child(7),
-            .tabla-contenedor td:nth-child(7) {
+      background:
+        white;
 
-                width: 220px;
-                min-width: 220px;
-                max-width: 220px;
-            }
-        }
+      -webkit-overflow-scrolling:
+        touch;
 
-    </style>
+    }
+
+
+    /* =========================================================
+       TABLA WELLNESS - ORDENADOR
+       ========================================================= */
+
+    .tabla-contenedor table {
+
+      width:
+        1160px;
+
+      min-width:
+        1160px;
+
+      max-width:
+        none;
+
+      border-collapse:
+        collapse;
+
+      border-spacing:
+        0;
+
+      table-layout:
+        fixed;
+
+      background:
+        white;
+
+    }
+
+
+    /* =========================================================
+       CABECERA TABLA
+       ========================================================= */
+
+    .tabla-contenedor thead th {
+
+      background:
+        #0f172a;
+
+      color:
+        white;
+
+      padding:
+        14px 10px;
+
+      font-size:
+        14px;
+
+      font-weight:
+        700;
+
+      text-align:
+        center;
+
+      white-space:
+        nowrap;
+
+      position:
+        sticky;
+
+      top:
+        0;
+
+      z-index:
+        4;
+
+      border:
+        1px solid #334155;
+
+      box-sizing:
+        border-box;
+
+    }
+
+
+    /* =========================================================
+       CELDAS
+       ========================================================= */
+
+    .tabla-contenedor tbody td {
+
+      padding:
+        12px 10px;
+
+      border-bottom:
+        1px solid #e2e8f0;
+
+      border-right:
+        1px solid #e2e8f0;
+
+      text-align:
+        center;
+
+      font-size:
+        14px;
+
+      color:
+        #334155;
+
+      vertical-align:
+        middle;
+
+      box-sizing:
+        border-box;
+
+    }
+
+
+    .tabla-contenedor tbody tr:hover {
+
+      background:
+        #f8fafc;
+
+    }
+
+
+    /* =========================================================
+       COLUMNA JUGADOR - ORDENADOR
+       ========================================================= */
+
+    .tabla-contenedor th:nth-child(1),
+    .tabla-contenedor td:nth-child(1) {
+
+      width:
+        250px;
+
+      min-width:
+        250px;
+
+      max-width:
+        250px;
+
+    }
+
+
+    .tabla-contenedor thead th:nth-child(1) {
+
+      text-align:
+        left;
+
+      background:
+        #222;
+
+      position:
+        sticky;
+
+      left:
+        0;
+
+      z-index:
+        6;
+
+    }
+
+
+    .tabla-contenedor tbody td:nth-child(1) {
+
+      text-align:
+        left;
+
+      background:
+        #f8fafc;
+
+      font-weight:
+        700;
+
+      color:
+        #0f172a;
+
+      white-space:
+        nowrap;
+
+      overflow:
+        hidden;
+
+      text-overflow:
+        ellipsis;
+
+      position:
+        sticky;
+
+      left:
+        0;
+
+      z-index:
+        5;
+
+    }
+
+
+    /* =========================================================
+       SUEÑO
+       ========================================================= */
+
+    .tabla-contenedor th:nth-child(2),
+    .tabla-contenedor td:nth-child(2) {
+
+      width:
+        90px;
+
+      min-width:
+        90px;
+
+      max-width:
+        90px;
+
+    }
+
+
+    /* =========================================================
+       FATIGA
+       ========================================================= */
+
+    .tabla-contenedor th:nth-child(3),
+    .tabla-contenedor td:nth-child(3) {
+
+      width:
+        90px;
+
+      min-width:
+        90px;
+
+      max-width:
+        90px;
+
+    }
+
+
+    /* =========================================================
+       ESTRÉS
+       ========================================================= */
+
+    .tabla-contenedor th:nth-child(4),
+    .tabla-contenedor td:nth-child(4) {
+
+      width:
+        90px;
+
+      min-width:
+        90px;
+
+      max-width:
+        90px;
+
+    }
+
+
+    /* =========================================================
+       DOLOR
+       ========================================================= */
+
+    .tabla-contenedor th:nth-child(5),
+    .tabla-contenedor td:nth-child(5) {
+
+      width:
+        90px;
+
+      min-width:
+        90px;
+
+      max-width:
+        90px;
+
+    }
+
+
+    /* =========================================================
+       MOLESTIAS
+       ========================================================= */
+
+    .tabla-contenedor th:nth-child(6),
+    .tabla-contenedor td:nth-child(6) {
+
+      width:
+        100px;
+
+      min-width:
+        100px;
+
+      max-width:
+        100px;
+
+    }
+
+
+    /* =========================================================
+       COMENTARIO
+       ========================================================= */
+
+    .tabla-contenedor th:nth-child(7),
+    .tabla-contenedor td:nth-child(7) {
+
+      width:
+        450px;
+
+      min-width:
+        450px;
+
+      max-width:
+        450px;
+
+      text-align:
+        left !important;
+
+      vertical-align:
+        top;
+
+      white-space:
+        normal !important;
+
+      overflow:
+        hidden;
+
+      overflow-wrap:
+        anywhere !important;
+
+      word-break:
+        break-word !important;
+
+      line-height:
+        1.5;
+
+      padding:
+        12px 10px;
+
+      box-sizing:
+        border-box;
+
+    }
+
+
+    .tabla-contenedor td:nth-child(7) {
+
+      height:
+        auto;
+
+    }
+
+
+    /* =========================================================
+       VALORES
+       ========================================================= */
+
+    .valor {
+
+      display:
+        inline-flex;
+
+      justify-content:
+        center;
+
+      align-items:
+        center;
+
+      min-width:
+        32px;
+
+      height:
+        32px;
+
+      padding:
+        0 7px;
+
+      border-radius:
+        6px;
+
+      font-weight:
+        bold;
+
+    }
+
+
+    /* =========================================================
+       ESCALA DE COLORES
+       ========================================================= */
+
+    .sueno-1,
+    .riesgo-1 {
+
+      background:
+        #ff4d4d;
+
+      color:
+        white;
+
+    }
+
+
+    .sueno-2,
+    .riesgo-2 {
+
+      background:
+        #ff9999;
+
+      color:
+        #7a0000;
+
+    }
+
+
+    .sueno-3,
+    .riesgo-3 {
+
+      background:
+        #ffd966;
+
+      color:
+        #665000;
+
+    }
+
+
+    .sueno-4,
+    .riesgo-4 {
+
+      background:
+        #a9df9c;
+
+      color:
+        #205c18;
+
+    }
+
+
+    .sueno-5,
+    .riesgo-5 {
+
+      background:
+        #4caf50;
+
+      color:
+        white;
+
+    }
+
+
+    /* =========================================================
+       MOLESTIAS
+       ========================================================= */
+
+    .molestias-si {
+
+      background:
+        #ff4d4d;
+
+      color:
+        white;
+
+      font-weight:
+        bold;
+
+      padding:
+        6px 10px;
+
+      border-radius:
+        6px;
+
+    }
+
+
+    .molestias-no {
+
+      background:
+        #4caf50;
+
+      color:
+        white;
+
+      font-weight:
+        bold;
+
+      padding:
+        6px 10px;
+
+      border-radius:
+        6px;
+
+    }
+
+
+    /* =========================================================
+       SIN RESPUESTA
+       ========================================================= */
+
+    .sin-respuesta {
+
+      color:
+        #aaa;
+
+      font-weight:
+        normal;
+
+    }
+
+
+    /* =========================================================
+       CARGANDO
+       ========================================================= */
+
+    .cargando {
+
+      text-align:
+        center !important;
+
+      padding:
+        30px !important;
+
+      color:
+        #666;
+
+      white-space:
+        normal !important;
+
+    }
+
+
+    /* =========================================================
+       MÓVIL
+       ========================================================= */
+
+    @media (max-width: 700px) {
+
+
+      /* -------------------------------------------------------
+         BODY
+         ------------------------------------------------------- */
+
+      body {
+
+        padding:
+          10px 6px;
+
+        overflow-x:
+          hidden;
+
+      }
+
+
+      /* -------------------------------------------------------
+         CONTENEDOR
+         ------------------------------------------------------- */
+
+      .contenedor {
+
+        width:
+          100%;
+
+        max-width:
+          100%;
+
+        margin:
+          0 auto;
+
+        padding:
+          18px 12px;
+
+        border-radius:
+          16px;
+
+        overflow:
+          hidden;
+
+      }
+
+
+      /* -------------------------------------------------------
+         CABECERA
+         ------------------------------------------------------- */
+
+      .cabecera {
+
+        margin-bottom:
+          18px;
+
+      }
+
+
+      .cabecera h1 {
+
+        font-size:
+          26px;
+
+      }
+
+
+      .cabecera p {
+
+        font-size:
+          13px;
+
+        line-height:
+          1.45;
+
+      }
+
+
+      /* -------------------------------------------------------
+         FILTROS
+         ------------------------------------------------------- */
+
+      .filtros {
+
+        width:
+          100%;
+
+        max-width:
+          100%;
+
+        display:
+          flex;
+
+        flex-direction:
+          column;
+
+        align-items:
+          stretch;
+
+        gap:
+          12px;
+
+        padding:
+          14px;
+
+        margin-bottom:
+          20px;
+
+        overflow:
+          hidden;
+
+      }
+
+
+      .campo {
+
+        width:
+          100%;
+
+        max-width:
+          100%;
+
+        min-width:
+          0;
+
+      }
+
+
+      .campo label {
+
+        font-size:
+          14px;
+
+      }
+
+
+      .campo select,
+      .campo input {
+
+        display:
+          block;
+
+        width:
+          100%;
+
+        max-width:
+          100%;
+
+        min-width:
+          0;
+
+        height:
+          48px;
+
+        padding:
+          10px 12px;
+
+        font-size:
+          15px;
+
+      }
+
+
+      /* -------------------------------------------------------
+         CORRECCIÓN ESPECÍFICA DEL CAMPO FECHA
+         ------------------------------------------------------- */
+
+      #fecha {
+
+        width:
+          100%;
+
+        max-width:
+          100%;
+
+        min-width:
+          0;
+
+        display:
+          block;
+
+      }
+
+
+      /* -------------------------------------------------------
+         BOTÓN CONSULTAR
+         ------------------------------------------------------- */
+
+      .boton-consultar {
+
+        width:
+          100%;
+
+        max-width:
+          100%;
+
+        min-width:
+          0;
+
+        height:
+          48px;
+
+        margin-top:
+          3px;
+
+        padding:
+          10px 15px;
+
+      }
+
+
+      /* -------------------------------------------------------
+         INFORMACIÓN
+         ------------------------------------------------------- */
+
+      .info {
+
+        margin-bottom:
+          12px;
+
+      }
+
+
+      .contador {
+
+        font-size:
+          14px;
+
+      }
+
+
+      /* -------------------------------------------------------
+         TABLA
+         ------------------------------------------------------- */
+
+      .tabla-contenedor {
+
+        width:
+          100%;
+
+        max-width:
+          100%;
+
+        overflow-x:
+          hidden;
+
+        overflow-y:
+          visible;
+
+        border-radius:
+          10px;
+
+      }
+
+
+      /* =======================================================
+         TABLA RESPONSIVE
+         ======================================================= */
+
+      .tabla-contenedor table {
+
+        width:
+          100%;
+
+        min-width:
+          100%;
+
+        max-width:
+          100%;
+
+        table-layout:
+          fixed;
+
+      }
+
+
+      /* -------------------------------------------------------
+         CABECERA
+         ------------------------------------------------------- */
+
+      .tabla-contenedor thead th {
+
+        padding:
+          10px 3px;
+
+        font-size:
+          11px;
+
+        white-space:
+          normal;
+
+        line-height:
+          1.15;
+
+      }
+
+
+      /* -------------------------------------------------------
+         CELDAS
+         ------------------------------------------------------- */
+
+      .tabla-contenedor tbody td {
+
+        padding:
+          9px 3px;
+
+        font-size:
+          12px;
+
+      }
+
+
+      /* =======================================================
+         JUGADOR - AHORA SOLO 26%
+         ======================================================= */
+
+      .tabla-contenedor th:nth-child(1),
+      .tabla-contenedor td:nth-child(1) {
+
+        width:
+          26%;
+
+        min-width:
+          0;
+
+        max-width:
+          none;
+
+      }
+
+
+      .tabla-contenedor thead th:nth-child(1) {
+
+        position:
+          sticky;
+
+        left:
+          0;
+
+        z-index:
+          6;
+
+        text-align:
+          left;
+
+        padding-left:
+          8px;
+
+      }
+
+
+      .tabla-contenedor tbody td:nth-child(1) {
+
+        position:
+          sticky;
+
+        left:
+          0;
+
+        z-index:
+          5;
+
+        text-align:
+          left;
+
+        padding-left:
+          8px;
+
+        padding-right:
+          4px;
+
+        white-space:
+          normal;
+
+        overflow:
+          hidden;
+
+        text-overflow:
+          clip;
+
+        overflow-wrap:
+          anywhere;
+
+        word-break:
+          break-word;
+
+        line-height:
+          1.2;
+
+      }
+
+
+      /* =======================================================
+         SUEÑO - 9%
+         ======================================================= */
+
+      .tabla-contenedor th:nth-child(2),
+      .tabla-contenedor td:nth-child(2) {
+
+        width:
+          9%;
+
+        min-width:
+          0;
+
+        max-width:
+          none;
+
+      }
+
+
+      /* =======================================================
+         FATIGA - 9%
+         ======================================================= */
+
+      .tabla-contenedor th:nth-child(3),
+      .tabla-contenedor td:nth-child(3) {
+
+        width:
+          9%;
+
+        min-width:
+          0;
+
+        max-width:
+          none;
+
+      }
+
+
+      /* =======================================================
+         ESTRÉS - 9%
+         ======================================================= */
+
+      .tabla-contenedor th:nth-child(4),
+      .tabla-contenedor td:nth-child(4) {
+
+        width:
+          9%;
+
+        min-width:
+          0;
+
+        max-width:
+          none;
+
+      }
+
+
+      /* =======================================================
+         DOLOR - 9%
+         ======================================================= */
+
+      .tabla-contenedor th:nth-child(5),
+      .tabla-contenedor td:nth-child(5) {
+
+        width:
+          9%;
+
+        min-width:
+          0;
+
+        max-width:
+          none;
+
+      }
+
+
+      /* =======================================================
+         MOLESTIAS - 14%
+         ======================================================= */
+
+      .tabla-contenedor th:nth-child(6),
+      .tabla-contenedor td:nth-child(6) {
+
+        width:
+          14%;
+
+        min-width:
+          0;
+
+        max-width:
+          none;
+
+      }
+
+
+      /* =======================================================
+         COMENTARIO - 24%
+         ======================================================= */
+
+      .tabla-contenedor th:nth-child(7),
+      .tabla-contenedor td:nth-child(7) {
+
+        width:
+          24%;
+
+        min-width:
+          0;
+
+        max-width:
+          none;
+
+        padding:
+          9px 4px;
+
+        font-size:
+          11px;
+
+        text-align:
+          left !important;
+
+        white-space:
+          normal !important;
+
+        overflow:
+          hidden;
+
+        overflow-wrap:
+          anywhere !important;
+
+        word-break:
+          break-word !important;
+
+        line-height:
+          1.3;
+
+      }
+
+
+      /* -------------------------------------------------------
+         VALORES EN MÓVIL
+         ------------------------------------------------------- */
+
+      .valor {
+
+        min-width:
+          25px;
+
+        width:
+          25px;
+
+        height:
+          25px;
+
+        padding:
+          0;
+
+        border-radius:
+          5px;
+
+        font-size:
+          12px;
+
+      }
+
+
+      /* -------------------------------------------------------
+         MOLESTIAS EN MÓVIL
+         ------------------------------------------------------- */
+
+      .molestias-si,
+      .molestias-no {
+
+        display:
+          inline-flex;
+
+        justify-content:
+          center;
+
+        align-items:
+          center;
+
+        min-width:
+          25px;
+
+        height:
+          25px;
+
+        padding:
+          0 3px;
+
+        border-radius:
+          5px;
+
+        font-size:
+          10px;
+
+      }
+
+
+      /* -------------------------------------------------------
+         BOTÓN VOLVER
+         ------------------------------------------------------- */
+
+      .boton-volver {
+
+        width:
+          100%;
+
+        max-width:
+          250px;
+
+        margin-top:
+          18px;
+
+      }
+
+    }
+
+
+    /* =========================================================
+       MÓVILES MUY PEQUEÑOS
+       ========================================================= */
+
+    @media (max-width: 380px) {
+
+
+      .contenedor {
+
+        padding:
+          15px 8px;
+
+      }
+
+
+      .filtros {
+
+        padding:
+          12px;
+
+      }
+
+
+      .tabla-contenedor thead th {
+
+        font-size:
+          10px;
+
+        padding:
+          9px 2px;
+
+      }
+
+
+      .tabla-contenedor tbody td {
+
+        font-size:
+          11px;
+
+        padding:
+          8px 2px;
+
+      }
+
+
+      .tabla-contenedor th:nth-child(1),
+      .tabla-contenedor td:nth-child(1) {
+
+        width:
+          25%;
+
+      }
+
+
+      .tabla-contenedor th:nth-child(2),
+      .tabla-contenedor td:nth-child(2),
+      .tabla-contenedor th:nth-child(3),
+      .tabla-contenedor td:nth-child(3),
+      .tabla-contenedor th:nth-child(4),
+      .tabla-contenedor td:nth-child(4),
+      .tabla-contenedor th:nth-child(5),
+      .tabla-contenedor td:nth-child(5) {
+
+        width:
+          9%;
+
+      }
+
+
+      .tabla-contenedor th:nth-child(6),
+      .tabla-contenedor td:nth-child(6) {
+
+        width:
+          14%;
+
+      }
+
+
+      .tabla-contenedor th:nth-child(7),
+      .tabla-contenedor td:nth-child(7) {
+
+        width:
+          29%;
+
+      }
+
+
+      .valor {
+
+        min-width:
+          23px;
+
+        width:
+          23px;
+
+        height:
+          23px;
+
+        font-size:
+          11px;
+
+      }
+
+
+      .molestias-si,
+      .molestias-no {
+
+        min-width:
+          23px;
+
+        height:
+          23px;
+
+        font-size:
+          9px;
+
+      }
+
+    }
+
+  </style>
 
 </head>
 
 
 <body>
 
-    <div class="contenedor">
 
-        <div class="cabecera">
-
-            <h1>Panel Wellness</h1>
-
-            <p>
-                Consulta las respuestas Wellness
-                de los jugadores por equipo y día.
-            </p>
-
-        </div>
+  <div class="contenedor">
 
 
-        <div class="panel">
+    <!-- =======================================================
+         CABECERA
+         ======================================================= -->
 
-            <!-- FILTROS -->
+    <div class="cabecera">
 
-            <div class="filtros">
+      <h1>
+        Panel Wellness
+      </h1>
 
-                <div class="filtro">
-
-                    <label for="equipo">
-                        Equipo
-                    </label>
-
-                    <select id="equipo">
-                        <option value="">
-                            Cargando equipos...
-                        </option>
-                    </select>
-
-                </div>
-
-
-                <div class="filtro">
-
-                    <label for="fecha">
-                        Fecha
-                    </label>
-
-                    <input
-                        type="date"
-                        id="fecha"
-                    >
-
-                </div>
-
-
-                <button
-                    type="button"
-                    class="boton-consultar"
-                    onclick="consultarWellness()"
-                >
-                    CONSULTAR
-                </button>
-
-            </div>
-
-
-            <!-- MENSAJES -->
-
-            <div id="mensaje"></div>
-
-            <div id="contador"></div>
-
-
-            <!-- TABLA -->
-
-            <div class="tabla-contenedor">
-
-                <table>
-
-                    <thead>
-
-                        <tr>
-
-                            <th>Jugador</th>
-
-                            <th>Sueño</th>
-
-                            <th>Fatiga</th>
-
-                            <th>Estrés</th>
-
-                            <th>Dolor</th>
-
-                            <th>Molestias</th>
-
-                            <th>Comentario</th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody id="tablaJugadores">
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-
-            <!-- VOLVER -->
-
-            <button
-                class="volver"
-                onclick="volverAdmin()"
-            >
-                VOLVER
-            </button>
-
-        </div>
+      <p>
+        Consulta las respuestas Wellness de los jugadores por equipo y día.
+      </p>
 
     </div>
 
 
-    <!-- =====================================================
-         SUPABASE
-         ===================================================== -->
+    <!-- =======================================================
+         FILTROS
+         ======================================================= -->
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-    <script>
-
-        const SUPABASE_URL =
-            "https://alprdcjaexllelxthhbv.supabase.co";
+    <div class="filtros">
 
 
-        const SUPABASE_KEY =
-            "sb_publishable_6kF4hhGM3bwqgwv6Fz3mmw__HvkPXiD";
+      <div class="campo">
+
+        <label for="equipo">
+          Equipo
+        </label>
+
+        <select id="equipo">
+
+          <option value="">
+            Cargando equipos...
+          </option>
+
+        </select>
+
+      </div>
 
 
-        const supabaseClient =
-            supabase.createClient(
-                SUPABASE_URL,
-                SUPABASE_KEY
+      <div class="campo">
+
+        <label for="fecha">
+          Día
+        </label>
+
+        <input
+          type="date"
+          id="fecha"
+        >
+
+      </div>
+
+
+      <button
+        type="button"
+        class="boton-consultar"
+        onclick="consultarWellness()"
+      >
+        CONSULTAR
+      </button>
+
+
+    </div>
+
+
+    <!-- =======================================================
+         MENSAJE
+         ======================================================= -->
+
+    <div
+      id="mensaje"
+      class="mensaje"
+    ></div>
+
+
+    <!-- =======================================================
+         CONTADOR
+         ======================================================= -->
+
+    <div class="info">
+
+      <div
+        id="contador"
+        class="contador"
+      ></div>
+
+    </div>
+
+
+    <!-- =======================================================
+         TABLA
+         ======================================================= -->
+
+    <div class="tabla-contenedor">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Jugador
+            </th>
+
+            <th>
+              Sueño
+            </th>
+
+            <th>
+              Fatiga
+            </th>
+
+            <th>
+              Estrés
+            </th>
+
+            <th>
+              Dolor
+            </th>
+
+            <th>
+              Molestias
+            </th>
+
+            <th>
+              Comentario
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody id="tablaWellness"></tbody>
+
+      </table>
+
+    </div>
+
+
+    <!-- =======================================================
+         VOLVER
+         ======================================================= -->
+
+    <button
+      type="button"
+      class="boton-volver"
+      onclick="volverAdmin()"
+    >
+      VOLVER
+    </button>
+
+
+  </div>
+
+
+
+  <script>
+
+
+    // =========================================================
+    // SUPABASE
+    // =========================================================
+
+    const SUPABASE_URL =
+      "https://alprdcjaexllelxthhbv.supabase.co";
+
+
+    const SUPABASE_KEY =
+      "sb_publishable_6kF4hhGM3bwqgwv6Fz3mmw__HvkPXiD";
+
+
+    const supabaseClient =
+      supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+
+    // =========================================================
+    // EQUIPOS
+    // =========================================================
+
+    let equipos = [];
+
+
+
+    // =========================================================
+    // JUGADORES
+    // =========================================================
+
+    let jugadoresActuales = [];
+
+
+
+    // =========================================================
+    // FECHA DE HOY
+    // =========================================================
+
+    function fechaHoyLocal() {
+
+      const ahora =
+        new Date();
+
+
+      const año =
+        ahora.getFullYear();
+
+
+      const mes =
+        String(
+          ahora.getMonth() + 1
+        ).padStart(
+          2,
+          "0"
+        );
+
+
+      const dia =
+        String(
+          ahora.getDate()
+        ).padStart(
+          2,
+          "0"
+        );
+
+
+      return `${año}-${mes}-${dia}`;
+
+    }
+
+
+
+    // =========================================================
+    // FECHA LOCAL A ISO
+    // =========================================================
+
+    function fechaLocalAISO(
+      fechaTexto
+    ) {
+
+      const partes =
+        fechaTexto.split("-");
+
+
+      const año =
+        Number(
+          partes[0]
+        );
+
+
+      const mes =
+        Number(
+          partes[1]
+        ) - 1;
+
+
+      const dia =
+        Number(
+          partes[2]
+        );
+
+
+      return new Date(
+        año,
+        mes,
+        dia,
+        0,
+        0,
+        0,
+        0
+      );
+
+    }
+
+
+
+    // =========================================================
+    // ESCAPAR HTML
+    // =========================================================
+
+    function escaparHTML(
+      texto
+    ) {
+
+      if (
+        texto === null ||
+        texto === undefined
+      ) {
+
+        return "";
+
+      }
+
+
+      return String(texto)
+
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+
+        .replace(
+          /</g,
+          "&lt;"
+        )
+
+        .replace(
+          />/g,
+          "&gt;"
+        )
+
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+
+
+    // =========================================================
+    // MOSTRAR MENSAJE
+    // =========================================================
+
+    function mostrarMensaje(
+      texto,
+      error = false
+    ) {
+
+      const mensaje =
+        document.getElementById(
+          "mensaje"
+        );
+
+
+      mensaje.textContent =
+        texto;
+
+
+      mensaje.className =
+        "mensaje";
+
+
+      if (error) {
+
+        mensaje.classList.add(
+          "error"
+        );
+
+      }
+
+
+      mensaje.style.display =
+        "block";
+
+    }
+
+
+
+    // =========================================================
+    // OCULTAR MENSAJE
+    // =========================================================
+
+    function ocultarMensaje() {
+
+      const mensaje =
+        document.getElementById(
+          "mensaje"
+        );
+
+
+      mensaje.style.display =
+        "none";
+
+    }
+
+
+
+    // =========================================================
+    // CARGAR EQUIPOS
+    // =========================================================
+
+    async function cargarEquipos() {
+
+      const selectEquipo =
+        document.getElementById(
+          "equipo"
+        );
+
+
+      selectEquipo.innerHTML = `
+
+        <option value="">
+          Cargando equipos...
+        </option>
+
+      `;
+
+
+      try {
+
+        const {
+          data,
+          error
+        } = await supabaseClient
+
+          .from("equipos")
+
+          .select(
+            "id, nombre"
+          )
+
+          .order(
+            "nombre",
+            {
+              ascending: true
+            }
+          );
+
+
+        if (error) {
+
+          console.error(
+            "Error cargando equipos:",
+            error
+          );
+
+          throw error;
+
+        }
+
+
+        equipos =
+          data || [];
+
+
+        selectEquipo.innerHTML = `
+
+          <option value="">
+            Selecciona un equipo
+          </option>
+
+        `;
+
+
+        equipos.forEach(
+          equipo => {
+
+            const opcion =
+              document.createElement(
+                "option"
+              );
+
+
+            opcion.value =
+              equipo.id;
+
+
+            opcion.textContent =
+              equipo.nombre;
+
+
+            selectEquipo.appendChild(
+              opcion
             );
 
-
-        /* =====================================================
-           CARGAR EQUIPOS
-           ===================================================== */
-
-        async function cargarEquipos() {
-
-            const select =
-                document.getElementById("equipo");
-
-            const {
-                data,
-                error
-            } = await supabaseClient
-                .from("equipos")
-                .select("id,nombre")
-                .order("nombre", {
-                    ascending: true
-                });
+          }
+        );
 
 
-            if (error) {
+        if (
+          equipos.length > 0
+        ) {
 
-                console.error(error);
+          selectEquipo.value =
+            equipos[0].id;
 
-                document.getElementById("mensaje").textContent =
-                    "Error al cargar los equipos.";
 
-                return;
+          await cargarJugadores(
+            equipos[0].id
+          );
+
+        } else {
+
+          mostrarMensaje(
+            "No hay equipos configurados.",
+            false
+          );
+
+        }
+
+
+      } catch (error) {
+
+        console.error(
+          error
+        );
+
+
+        selectEquipo.innerHTML = `
+
+          <option value="">
+            Error al cargar equipos
+          </option>
+
+        `;
+
+
+        mostrarMensaje(
+          "No se han podido cargar los equipos desde Supabase.",
+          true
+        );
+
+      }
+
+    }
+
+
+
+    // =========================================================
+    // CARGAR JUGADORES
+    // =========================================================
+
+    async function cargarJugadores(
+      equipoId
+    ) {
+
+      jugadoresActuales =
+        [];
+
+
+      if (!equipoId) {
+
+        return;
+
+      }
+
+
+      try {
+
+        const {
+          data,
+          error
+        } = await supabaseClient
+
+          .from("jugadores")
+
+          .select(
+            "id, nombre, equipo_id"
+          )
+
+          .eq(
+            "equipo_id",
+            equipoId
+          )
+
+          .order(
+            "nombre",
+            {
+              ascending: true
+            }
+          );
+
+
+        if (error) {
+
+          console.error(
+            "Error cargando jugadores:",
+            error
+          );
+
+          throw error;
+
+        }
+
+
+        jugadoresActuales =
+          data || [];
+
+
+      } catch (error) {
+
+        console.error(
+          error
+        );
+
+
+        jugadoresActuales =
+          [];
+
+
+        mostrarMensaje(
+          "No se han podido cargar los jugadores del equipo.",
+          true
+        );
+
+      }
+
+    }
+
+
+
+    // =========================================================
+    // PINTAR SUEÑO
+    // =========================================================
+
+    function pintarSueno(
+      valor
+    ) {
+
+      if (
+        valor === null ||
+        valor === undefined ||
+        valor === ""
+      ) {
+
+        return `
+
+          <span class="sin-respuesta">
+            —
+          </span>
+
+        `;
+
+      }
+
+
+      const numero =
+        Number(valor);
+
+
+      return `
+
+        <span class="valor sueno-${numero}">
+          ${escaparHTML(numero)}
+        </span>
+
+      `;
+
+    }
+
+
+
+    // =========================================================
+    // PINTAR RIESGO
+    // =========================================================
+
+    function pintarRiesgo(
+      valor
+    ) {
+
+      if (
+        valor === null ||
+        valor === undefined ||
+        valor === ""
+      ) {
+
+        return `
+
+          <span class="sin-respuesta">
+            —
+          </span>
+
+        `;
+
+      }
+
+
+      const numero =
+        Number(valor);
+
+
+      return `
+
+        <span class="valor riesgo-${numero}">
+          ${escaparHTML(numero)}
+        </span>
+
+      `;
+
+    }
+
+
+
+    // =========================================================
+    // PINTAR MOLESTIAS
+    // =========================================================
+
+    function pintarMolestias(
+      valor
+    ) {
+
+      if (
+        valor === null ||
+        valor === undefined ||
+        valor === ""
+      ) {
+
+        return `
+
+          <span class="sin-respuesta">
+            —
+          </span>
+
+        `;
+
+      }
+
+
+      const texto =
+        String(valor)
+          .trim()
+          .toLowerCase();
+
+
+      if (
+        texto === "si"
+      ) {
+
+        return `
+
+          <span class="molestias-si">
+            Sí
+          </span>
+
+        `;
+
+      }
+
+
+      return `
+
+        <span class="molestias-no">
+          No
+        </span>
+
+      `;
+
+    }
+
+
+
+    // =========================================================
+    // CONSULTAR WELLNESS
+    // =========================================================
+
+    async function consultarWellness() {
+
+      ocultarMensaje();
+
+
+      const equipoId =
+        document.getElementById(
+          "equipo"
+        ).value;
+
+
+      const fecha =
+        document.getElementById(
+          "fecha"
+        ).value;
+
+
+      const tabla =
+        document.getElementById(
+          "tablaWellness"
+        );
+
+
+      const contador =
+        document.getElementById(
+          "contador"
+        );
+
+
+      const tablaContenedor =
+        document.querySelector(
+          ".tabla-contenedor"
+        );
+
+
+
+      // =======================================================
+      // COMPROBAR EQUIPO
+      // =======================================================
+
+      if (!equipoId) {
+
+        mostrarMensaje(
+          "Selecciona un equipo antes de consultar.",
+          true
+        );
+
+
+        tablaContenedor.style.display =
+          "none";
+
+
+        contador.textContent =
+          "";
+
+
+        return;
+
+      }
+
+
+
+      // =======================================================
+      // COMPROBAR FECHA
+      // =======================================================
+
+      if (!fecha) {
+
+        mostrarMensaje(
+          "Selecciona un día antes de consultar.",
+          true
+        );
+
+
+        tablaContenedor.style.display =
+          "none";
+
+
+        contador.textContent =
+          "";
+
+
+        return;
+
+      }
+
+
+
+      // =======================================================
+      // EQUIPO SELECCIONADO
+      // =======================================================
+
+      const equipoSeleccionado =
+        equipos.find(
+          equipo =>
+            equipo.id === equipoId
+        );
+
+
+      if (!equipoSeleccionado) {
+
+        mostrarMensaje(
+          "No se ha encontrado el equipo seleccionado.",
+          true
+        );
+
+
+        return;
+
+      }
+
+
+      const equipoNombre =
+        equipoSeleccionado.nombre;
+
+
+
+      // =======================================================
+      // CARGAR JUGADORES
+      // =======================================================
+
+      await cargarJugadores(
+        equipoId
+      );
+
+
+
+      // =======================================================
+      // MOSTRAR TABLA
+      // =======================================================
+
+      tablaContenedor.style.display =
+        "block";
+
+
+      tabla.innerHTML = `
+
+        <tr>
+
+          <td
+            colspan="7"
+            class="cargando"
+          >
+
+            Cargando respuestas...
+
+          </td>
+
+        </tr>
+
+      `;
+
+
+      contador.textContent =
+        "Consultando...";
+
+
+
+      try {
+
+
+        // =====================================================
+        // INICIO DEL DÍA
+        // =====================================================
+
+        const desde =
+          fechaLocalAISO(
+            fecha
+          );
+
+
+
+        // =====================================================
+        // FINAL DEL DÍA
+        // =====================================================
+
+        const hasta =
+          new Date(
+            desde
+          );
+
+
+        hasta.setDate(
+          hasta.getDate() + 1
+        );
+
+
+
+        // =====================================================
+        // CONSULTA SUPABASE
+        // =====================================================
+
+        const {
+          data,
+          error
+        } = await supabaseClient
+
+          .from("respuestas")
+
+          .select("*")
+
+          .eq(
+            "equipo",
+            equipoNombre
+          )
+
+          .eq(
+            "tipo",
+            "wellness"
+          )
+
+          .gte(
+            "fecha",
+            desde.toISOString()
+          )
+
+          .lt(
+            "fecha",
+            hasta.toISOString()
+          )
+
+          .order(
+            "fecha",
+            {
+              ascending: true
+            }
+          );
+
+
+
+        // =====================================================
+        // COMPROBAR ERROR
+        // =====================================================
+
+        if (error) {
+
+          console.error(
+            "Error Supabase:",
+            error
+          );
+
+
+          throw error;
+
+        }
+
+
+
+        // =====================================================
+        // ORGANIZAR RESPUESTAS
+        // =====================================================
+
+        const respuestasPorJugador =
+          {};
+
+
+        (data || []).forEach(
+          registro => {
+
+            respuestasPorJugador[
+              registro.jugador
+            ] = registro;
+
+          }
+        );
+
+
+
+        // =====================================================
+        // CONTADOR
+        // =====================================================
+
+        let numeroRespuestas =
+          0;
+
+
+        jugadoresActuales.forEach(
+          jugador => {
+
+            if (
+              respuestasPorJugador[
+                jugador.nombre
+              ]
+            ) {
+
+              numeroRespuestas++;
+
+            }
+
+          }
+        );
+
+
+        contador.textContent =
+          `${numeroRespuestas} de ${jugadoresActuales.length} jugadores han respondido`;
+
+
+
+        // =====================================================
+        // SIN JUGADORES
+        // =====================================================
+
+        if (
+          jugadoresActuales.length === 0
+        ) {
+
+          tabla.innerHTML = `
+
+            <tr>
+
+              <td
+                colspan="7"
+                class="cargando"
+              >
+
+                No hay jugadores configurados
+                para este equipo.
+
+              </td>
+
+            </tr>
+
+          `;
+
+
+          return;
+
+        }
+
+
+
+        // =====================================================
+        // LIMPIAR TABLA
+        // =====================================================
+
+        tabla.innerHTML =
+          "";
+
+
+
+        // =====================================================
+        // CREAR FILAS
+        // =====================================================
+
+        jugadoresActuales.forEach(
+          jugador => {
+
+
+            const nombreJugador =
+              jugador.nombre;
+
+
+            const registro =
+              respuestasPorJugador[
+                nombreJugador
+              ];
+
+
+
+            // =================================================
+            // SIN RESPUESTA
+            // =================================================
+
+            if (!registro) {
+
+              const fila =
+                document.createElement(
+                  "tr"
+                );
+
+
+              fila.innerHTML = `
+
+                <td>
+                  ${escaparHTML(
+                    nombreJugador
+                  )}
+                </td>
+
+
+                <td>
+                  <span class="sin-respuesta">
+                    —
+                  </span>
+                </td>
+
+
+                <td>
+                  <span class="sin-respuesta">
+                    —
+                  </span>
+                </td>
+
+
+                <td>
+                  <span class="sin-respuesta">
+                    —
+                  </span>
+                </td>
+
+
+                <td>
+                  <span class="sin-respuesta">
+                    —
+                  </span>
+                </td>
+
+
+                <td>
+                  <span class="sin-respuesta">
+                    —
+                  </span>
+                </td>
+
+
+                <td>
+                  <span class="sin-respuesta">
+                    Sin respuesta
+                  </span>
+                </td>
+
+              `;
+
+
+              tabla.appendChild(
+                fila
+              );
+
+
+              return;
+
             }
 
 
-            select.innerHTML = "";
+
+            // =================================================
+            // RESPUESTAS
+            // =================================================
+
+            const respuestas =
+              registro.respuestas || {};
 
 
-            if (!data || data.length === 0) {
+            const sueño =
+              respuestas.sueno;
 
-                select.innerHTML =
-                    '<option value="">No hay equipos</option>';
 
-                return;
+            const fatiga =
+              respuestas.fatiga;
+
+
+            const estres =
+              respuestas.estres;
+
+
+            const dolor =
+              respuestas.dolor;
+
+
+            const molestias =
+              respuestas.molestias;
+
+
+            const comentario =
+              respuestas.comentario;
+
+
+
+            // =================================================
+            // COMENTARIO
+            // =================================================
+
+            let comentarioHTML = `
+
+              <span class="sin-respuesta">
+                —
+              </span>
+
+            `;
+
+
+            if (
+              comentario !== null &&
+              comentario !== undefined &&
+              String(
+                comentario
+              ).trim() !== ""
+            ) {
+
+              comentarioHTML =
+                escaparHTML(
+                  comentario
+                );
+
             }
 
 
-            data.forEach(equipo => {
 
-                const option =
-                    document.createElement("option");
+            // =================================================
+            // CREAR FILA
+            // =================================================
 
-                option.value = equipo.id;
-
-                option.textContent =
-                    equipo.nombre;
-
-                select.appendChild(option);
-
-            });
+            const fila =
+              document.createElement(
+                "tr"
+              );
 
 
-            select.value = data[0].id;
+            fila.innerHTML = `
+
+              <td>
+                ${escaparHTML(
+                  nombreJugador
+                )}
+              </td>
 
 
-            await cargarJugadores(
-                data[0].id
+              <td>
+                ${pintarSueno(
+                  sueño
+                )}
+              </td>
+
+
+              <td>
+                ${pintarRiesgo(
+                  fatiga
+                )}
+              </td>
+
+
+              <td>
+                ${pintarRiesgo(
+                  estres
+                )}
+              </td>
+
+
+              <td>
+                ${pintarRiesgo(
+                  dolor
+                )}
+              </td>
+
+
+              <td>
+                ${pintarMolestias(
+                  molestias
+                )}
+              </td>
+
+
+              <td>
+                ${comentarioHTML}
+              </td>
+
+            `;
+
+
+            tabla.appendChild(
+              fila
             );
 
-        }
+          }
+        );
 
 
-        /* =====================================================
-           CARGAR JUGADORES
-           ===================================================== */
+      } catch (error) {
 
-        async function cargarJugadores(equipoId) {
 
-            const {
-                data,
-                error
-            } = await supabaseClient
-                .from("jugadores")
-                .select("id,nombre,equipo_id")
-                .eq("equipo_id", equipoId)
-                .order("nombre", {
-                    ascending: true
-                });
+        console.error(
+          error
+        );
 
 
-            if (error) {
+        tabla.innerHTML = `
 
-                console.error(error);
+          <tr>
 
-                return [];
-            }
+            <td
+              colspan="7"
+              class="cargando"
+            >
 
+              No se han podido cargar
+              las respuestas.
 
-            return data || [];
-        }
+            </td>
 
+          </tr>
 
-        /* =====================================================
-           CONSULTAR WELLNESS
-           ===================================================== */
+        `;
 
-        async function consultarWellness() {
 
-            const selectEquipo =
-                document.getElementById("equipo");
+        contador.textContent =
+          "Error al consultar los datos.";
 
-            const fecha =
-                document.getElementById("fecha").value;
 
+        mostrarMensaje(
+          "Ha ocurrido un error al consultar Supabase. Revisa la consola del navegador.",
+          true
+        );
 
-            const mensaje =
-                document.getElementById("mensaje");
+      }
 
-            const contador =
-                document.getElementById("contador");
+    }
 
-            const tabla =
-                document.getElementById("tablaJugadores");
 
 
-            tabla.innerHTML = "";
+    // =========================================================
+    // VOLVER
+    // =========================================================
 
-            contador.textContent = "";
+    function volverAdmin() {
 
+      window.location.href =
+        "panel-admin.html";
 
-            if (!selectEquipo.value) {
+    }
 
-                mensaje.textContent =
-                    "Selecciona un equipo.";
 
-                return;
-            }
 
+    // =========================================================
+    // CAMBIO DE EQUIPO
+    // =========================================================
 
-            if (!fecha) {
+    document.getElementById(
+      "equipo"
+    ).addEventListener(
+      "change",
+      async function () {
 
-                mensaje.textContent =
-                    "Selecciona una fecha.";
 
-                return;
-            }
+        const equipoId =
+          this.value;
 
 
-            mensaje.textContent =
-                "Cargando...";
+        await cargarJugadores(
+          equipoId
+        );
 
 
-            const equipoId =
-                selectEquipo.value;
+        document.querySelector(
+          ".tabla-contenedor"
+        ).style.display =
+          "none";
 
 
-            const equipoNombre =
-                selectEquipo.options[
-                    selectEquipo.selectedIndex
-                ].textContent;
+        document.getElementById(
+          "contador"
+        ).textContent =
+          "";
 
+      }
+    );
 
-            const jugadores =
-                await cargarJugadores(equipoId);
 
 
-            if (!jugadores) {
+    // =========================================================
+    // INICIALIZAR
+    // =========================================================
 
-                mensaje.textContent =
-                    "No se han podido cargar los jugadores.";
+    document.addEventListener(
+      "DOMContentLoaded",
+      async function () {
 
-                return;
-            }
 
+        document.getElementById(
+          "fecha"
+        ).value =
+          fechaHoyLocal();
 
-            /*
-             * Inicio y fin del día seleccionado
-             */
 
-            const desde =
-                new Date(
-                    fecha + "T00:00:00"
-                );
+        await cargarEquipos();
 
+      }
+    );
 
-            const hasta =
-                new Date(
-                    desde.getTime() +
-                    24 * 60 * 60 * 1000
-                );
 
+  </script>
 
-            const {
-                data,
-                error
-            } = await supabaseClient
-
-                .from("respuestas")
-
-                .select("*")
-
-                .eq("equipo", equipoNombre)
-
-                .eq("tipo", "wellness")
-
-                .gte(
-                    "fecha",
-                    desde.toISOString()
-                )
-
-                .lt(
-                    "fecha",
-                    hasta.toISOString()
-                )
-
-                .order(
-                    "fecha",
-                    {
-                        ascending: true
-                    }
-                );
-
-
-            if (error) {
-
-                console.error(error);
-
-                mensaje.textContent =
-                    "Error al consultar las respuestas.";
-
-                return;
-            }
-
-
-            /*
-             * Guardamos la última respuesta
-             * de cada jugador.
-             */
-
-            const respuestasPorJugador =
-                {};
-
-
-            (data || []).forEach(registro => {
-
-                respuestasPorJugador[
-                    registro.jugador
-                ] = registro;
-
-            });
-
-
-            let numeroRespuestas = 0;
-
-
-            jugadores.forEach(jugador => {
-
-                const registro =
-                    respuestasPorJugador[
-                        jugador.nombre
-                    ];
-
-
-                if (registro) {
-                    numeroRespuestas++;
-                }
-
-
-                const fila =
-                    document.createElement("tr");
-
-
-                const wellness =
-                    registro &&
-                    registro.respuestas
-                        ? registro.respuestas
-                        : {};
-
-
-                const sueno =
-                    wellness.sueno ?? "-";
-
-
-                const fatiga =
-                    wellness.fatiga ?? "-";
-
-
-                const estres =
-                    wellness.estres ?? "-";
-
-
-                const dolor =
-                    wellness.dolor ?? "-";
-
-
-                const molestias =
-                    wellness.molestias || "-";
-
-
-                const comentario =
-                    wellness.comentario || "-";
-
-
-                fila.innerHTML = `
-
-                    <td>
-                        ${escaparHTML(
-                            jugador.nombre
-                        )}
-                    </td>
-
-                    <td class="${pintarSueno(sueno)}">
-                        ${escaparHTML(sueno)}
-                    </td>
-
-                    <td class="${pintarRiesgo(fatiga)}">
-                        ${escaparHTML(fatiga)}
-                    </td>
-
-                    <td class="${pintarRiesgo(estres)}">
-                        ${escaparHTML(estres)}
-                    </td>
-
-                    <td class="${pintarRiesgo(dolor)}">
-                        ${escaparHTML(dolor)}
-                    </td>
-
-                    <td class="${pintarMolestias(molestias)}">
-                        ${escaparHTML(molestias)}
-                    </td>
-
-                    <td>
-                        ${escaparHTML(comentario)}
-                    </td>
-
-                `;
-
-
-                tabla.appendChild(fila);
-
-            });
-
-
-            mensaje.textContent = "";
-
-
-            contador.textContent =
-                numeroRespuestas +
-                " de " +
-                jugadores.length +
-                " jugadores han respondido.";
-
-        }
-
-
-        /* =====================================================
-           COLORES SUEÑO
-           ===================================================== */
-
-        function pintarSueno(valor) {
-
-            if (
-                valor === "-" ||
-                valor === "" ||
-                valor === null
-            ) {
-                return "";
-            }
-
-
-            const numero =
-                Number(valor);
-
-
-            if (numero >= 8) {
-                return "wellness-verde";
-            }
-
-            if (numero >= 6) {
-                return "wellness-amarillo";
-            }
-
-            return "wellness-rojo";
-        }
-
-
-        /* =====================================================
-           COLORES RIESGO
-           ===================================================== */
-
-        function pintarRiesgo(valor) {
-
-            if (
-                valor === "-" ||
-                valor === "" ||
-                valor === null
-            ) {
-                return "";
-            }
-
-
-            const numero =
-                Number(valor);
-
-
-            if (numero <= 2) {
-                return "wellness-verde";
-            }
-
-            if (numero <= 4) {
-                return "wellness-amarillo";
-            }
-
-            return "wellness-rojo";
-        }
-
-
-        /* =====================================================
-           COLORES MOLESTIAS
-           ===================================================== */
-
-        function pintarMolestias(valor) {
-
-            if (
-                valor === "-" ||
-                valor === "" ||
-                valor === null
-            ) {
-                return "";
-            }
-
-
-            const texto =
-                String(valor)
-                    .trim()
-                    .toLowerCase();
-
-
-            if (
-                texto === "no" ||
-                texto === "ninguna" ||
-                texto === "ninguno"
-            ) {
-                return "wellness-verde";
-            }
-
-
-            return "wellness-amarillo";
-        }
-
-
-        /* =====================================================
-           ESCAPAR HTML
-           ===================================================== */
-
-        function escaparHTML(texto) {
-
-            return String(texto)
-                .replace(
-                    /&/g,
-                    "&amp;"
-                )
-                .replace(
-                    /</g,
-                    "&lt;"
-                )
-                .replace(
-                    />/g,
-                    "&gt;"
-                )
-                .replace(
-                    /"/g,
-                    "&quot;"
-                )
-                .replace(
-                    /'/g,
-                    "&#039;"
-                );
-        }
-
-
-        /* =====================================================
-           VOLVER
-           ===================================================== */
-
-        function volverAdmin() {
-
-            window.location.href =
-                "panel-admin.html";
-        }
-
-
-        /* =====================================================
-           ESTILOS DE COLORES DE WELLNESS
-           ===================================================== */
-
-    </script>
-
-
-    <style>
-
-        .wellness-verde {
-            background: #dcfce7 !important;
-            color: #166534;
-            font-weight: bold;
-        }
-
-        .wellness-amarillo {
-            background: #fef3c7 !important;
-            color: #92400e;
-            font-weight: bold;
-        }
-
-        .wellness-rojo {
-            background: #fee2e2 !important;
-            color: #991b1b;
-            font-weight: bold;
-        }
-
-    </style>
-
-
-    <script>
-
-        /* =====================================================
-           CARGAR AL ABRIR
-           ===================================================== */
-
-        cargarEquipos();
-
-    </script>
 
 </body>
 
