@@ -414,20 +414,11 @@ button {
    y cada columna tiene su propio tamaño.
 */
 
-.tabla-contenedor table:not(#tablaPrincipal) {
-    width: 950px !important;
-    min-width: 950px !important;
-    max-width: 950px !important;
-    table-layout: fixed !important;
-}
+
 
 
 /* Tamaño general del texto */
 
-.tabla-contenedor table:not(#tablaPrincipal) th,
-.tabla-contenedor table:not(#tablaPrincipal) td {
-    font-size: 13px;
-}
 
 
 /* =========================================================
@@ -436,113 +427,6 @@ button {
 
 /* 1. JUGADOR */
 
-.tabla-contenedor table:not(#tablaPrincipal) th:nth-child(1),
-.tabla-contenedor table:not(#tablaPrincipal) td:nth-child(1) {
-    width: 170px !important;
-    min-width: 170px !important;
-    max-width: 170px !important;
-
-    text-align: left;
-    font-weight: bold;
-}
-
-
-/* 2. SUEÑO */
-
-.tabla-contenedor table:not(#tablaPrincipal) th:nth-child(2),
-.tabla-contenedor table:not(#tablaPrincipal) td:nth-child(2) {
-    width: 75px !important;
-    min-width: 75px !important;
-    max-width: 75px !important;
-}
-
-
-/* 3. FATIGA */
-
-.tabla-contenedor table:not(#tablaPrincipal) th:nth-child(3),
-.tabla-contenedor table:not(#tablaPrincipal) td:nth-child(3) {
-    width: 75px !important;
-    min-width: 75px !important;
-    max-width: 75px !important;
-}
-
-
-/* 4. ESTRÉS */
-
-.tabla-contenedor table:not(#tablaPrincipal) th:nth-child(4),
-.tabla-contenedor table:not(#tablaPrincipal) td:nth-child(4) {
-    width: 75px !important;
-    min-width: 75px !important;
-    max-width: 75px !important;
-}
-
-
-/* 5. DOLOR */
-
-.tabla-contenedor table:not(#tablaPrincipal) th:nth-child(5),
-.tabla-contenedor table:not(#tablaPrincipal) td:nth-child(5) {
-    width: 75px !important;
-    min-width: 75px !important;
-    max-width: 75px !important;
-}
-
-
-/* 6. MOLESTIAS */
-
-.tabla-contenedor table:not(#tablaPrincipal) th:nth-child(6),
-.tabla-contenedor table:not(#tablaPrincipal) td:nth-child(6) {
-    width: 75px !important;
-    min-width: 75px !important;
-    max-width: 75px !important;
-}
-
-
-/* 7. COMENTARIO */
-
-.tabla-contenedor table:not(#tablaPrincipal) th:nth-child(7),
-.tabla-contenedor table:not(#tablaPrincipal) td:nth-child(7) {
-    width: 400px !important;
-    min-width: 400px !important;
-    max-width: 400px !important;
-
-    white-space: normal !important;
-    overflow-wrap: anywhere !important;
-    word-break: break-word !important;
-
-    text-align: left !important;
-    vertical-align: top !important;
-
-    line-height: 1.5;
-    box-sizing: border-box !important;
-}
-
-
-/* =========================================================
-   CAMPOS DE MINUTOS
-   ========================================================= */
-
-.tabla-contenedor input.minutos {
-    width: 38px;
-    padding: 5px 2px;
-    text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-
-/* =========================================================
-   CAMPOS RPE
-   ========================================================= */
-
-.tabla-contenedor input.rpeL {
-    width: 38px;
-    padding: 5px 2px;
-    text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
 
 
 /* =========================================================
