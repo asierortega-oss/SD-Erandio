@@ -13,334 +13,393 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
+    * {
+        box-sizing: border-box;
+    }
 
-        /* ======================================================
-           FILTROS
-        ====================================================== */
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        padding: 30px 15px;
+        color: #1e293b;
+    }
+
+    .contenedor {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        background: white;
+        padding: 32px;
+        border-radius: 22px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.30);
+    }
+
+    .cabecera {
+        text-align: center;
+        margin-bottom: 28px;
+    }
+
+    .cabecera h1 {
+        margin: 0;
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: #0f172a;
+    }
+
+    .cabecera p {
+        margin: 8px 0 0;
+        color: #64748b;
+        font-size: 16px;
+    }
+
+    .formulario {
+        width: 100%;
+    }
+
+    .formulario > label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #334155;
+    }
+
+    #equipo,
+    .filtro-fecha input {
+        width: 100%;
+        padding: 13px 14px;
+        font-size: 15px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        background: #f8fafc;
+        color: #1e293b;
+        transition: all 0.2s ease;
+    }
+
+    #equipo:focus,
+    .filtro-fecha input:focus {
+        outline: none;
+        border-color: #0f172a;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+    }
+
+    .filtros-fechas {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 18px;
+        margin-bottom: 15px;
+        padding: 20px;
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+        border-radius: 16px;
+    }
+
+    .filtro-fecha {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filtro-fecha label {
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #334155;
+    }
+
+    #botonConsultar {
+        width: 100%;
+        height: 50px;
+        padding: 0 18px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 700;
+        background: #0f172a;
+        color: white;
+        transition: all 0.2s ease;
+        box-shadow: 0 6px 15px rgba(15, 23, 42, 0.18);
+    }
+
+    #botonConsultar:hover {
+        background: #1e293b;
+        transform: translateY(-2px);
+        box-shadow: 0 9px 20px rgba(15, 23, 42, 0.23);
+    }
+
+    .mensaje {
+        margin-top: 15px;
+        padding: 13px 15px;
+        border-radius: 12px;
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+        color: #475569;
+        font-size: 14px;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .tabla-contenedor {
+        width: 100%;
+        overflow-x: auto;
+        margin-top: 20px;
+        border: 2px solid #e2e8f0;
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+        background: white;
+    }
+
+    table {
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+        table-layout: fixed;
+        font-size: 12px;
+        overflow: hidden;
+    }
+
+    th,
+    td {
+        border-right: 1px solid #e2e8f0;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 5px 3px;
+        text-align: center;
+        white-space: nowrap;
+        box-sizing: border-box;
+        height: 36px;
+    }
+
+    th:last-child,
+    td:last-child {
+        border-right: none;
+    }
+
+    tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .jugador-col {
+        width: 150px !important;
+        min-width: 150px !important;
+        max-width: 150px !important;
+        position: sticky;
+        left: 0;
+        background: white;
+        z-index: 2;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: 700;
+        color: #0f172a;
+        padding-left: 12px;
+    }
+
+    .fecha-principal {
+        font-weight: 800;
+        font-size: 11px;
+        padding: 7px 2px;
+        background: #0f172a;
+        color: white;
+    }
+
+    .subcabecera {
+        width: 46px !important;
+        min-width: 46px !important;
+        max-width: 46px !important;
+        font-size: 10px;
+        padding: 6px 1px;
+        background: #1e293b;
+        color: white;
+    }
+
+    .carga-total-col {
+        width: 75px !important;
+        min-width: 75px !important;
+        max-width: 75px !important;
+        position: sticky;
+        right: 0;
+        background: white;
+        z-index: 2;
+        font-weight: 800;
+        font-size: 11px;
+    }
+
+    th.carga-total-col {
+        background: #0f172a;
+        color: white;
+    }
+
+    td.carga-total-col {
+        background: white;
+    }
+
+    tbody tr:hover td {
+        background: #f8fafc;
+    }
+
+    tbody tr:hover .jugador-col {
+        background: #f1f5f9;
+    }
+
+    tbody tr:hover .carga-total-col {
+        background: #f8fafc;
+    }
+
+    .celda-rpe {
+        width: 42px !important;
+        min-width: 42px !important;
+        max-width: 42px !important;
+        padding: 3px !important;
+    }
+
+    .celda-min {
+        width: 48px !important;
+        min-width: 48px !important;
+        max-width: 48px !important;
+        padding: 3px !important;
+    }
+
+    .celda-carga {
+        width: 50px !important;
+        min-width: 50px !important;
+        max-width: 50px !important;
+        padding: 3px !important;
+        font-weight: 800;
+        font-size: 11px;
+    }
+
+    .celda-rpe input,
+    .celda-min input {
+        display: block;
+        width: 36px;
+        height: 26px;
+        margin: 0 auto;
+        box-sizing: border-box;
+        padding: 1px;
+        text-align: center;
+        font-size: 11px;
+        border: 1px solid #cbd5e1;
+        border-radius: 7px;
+        background: #f8fafc;
+        color: #1e293b;
+    }
+
+    .celda-rpe input {
+        background: transparent;
+        border-color: transparent;
+        font-weight: 800;
+    }
+
+    .celda-min input:focus {
+        outline: none;
+        border-color: #0f172a;
+        background: white;
+        box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.08);
+    }
+
+    .celda-min .input-minutos {
+        width: 42px;
+        height: 25px;
+        font-size: 11px;
+        padding: 1px;
+    }
+
+    .fila-media td {
+        background: #f1f5f9;
+        font-weight: 800;
+        font-size: 11px;
+        color: #334155;
+    }
+
+    .fila-media .jugador-col {
+        background: #e2e8f0;
+    }
+
+    .fila-media .carga-total-col {
+        background: #e2e8f0;
+    }
+
+    .celda-rpe.coloreada,
+    .carga-total.coloreada {
+        transition: background-color 0.2s ease;
+    }
+
+    @media (max-width: 700px) {
+
+        body {
+            padding: 15px 10px;
+        }
+
+        .contenedor {
+            margin: 0 auto;
+            padding: 22px 18px;
+            border-radius: 18px;
+        }
+
+        .cabecera {
+            margin-bottom: 22px;
+        }
+
+        .cabecera h1 {
+            font-size: 28px;
+        }
+
+        .cabecera p {
+            font-size: 14px;
+            line-height: 1.5;
+        }
 
         .filtros-fechas {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .filtro-fecha {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .filtro-fecha label {
-            margin-bottom: 6px;
-        }
-
-        .filtro-fecha input {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+            padding: 18px;
         }
 
         #botonConsultar {
-            width: 100%;
-            padding: 10px;
-            border: 0;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
+            height: 48px;
         }
-
-
-        /* ======================================================
-           TABLA
-        ====================================================== */
 
         .tabla-contenedor {
-            width: 100%;
-            overflow-x: auto;
-            margin-top: 20px;
+            border-radius: 12px;
         }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            table-layout: fixed;
-            font-size: 12px;
-        }
-
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 3px 2px;
-            text-align: center;
-            white-space: nowrap;
-            box-sizing: border-box;
-            height: 32px;
-        }
-
-
-        /* ======================================================
-           ANCHOS DE LAS COLUMNAS
-        ====================================================== */
 
         .jugador-col {
-            width: 130px !important;
-            min-width: 130px !important;
-            max-width: 130px !important;
-        }
-
-        .fecha-principal {
-            font-weight: bold;
-            font-size: 11px;
-            padding: 3px 1px;
-        }
-
-        .subcabecera {
-            width: 46px !important;
-            min-width: 46px !important;
-            max-width: 46px !important;
-
-            font-size: 10px;
-            padding: 3px 1px;
+            width: 120px !important;
+            min-width: 120px !important;
+            max-width: 120px !important;
         }
 
         .carga-total-col {
             width: 65px !important;
             min-width: 65px !important;
             max-width: 65px !important;
-
-            font-size: 11px;
         }
 
-
-        /* ======================================================
-           CELDAS RPE / MIN / C
-        ====================================================== */
-
         .celda-rpe {
-            width: 42px !important;
-            min-width: 42px !important;
-            max-width: 42px !important;
-
-            padding: 2px !important;
+            width: 40px !important;
+            min-width: 40px !important;
+            max-width: 40px !important;
         }
 
         .celda-min {
-            width: 48px !important;
-            min-width: 48px !important;
-            max-width: 48px !important;
-
-            padding: 2px !important;
+            width: 45px !important;
+            min-width: 45px !important;
+            max-width: 45px !important;
         }
 
         .celda-carga {
-            width: 50px !important;
-            min-width: 50px !important;
-            max-width: 50px !important;
-
-            padding: 2px !important;
-
-            font-weight: bold;
-            font-size: 11px;
+            width: 45px !important;
+            min-width: 45px !important;
+            max-width: 45px !important;
         }
+    }
+</style>
 
-
-        /* ======================================================
-           CAMPOS DE RPE Y MINUTOS
-        ====================================================== */
-
-        .celda-rpe input,
-        .celda-min input {
-
-            display: block;
-
-            width: 36px;
-            height: 24px;
-
-            margin: 0 auto;
-
-            box-sizing: border-box;
-
-            padding: 1px;
-
-            text-align: center;
-
-            font-size: 11px;
-        }
-
-
-        .celda-min .input-minutos {
-
-            width: 42px;
-            height: 23px;
-
-            font-size: 11px;
-
-            padding: 1px;
-
-        }
-
-
-        /* ======================================================
-           CABECERAS
-        ====================================================== */
-
-        th {
-            background: #f5f5f5;
-        }
-
-
-        /* ======================================================
-           JUGADOR FIJO A LA IZQUIERDA
-        ====================================================== */
-
-        .jugador-col {
-
-            position: sticky;
-
-            left: 0;
-
-            background: white;
-
-            z-index: 2;
-
-            text-align: left;
-
-            overflow: hidden;
-
-            text-overflow: ellipsis;
-
-        }
-
-
-        /* ======================================================
-           CARGA TOTAL FIJA A LA DERECHA
-        ====================================================== */
-
-        .carga-total-col {
-
-            position: sticky;
-
-            right: 0;
-
-            background: white;
-
-            z-index: 2;
-
-            font-weight: bold;
-
-        }
-
-
-        th.carga-total-col,
-        td.carga-total-col {
-
-            background: white;
-
-        }
-
-
-        /* ======================================================
-           FILA MEDIA
-        ====================================================== */
-
-        .fila-media td {
-
-            background: #f7f7f7;
-
-            font-weight: bold;
-
-            font-size: 11px;
-
-        }
-
-
-        /* ======================================================
-           MENSAJE
-        ====================================================== */
-
-        .mensaje {
-
-            margin-top: 12px;
-
-            font-weight: bold;
-
-        }
-
-
-        /* ======================================================
-           COLORES DE ESCALA
-        ====================================================== */
-
-        .celda-rpe.coloreada,
-        .carga-total.coloreada {
-
-            transition:
-                background-color 0.2s ease;
-
-        }
-
-        .celda-rpe input {
-
-            background: transparent;
-
-        }
-
-
-        /* ======================================================
-           MÓVIL
-        ====================================================== */
-
-        @media (max-width: 600px) {
-
-            .filtros-fechas {
-
-                grid-template-columns: 1fr;
-
-            }
-
-            .jugador-col {
-
-                width: 120px !important;
-                min-width: 120px !important;
-                max-width: 120px !important;
-
-            }
-
-            .carga-total-col {
-
-                width: 60px !important;
-                min-width: 60px !important;
-                max-width: 60px !important;
-
-            }
-
-            .celda-rpe {
-
-                width: 40px !important;
-                min-width: 40px !important;
-                max-width: 40px !important;
-
-            }
-
-            .celda-min {
-
-                width: 45px !important;
-                min-width: 45px !important;
-                max-width: 45px !important;
-
-            }
-
-            .celda-carga {
-
-                width: 45px !important;
-                min-width: 45px !important;
-                max-width: 45px !important;
-
-            }
-
-        }
-
-    </style>
 
 </head>
 
