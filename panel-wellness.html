@@ -331,13 +331,28 @@ tbody tr:hover {
     /* COMENTARIO */
 
     .comentario {
-      min-width: 230px;
-      max-width: 350px;
-      text-align: left !important;
-      white-space: normal;
-      word-break: break-word;
-      line-height: 1.4;
-    }
+  width: 400px;
+  min-width: 400px;
+  max-width: 400px;
+  box-sizing: border-box;
+
+  text-align: left !important;
+
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+
+  line-height: 1.5;
+  vertical-align: top;
+  font-size: 14px;
+}
+
+.comentario span {
+  display: block;
+  width: 100%;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
 
 
     /* CARGANDO */
