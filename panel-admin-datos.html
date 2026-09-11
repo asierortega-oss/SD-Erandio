@@ -8,137 +8,278 @@
     <title>SD Erandio - Editar datos</title>
 
     <style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        padding: 30px 15px;
+        color: #1e293b;
+    }
+
+    .contenedor {
+        width: 100%;
+        max-width: 850px;
+        margin: 0 auto;
+        background: white;
+        padding: 32px;
+        border-radius: 22px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.30);
+    }
+
+    h1 {
+        text-align: center;
+        margin: 0;
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: #0f172a;
+    }
+
+    .descripcion {
+        text-align: center;
+        color: #64748b;
+        margin: 8px 0 30px;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    h2 {
+        margin-top: 30px;
+        margin-bottom: 14px;
+        font-size: 21px;
+        color: #0f172a;
+    }
+
+    input {
+        width: 100%;
+        padding: 14px;
+        font-size: 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        background: #f8fafc;
+        color: #1e293b;
+        margin-bottom: 10px;
+        transition: all 0.2s ease;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #0f172a;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+    }
+
+    button {
+        padding: 13px 18px;
+        font-size: 15px;
+        font-weight: 700;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        background: #0f172a;
+        color: white;
+        transition: all 0.2s ease;
+    }
+
+    button:hover {
+        background: #1e293b;
+        transform: translateY(-2px);
+        box-shadow: 0 7px 18px rgba(15, 23, 42, 0.18);
+    }
+
+    .boton-anadir {
+        width: 100%;
+        margin-top: 2px;
+    }
+
+    .equipo {
+        border: 2px solid #e2e8f0;
+        border-radius: 16px;
+        margin-top: 15px;
+        overflow: hidden;
+        background: white;
+        box-shadow: 0 5px 14px rgba(15, 23, 42, 0.05);
+        transition: all 0.2s ease;
+    }
+
+    .equipo:hover {
+        border-color: #cbd5e1;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+    }
+
+    .cabecera-equipo {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        padding: 17px 18px;
+        background: #f8fafc;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    .cabecera-equipo:hover {
+        background: #f1f5f9;
+    }
+
+    .nombre-equipo {
+        font-weight: 800;
+        font-size: 17px;
+        color: #0f172a;
+    }
+
+    .boton-eliminar-equipo {
+        flex-shrink: 0;
+        background: #fef2f2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+        padding: 8px 11px;
+        font-size: 12px;
+        border-radius: 9px;
+        box-shadow: none;
+    }
+
+    .boton-eliminar-equipo:hover {
+        background: #fee2e2;
+        color: #991b1b;
+        box-shadow: none;
+    }
+
+    .jugadores {
+        display: none;
+        padding: 18px;
+        border-top: 2px solid #e2e8f0;
+        background: white;
+    }
+
+    .jugadores.visible {
+        display: block;
+    }
+
+    .jugadores .boton-anadir {
+        margin-bottom: 15px;
+    }
+
+    .jugador {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        padding: 12px 0;
+        border-bottom: 1px solid #e2e8f0;
+        color: #334155;
+        font-size: 15px;
+    }
+
+    .jugador:last-child {
+        border-bottom: none;
+    }
+
+    .jugador span {
+        font-weight: 600;
+    }
+
+    .boton-eliminar-jugador {
+        flex-shrink: 0;
+        background: #fef2f2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+        padding: 7px 10px;
+        font-size: 11px;
+        border-radius: 8px;
+        box-shadow: none;
+    }
+
+    .boton-eliminar-jugador:hover {
+        background: #fee2e2;
+        color: #991b1b;
+        box-shadow: none;
+    }
+
+    .mensaje {
+        text-align: center;
+        margin-top: 15px;
+        padding: 13px 15px;
+        border-radius: 12px;
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+        color: #334155;
+        font-weight: 700;
+    }
+
+    .volver {
+        width: 100%;
+        margin-top: 30px;
+        background: transparent;
+        color: #334155;
+        border: 2px solid #334155;
+        box-shadow: none;
+    }
+
+    .volver:hover {
+        background: #0f172a;
+        color: white;
+        border-color: #0f172a;
+        box-shadow: none;
+    }
+
+    @media (max-width: 600px) {
+
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            margin: 0;
-            padding: 0;
+            padding: 15px 10px;
         }
 
         .contenedor {
-            max-width: 600px;
-            margin: 60px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            padding: 24px 18px;
+            border-radius: 18px;
         }
 
         h1 {
-            text-align: center;
-            margin-bottom: 10px;
+            font-size: 28px;
         }
 
         .descripcion {
-            text-align: center;
-            color: #666;
-            margin-bottom: 35px;
+            font-size: 14px;
+            margin-bottom: 25px;
         }
 
         h2 {
-            margin-top: 30px;
-            margin-bottom: 15px;
-        }
-
-        input {
-            width: 100%;
-            padding: 14px;
-            font-size: 16px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-
-        button {
-            padding: 14px;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            background: #222;
-            color: white;
-        }
-
-        button:hover {
-            opacity: 0.85;
-        }
-
-        .boton-anadir {
-            width: 100%;
-        }
-
-        .equipo {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-top: 15px;
-            overflow: hidden;
+            font-size: 19px;
         }
 
         .cabecera-equipo {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             padding: 15px;
-            background: #f7f7f7;
-            cursor: pointer;
         }
 
         .nombre-equipo {
-            font-weight: bold;
-            font-size: 17px;
-        }
-
-        .boton-eliminar-equipo {
-            background: #ddd;
-            color: #222;
-            padding: 8px 10px;
-            font-size: 12px;
+            font-size: 16px;
         }
 
         .jugadores {
-            display: none;
             padding: 15px;
-            border-top: 1px solid #ddd;
-        }
-
-        .jugadores.visible {
-            display: block;
         }
 
         .jugador {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 9px 0;
-            border-bottom: 1px solid #eee;
+            padding: 11px 0;
         }
 
-        .jugador:last-child {
-            border-bottom: none;
-        }
-
-        .boton-eliminar-jugador {
-            background: #ddd;
-            color: #222;
-            padding: 6px 9px;
+        .boton-eliminar-equipo {
+            padding: 7px 9px;
             font-size: 11px;
         }
 
-        .mensaje {
-            text-align: center;
-            margin-top: 15px;
-            font-weight: bold;
+        .boton-eliminar-jugador {
+            padding: 6px 8px;
         }
-
-        .volver {
-            width: 100%;
-            margin-top: 30px;
-            background: #ddd;
-            color: #222;
-        }
-    </style>
+    }
+</style>
+    
 </head>
 
 <body>
