@@ -2,14 +2,23 @@
 <html lang="es">
 
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>SD Erandio - Panel Wellness</title>
 
-  <link rel="stylesheet" href="estilos.css">
+  <link
+    rel="stylesheet"
+    href="estilos.css"
+  >
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
   <style>
 
@@ -18,19 +27,42 @@
        ========================================================= */
 
     body {
+
       margin: 0;
+
       min-height: 100vh;
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(135deg, #0f172a, #1e293b);
-      padding: 30px 15px;
-      color: #1e293b;
-      box-sizing: border-box;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      background:
+        linear-gradient(
+          135deg,
+          #0f172a,
+          #1e293b
+        );
+
+      padding:
+        30px 15px;
+
+      color:
+        #1e293b;
+
+      box-sizing:
+        border-box;
+
     }
+
 
     *,
     *::before,
     *::after {
-      box-sizing: border-box;
+
+      box-sizing:
+        border-box;
+
     }
 
 
@@ -39,13 +71,32 @@
        ========================================================= */
 
     .contenedor {
-      width: 100%;
-      max-width: 1400px;
-      margin: 0 auto;
-      background: white;
-      padding: 32px;
-      border-radius: 22px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.30);
+
+      width:
+        100%;
+
+      max-width:
+        1400px;
+
+      margin:
+        0 auto;
+
+      background:
+        white;
+
+      padding:
+        32px;
+
+      border-radius:
+        22px;
+
+      box-shadow:
+        0 20px 50px
+        rgba(0, 0, 0, 0.30);
+
+      overflow:
+        hidden;
+
     }
 
 
@@ -54,22 +105,47 @@
        ========================================================= */
 
     .cabecera {
-      text-align: center;
-      margin-bottom: 28px;
+
+      text-align:
+        center;
+
+      margin-bottom:
+        28px;
+
     }
+
 
     .cabecera h1 {
-      margin: 0;
-      font-size: 36px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      color: #0f172a;
+
+      margin:
+        0;
+
+      font-size:
+        36px;
+
+      font-weight:
+        800;
+
+      letter-spacing:
+        -0.5px;
+
+      color:
+        #0f172a;
+
     }
 
+
     .cabecera p {
-      margin: 8px 0 0;
-      color: #64748b;
-      font-size: 16px;
+
+      margin:
+        8px 0 0;
+
+      color:
+        #64748b;
+
+      font-size:
+        16px;
+
     }
 
 
@@ -78,45 +154,120 @@
        ========================================================= */
 
     .filtros {
-      display: flex;
-      gap: 15px;
-      align-items: end;
-      flex-wrap: wrap;
-      margin-bottom: 25px;
-      padding: 22px;
-      background: #f8fafc;
-      border: 2px solid #e2e8f0;
-      border-radius: 16px;
+
+      display:
+        flex;
+
+      gap:
+        15px;
+
+      align-items:
+        end;
+
+      flex-wrap:
+        wrap;
+
+      margin-bottom:
+        25px;
+
+      padding:
+        22px;
+
+      background:
+        #f8fafc;
+
+      border:
+        2px solid #e2e8f0;
+
+      border-radius:
+        16px;
+
+      width:
+        100%;
+
+      min-width:
+        0;
+
     }
+
 
     .campo {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+
+      display:
+        flex;
+
+      flex-direction:
+        column;
+
+      gap:
+        6px;
+
+      min-width:
+        0;
+
     }
 
+
     .campo label {
-      font-weight: 700;
-      font-size: 14px;
-      color: #334155;
+
+      font-weight:
+        700;
+
+      font-size:
+        14px;
+
+      color:
+        #334155;
+
     }
+
 
     .campo select,
     .campo input {
-      padding: 13px 14px;
-      border: 2px solid #e2e8f0;
-      border-radius: 12px;
-      font-size: 15px;
-      background: white;
-      color: #1e293b;
-      transition: all 0.2s ease;
+
+      padding:
+        13px 14px;
+
+      border:
+        2px solid #e2e8f0;
+
+      border-radius:
+        12px;
+
+      font-size:
+        15px;
+
+      background:
+        white;
+
+      color:
+        #1e293b;
+
+      transition:
+        all 0.2s ease;
+
+      min-width:
+        0;
+
+      max-width:
+        100%;
+
     }
+
 
     .campo select:focus,
     .campo input:focus {
-      outline: none;
-      border-color: #0f172a;
-      box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+
+      outline:
+        none;
+
+      border-color:
+        #0f172a;
+
+      box-shadow:
+        0 0 0 3px
+        rgba(15, 23, 42, 0.08);
+
     }
 
 
@@ -125,22 +276,56 @@
        ========================================================= */
 
     .boton-consultar {
-      padding: 13px 22px;
-      border: none;
-      border-radius: 12px;
-      background: #0f172a;
-      color: white;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 6px 15px rgba(15, 23, 42, 0.18);
+
+      padding:
+        13px 22px;
+
+      border:
+        none;
+
+      border-radius:
+        12px;
+
+      background:
+        #0f172a;
+
+      color:
+        white;
+
+      font-size:
+        15px;
+
+      font-weight:
+        700;
+
+      cursor:
+        pointer;
+
+      transition:
+        all 0.2s ease;
+
+      box-shadow:
+        0 6px 15px
+        rgba(15, 23, 42, 0.18);
+
+      min-width:
+        0;
+
     }
 
+
     .boton-consultar:hover {
-      background: #1e293b;
-      transform: translateY(-2px);
-      box-shadow: 0 9px 20px rgba(15, 23, 42, 0.23);
+
+      background:
+        #1e293b;
+
+      transform:
+        translateY(-2px);
+
+      box-shadow:
+        0 9px 20px
+        rgba(15, 23, 42, 0.23);
+
     }
 
 
@@ -149,23 +334,54 @@
        ========================================================= */
 
     .boton-volver {
-      display: block;
-      margin: 25px auto 0;
-      padding: 11px 18px;
-      border: 2px solid #334155;
-      border-radius: 12px;
-      background: transparent;
-      color: #334155;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.2s;
+
+      display:
+        block;
+
+      margin:
+        25px auto 0;
+
+      padding:
+        11px 18px;
+
+      border:
+        2px solid #334155;
+
+      border-radius:
+        12px;
+
+      background:
+        transparent;
+
+      color:
+        #334155;
+
+      font-size:
+        15px;
+
+      font-weight:
+        700;
+
+      cursor:
+        pointer;
+
+      transition:
+        0.2s;
+
     }
 
+
     .boton-volver:hover {
-      background: #0f172a;
-      color: white;
-      transform: translateY(-2px);
+
+      background:
+        #0f172a;
+
+      color:
+        white;
+
+      transform:
+        translateY(-2px);
+
     }
 
 
@@ -174,18 +390,39 @@
        ========================================================= */
 
     .info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
+
+      display:
+        flex;
+
+      justify-content:
+        space-between;
+
+      align-items:
+        center;
+
+      gap:
+        15px;
+
+      margin-bottom:
+        15px;
+
+      flex-wrap:
+        wrap;
+
     }
 
+
     .contador {
-      font-weight: 700;
-      color: #334155;
-      font-size: 15px;
+
+      font-weight:
+        700;
+
+      color:
+        #334155;
+
+      font-size:
+        15px;
+
     }
 
 
@@ -194,19 +431,42 @@
        ========================================================= */
 
     .mensaje {
-      padding: 15px 18px;
-      border-radius: 12px;
-      background: #f8fafc;
-      border: 2px solid #e2e8f0;
-      color: #475569;
-      margin-bottom: 15px;
-      display: none;
+
+      padding:
+        15px 18px;
+
+      border-radius:
+        12px;
+
+      background:
+        #f8fafc;
+
+      border:
+        2px solid #e2e8f0;
+
+      color:
+        #475569;
+
+      margin-bottom:
+        15px;
+
+      display:
+        none;
+
     }
 
+
     .mensaje.error {
-      background: #fef2f2;
-      border-color: #fecaca;
-      color: #b91c1c;
+
+      background:
+        #fef2f2;
+
+      border-color:
+        #fecaca;
+
+      color:
+        #b91c1c;
+
     }
 
 
@@ -215,30 +475,68 @@
        ========================================================= */
 
     .tabla-contenedor {
-      display: none;
-      width: 100%;
-      max-width: 100%;
-      overflow-x: auto;
-      overflow-y: visible;
-      border: 2px solid #e2e8f0;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
-      background: white;
+
+      display:
+        none;
+
+      width:
+        100%;
+
+      max-width:
+        100%;
+
+      overflow-x:
+        auto;
+
+      overflow-y:
+        visible;
+
+      border:
+        2px solid #e2e8f0;
+
+      border-radius:
+        16px;
+
+      box-shadow:
+        0 8px 20px
+        rgba(15, 23, 42, 0.08);
+
+      background:
+        white;
+
+      -webkit-overflow-scrolling:
+        touch;
+
     }
 
 
     /* =========================================================
-       TABLA WELLNESS
+       TABLA WELLNESS - ORDENADOR
        ========================================================= */
 
     .tabla-contenedor table {
-      width: 1160px;
-      min-width: 1160px;
-      max-width: none;
-      border-collapse: collapse;
-      border-spacing: 0;
-      table-layout: fixed;
-      background: white;
+
+      width:
+        1160px;
+
+      min-width:
+        1160px;
+
+      max-width:
+        none;
+
+      border-collapse:
+        collapse;
+
+      border-spacing:
+        0;
+
+      table-layout:
+        fixed;
+
+      background:
+        white;
+
     }
 
 
@@ -247,18 +545,43 @@
        ========================================================= */
 
     .tabla-contenedor thead th {
-      background: #0f172a;
-      color: white;
-      padding: 14px 10px;
-      font-size: 14px;
-      font-weight: 700;
-      text-align: center;
-      white-space: nowrap;
-      position: sticky;
-      top: 0;
-      z-index: 4;
-      border: 1px solid #334155;
-      box-sizing: border-box;
+
+      background:
+        #0f172a;
+
+      color:
+        white;
+
+      padding:
+        14px 10px;
+
+      font-size:
+        14px;
+
+      font-weight:
+        700;
+
+      text-align:
+        center;
+
+      white-space:
+        nowrap;
+
+      position:
+        sticky;
+
+      top:
+        0;
+
+      z-index:
+        4;
+
+      border:
+        1px solid #334155;
+
+      box-sizing:
+        border-box;
+
     }
 
 
@@ -267,51 +590,113 @@
        ========================================================= */
 
     .tabla-contenedor tbody td {
-      padding: 12px 10px;
-      border-bottom: 1px solid #e2e8f0;
-      border-right: 1px solid #e2e8f0;
-      text-align: center;
-      font-size: 14px;
-      color: #334155;
-      vertical-align: middle;
-      box-sizing: border-box;
+
+      padding:
+        12px 10px;
+
+      border-bottom:
+        1px solid #e2e8f0;
+
+      border-right:
+        1px solid #e2e8f0;
+
+      text-align:
+        center;
+
+      font-size:
+        14px;
+
+      color:
+        #334155;
+
+      vertical-align:
+        middle;
+
+      box-sizing:
+        border-box;
+
     }
 
+
     .tabla-contenedor tbody tr:hover {
-      background: #f8fafc;
+
+      background:
+        #f8fafc;
+
     }
 
 
     /* =========================================================
-       COLUMNA JUGADOR
+       COLUMNA JUGADOR - ORDENADOR
        ========================================================= */
 
     .tabla-contenedor th:nth-child(1),
     .tabla-contenedor td:nth-child(1) {
-      width: 250px;
-      min-width: 250px;
-      max-width: 250px;
+
+      width:
+        250px;
+
+      min-width:
+        250px;
+
+      max-width:
+        250px;
+
     }
+
 
     .tabla-contenedor thead th:nth-child(1) {
-      text-align: left;
-      background: #222;
-      position: sticky;
-      left: 0;
-      z-index: 6;
+
+      text-align:
+        left;
+
+      background:
+        #222;
+
+      position:
+        sticky;
+
+      left:
+        0;
+
+      z-index:
+        6;
+
     }
 
+
     .tabla-contenedor tbody td:nth-child(1) {
-      text-align: left;
-      background: #f8fafc;
-      font-weight: 700;
-      color: #0f172a;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      position: sticky;
-      left: 0;
-      z-index: 5;
+
+      text-align:
+        left;
+
+      background:
+        #f8fafc;
+
+      font-weight:
+        700;
+
+      color:
+        #0f172a;
+
+      white-space:
+        nowrap;
+
+      overflow:
+        hidden;
+
+      text-overflow:
+        ellipsis;
+
+      position:
+        sticky;
+
+      left:
+        0;
+
+      z-index:
+        5;
+
     }
 
 
@@ -321,9 +706,16 @@
 
     .tabla-contenedor th:nth-child(2),
     .tabla-contenedor td:nth-child(2) {
-      width: 90px;
-      min-width: 90px;
-      max-width: 90px;
+
+      width:
+        90px;
+
+      min-width:
+        90px;
+
+      max-width:
+        90px;
+
     }
 
 
@@ -333,9 +725,16 @@
 
     .tabla-contenedor th:nth-child(3),
     .tabla-contenedor td:nth-child(3) {
-      width: 90px;
-      min-width: 90px;
-      max-width: 90px;
+
+      width:
+        90px;
+
+      min-width:
+        90px;
+
+      max-width:
+        90px;
+
     }
 
 
@@ -345,9 +744,16 @@
 
     .tabla-contenedor th:nth-child(4),
     .tabla-contenedor td:nth-child(4) {
-      width: 90px;
-      min-width: 90px;
-      max-width: 90px;
+
+      width:
+        90px;
+
+      min-width:
+        90px;
+
+      max-width:
+        90px;
+
     }
 
 
@@ -357,9 +763,16 @@
 
     .tabla-contenedor th:nth-child(5),
     .tabla-contenedor td:nth-child(5) {
-      width: 90px;
-      min-width: 90px;
-      max-width: 90px;
+
+      width:
+        90px;
+
+      min-width:
+        90px;
+
+      max-width:
+        90px;
+
     }
 
 
@@ -369,9 +782,16 @@
 
     .tabla-contenedor th:nth-child(6),
     .tabla-contenedor td:nth-child(6) {
-      width: 100px;
-      min-width: 100px;
-      max-width: 100px;
+
+      width:
+        100px;
+
+      min-width:
+        100px;
+
+      max-width:
+        100px;
+
     }
 
 
@@ -381,29 +801,51 @@
 
     .tabla-contenedor th:nth-child(7),
     .tabla-contenedor td:nth-child(7) {
-      width: 450px;
-      min-width: 450px;
-      max-width: 450px;
 
-      text-align: left !important;
-      vertical-align: top;
+      width:
+        450px;
 
-      white-space: normal !important;
+      min-width:
+        450px;
 
-      overflow: hidden;
+      max-width:
+        450px;
 
-      overflow-wrap: anywhere !important;
-      word-break: break-word !important;
+      text-align:
+        left !important;
 
-      line-height: 1.5;
+      vertical-align:
+        top;
 
-      padding: 12px 10px;
+      white-space:
+        normal !important;
 
-      box-sizing: border-box;
+      overflow:
+        hidden;
+
+      overflow-wrap:
+        anywhere !important;
+
+      word-break:
+        break-word !important;
+
+      line-height:
+        1.5;
+
+      padding:
+        12px 10px;
+
+      box-sizing:
+        border-box;
+
     }
 
+
     .tabla-contenedor td:nth-child(7) {
-      height: auto;
+
+      height:
+        auto;
+
     }
 
 
@@ -412,54 +854,95 @@
        ========================================================= */
 
     .valor {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      min-width: 32px;
-      height: 32px;
-      padding: 0 7px;
-      border-radius: 6px;
-      font-weight: bold;
+
+      display:
+        inline-flex;
+
+      justify-content:
+        center;
+
+      align-items:
+        center;
+
+      min-width:
+        32px;
+
+      height:
+        32px;
+
+      padding:
+        0 7px;
+
+      border-radius:
+        6px;
+
+      font-weight:
+        bold;
+
     }
 
 
     /* =========================================================
        ESCALA DE COLORES
-       1 = ROJO
-       2 = ROJO CLARO
-       3 = AMARILLO
-       4 = VERDE CLARO
-       5 = VERDE
        ========================================================= */
 
     .sueno-1,
     .riesgo-1 {
-      background: #ff4d4d;
-      color: white;
+
+      background:
+        #ff4d4d;
+
+      color:
+        white;
+
     }
+
 
     .sueno-2,
     .riesgo-2 {
-      background: #ff9999;
-      color: #7a0000;
+
+      background:
+        #ff9999;
+
+      color:
+        #7a0000;
+
     }
+
 
     .sueno-3,
     .riesgo-3 {
-      background: #ffd966;
-      color: #665000;
+
+      background:
+        #ffd966;
+
+      color:
+        #665000;
+
     }
+
 
     .sueno-4,
     .riesgo-4 {
-      background: #a9df9c;
-      color: #205c18;
+
+      background:
+        #a9df9c;
+
+      color:
+        #205c18;
+
     }
+
 
     .sueno-5,
     .riesgo-5 {
-      background: #4caf50;
-      color: white;
+
+      background:
+        #4caf50;
+
+      color:
+        white;
+
     }
 
 
@@ -468,19 +951,42 @@
        ========================================================= */
 
     .molestias-si {
-      background: #ff4d4d;
-      color: white;
-      font-weight: bold;
-      padding: 6px 10px;
-      border-radius: 6px;
+
+      background:
+        #ff4d4d;
+
+      color:
+        white;
+
+      font-weight:
+        bold;
+
+      padding:
+        6px 10px;
+
+      border-radius:
+        6px;
+
     }
 
+
     .molestias-no {
-      background: #4caf50;
-      color: white;
-      font-weight: bold;
-      padding: 6px 10px;
-      border-radius: 6px;
+
+      background:
+        #4caf50;
+
+      color:
+        white;
+
+      font-weight:
+        bold;
+
+      padding:
+        6px 10px;
+
+      border-radius:
+        6px;
+
     }
 
 
@@ -489,8 +995,13 @@
        ========================================================= */
 
     .sin-respuesta {
-      color: #aaa;
-      font-weight: normal;
+
+      color:
+        #aaa;
+
+      font-weight:
+        normal;
+
     }
 
 
@@ -499,10 +1010,19 @@
        ========================================================= */
 
     .cargando {
-      text-align: center !important;
-      padding: 30px !important;
-      color: #666;
-      white-space: normal !important;
+
+      text-align:
+        center !important;
+
+      padding:
+        30px !important;
+
+      color:
+        #666;
+
+      white-space:
+        normal !important;
+
     }
 
 
@@ -512,58 +1032,729 @@
 
     @media (max-width: 700px) {
 
+
+      /* -------------------------------------------------------
+         BODY
+         ------------------------------------------------------- */
+
       body {
-        padding: 15px 10px;
+
+        padding:
+          10px 6px;
+
+        overflow-x:
+          hidden;
+
       }
+
+
+      /* -------------------------------------------------------
+         CONTENEDOR
+         ------------------------------------------------------- */
 
       .contenedor {
-        margin: 0 auto;
-        padding: 22px 18px;
-        border-radius: 18px;
+
+        width:
+          100%;
+
+        max-width:
+          100%;
+
+        margin:
+          0 auto;
+
+        padding:
+          18px 12px;
+
+        border-radius:
+          16px;
+
+        overflow:
+          hidden;
+
       }
+
+
+      /* -------------------------------------------------------
+         CABECERA
+         ------------------------------------------------------- */
 
       .cabecera {
-        margin-bottom: 22px;
+
+        margin-bottom:
+          18px;
+
       }
+
 
       .cabecera h1 {
-        font-size: 28px;
+
+        font-size:
+          26px;
+
       }
+
 
       .cabecera p {
-        font-size: 14px;
-        line-height: 1.5;
+
+        font-size:
+          13px;
+
+        line-height:
+          1.45;
+
       }
+
+
+      /* -------------------------------------------------------
+         FILTROS
+         ------------------------------------------------------- */
 
       .filtros {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-        padding: 18px;
+
+        width:
+          100%;
+
+        max-width:
+          100%;
+
+        display:
+          flex;
+
+        flex-direction:
+          column;
+
+        align-items:
+          stretch;
+
+        gap:
+          12px;
+
+        padding:
+          14px;
+
+        margin-bottom:
+          20px;
+
+        overflow:
+          hidden;
+
       }
+
 
       .campo {
-        width: 100%;
+
+        width:
+          100%;
+
+        max-width:
+          100%;
+
+        min-width:
+          0;
+
       }
+
+
+      .campo label {
+
+        font-size:
+          14px;
+
+      }
+
 
       .campo select,
-      .campo input,
-      .boton-consultar {
-        width: 100%;
-        box-sizing: border-box;
+      .campo input {
+
+        display:
+          block;
+
+        width:
+          100%;
+
+        max-width:
+          100%;
+
+        min-width:
+          0;
+
+        height:
+          48px;
+
+        padding:
+          10px 12px;
+
+        font-size:
+          15px;
+
       }
 
-      .boton-consultar {
-        margin-top: 5px;
-        height: 48px;
+
+      /* -------------------------------------------------------
+         CORRECCIÓN ESPECÍFICA DEL CAMPO FECHA
+         ------------------------------------------------------- */
+
+      #fecha {
+
+        width:
+          100%;
+
+        max-width:
+          100%;
+
+        min-width:
+          0;
+
+        display:
+          block;
+
       }
+
+
+      /* -------------------------------------------------------
+         BOTÓN CONSULTAR
+         ------------------------------------------------------- */
+
+      .boton-consultar {
+
+        width:
+          100%;
+
+        max-width:
+          100%;
+
+        min-width:
+          0;
+
+        height:
+          48px;
+
+        margin-top:
+          3px;
+
+        padding:
+          10px 15px;
+
+      }
+
+
+      /* -------------------------------------------------------
+         INFORMACIÓN
+         ------------------------------------------------------- */
+
+      .info {
+
+        margin-bottom:
+          12px;
+
+      }
+
+
+      .contador {
+
+        font-size:
+          14px;
+
+      }
+
+
+      /* -------------------------------------------------------
+         TABLA
+         ------------------------------------------------------- */
 
       .tabla-contenedor {
-        border-radius: 12px;
+
+        width:
+          100%;
+
+        max-width:
+          100%;
+
+        overflow-x:
+          hidden;
+
+        overflow-y:
+          visible;
+
+        border-radius:
+          10px;
+
       }
 
+
+      /* =======================================================
+         TABLA RESPONSIVE
+         ======================================================= */
+
+      .tabla-contenedor table {
+
+        width:
+          100%;
+
+        min-width:
+          100%;
+
+        max-width:
+          100%;
+
+        table-layout:
+          fixed;
+
+      }
+
+
+      /* -------------------------------------------------------
+         CABECERA
+         ------------------------------------------------------- */
+
+      .tabla-contenedor thead th {
+
+        padding:
+          10px 3px;
+
+        font-size:
+          11px;
+
+        white-space:
+          normal;
+
+        line-height:
+          1.15;
+
+      }
+
+
+      /* -------------------------------------------------------
+         CELDAS
+         ------------------------------------------------------- */
+
+      .tabla-contenedor tbody td {
+
+        padding:
+          9px 3px;
+
+        font-size:
+          12px;
+
+      }
+
+
+      /* =======================================================
+         JUGADOR - AHORA SOLO 26%
+         ======================================================= */
+
+      .tabla-contenedor th:nth-child(1),
+      .tabla-contenedor td:nth-child(1) {
+
+        width:
+          26%;
+
+        min-width:
+          0;
+
+        max-width:
+          none;
+
+      }
+
+
+      .tabla-contenedor thead th:nth-child(1) {
+
+        position:
+          sticky;
+
+        left:
+          0;
+
+        z-index:
+          6;
+
+        text-align:
+          left;
+
+        padding-left:
+          8px;
+
+      }
+
+
+      .tabla-contenedor tbody td:nth-child(1) {
+
+        position:
+          sticky;
+
+        left:
+          0;
+
+        z-index:
+          5;
+
+        text-align:
+          left;
+
+        padding-left:
+          8px;
+
+        padding-right:
+          4px;
+
+        white-space:
+          normal;
+
+        overflow:
+          hidden;
+
+        text-overflow:
+          clip;
+
+        overflow-wrap:
+          anywhere;
+
+        word-break:
+          break-word;
+
+        line-height:
+          1.2;
+
+      }
+
+
+      /* =======================================================
+         SUEÑO - 9%
+         ======================================================= */
+
+      .tabla-contenedor th:nth-child(2),
+      .tabla-contenedor td:nth-child(2) {
+
+        width:
+          9%;
+
+        min-width:
+          0;
+
+        max-width:
+          none;
+
+      }
+
+
+      /* =======================================================
+         FATIGA - 9%
+         ======================================================= */
+
+      .tabla-contenedor th:nth-child(3),
+      .tabla-contenedor td:nth-child(3) {
+
+        width:
+          9%;
+
+        min-width:
+          0;
+
+        max-width:
+          none;
+
+      }
+
+
+      /* =======================================================
+         ESTRÉS - 9%
+         ======================================================= */
+
+      .tabla-contenedor th:nth-child(4),
+      .tabla-contenedor td:nth-child(4) {
+
+        width:
+          9%;
+
+        min-width:
+          0;
+
+        max-width:
+          none;
+
+      }
+
+
+      /* =======================================================
+         DOLOR - 9%
+         ======================================================= */
+
+      .tabla-contenedor th:nth-child(5),
+      .tabla-contenedor td:nth-child(5) {
+
+        width:
+          9%;
+
+        min-width:
+          0;
+
+        max-width:
+          none;
+
+      }
+
+
+      /* =======================================================
+         MOLESTIAS - 14%
+         ======================================================= */
+
+      .tabla-contenedor th:nth-child(6),
+      .tabla-contenedor td:nth-child(6) {
+
+        width:
+          14%;
+
+        min-width:
+          0;
+
+        max-width:
+          none;
+
+      }
+
+
+      /* =======================================================
+         COMENTARIO - 24%
+         ======================================================= */
+
+      .tabla-contenedor th:nth-child(7),
+      .tabla-contenedor td:nth-child(7) {
+
+        width:
+          24%;
+
+        min-width:
+          0;
+
+        max-width:
+          none;
+
+        padding:
+          9px 4px;
+
+        font-size:
+          11px;
+
+        text-align:
+          left !important;
+
+        white-space:
+          normal !important;
+
+        overflow:
+          hidden;
+
+        overflow-wrap:
+          anywhere !important;
+
+        word-break:
+          break-word !important;
+
+        line-height:
+          1.3;
+
+      }
+
+
+      /* -------------------------------------------------------
+         VALORES EN MÓVIL
+         ------------------------------------------------------- */
+
+      .valor {
+
+        min-width:
+          25px;
+
+        width:
+          25px;
+
+        height:
+          25px;
+
+        padding:
+          0;
+
+        border-radius:
+          5px;
+
+        font-size:
+          12px;
+
+      }
+
+
+      /* -------------------------------------------------------
+         MOLESTIAS EN MÓVIL
+         ------------------------------------------------------- */
+
+      .molestias-si,
+      .molestias-no {
+
+        display:
+          inline-flex;
+
+        justify-content:
+          center;
+
+        align-items:
+          center;
+
+        min-width:
+          25px;
+
+        height:
+          25px;
+
+        padding:
+          0 3px;
+
+        border-radius:
+          5px;
+
+        font-size:
+          10px;
+
+      }
+
+
+      /* -------------------------------------------------------
+         BOTÓN VOLVER
+         ------------------------------------------------------- */
+
       .boton-volver {
-        margin-top: 22px;
+
+        width:
+          100%;
+
+        max-width:
+          250px;
+
+        margin-top:
+          18px;
+
+      }
+
+    }
+
+
+    /* =========================================================
+       MÓVILES MUY PEQUEÑOS
+       ========================================================= */
+
+    @media (max-width: 380px) {
+
+
+      .contenedor {
+
+        padding:
+          15px 8px;
+
+      }
+
+
+      .filtros {
+
+        padding:
+          12px;
+
+      }
+
+
+      .tabla-contenedor thead th {
+
+        font-size:
+          10px;
+
+        padding:
+          9px 2px;
+
+      }
+
+
+      .tabla-contenedor tbody td {
+
+        font-size:
+          11px;
+
+        padding:
+          8px 2px;
+
+      }
+
+
+      .tabla-contenedor th:nth-child(1),
+      .tabla-contenedor td:nth-child(1) {
+
+        width:
+          25%;
+
+      }
+
+
+      .tabla-contenedor th:nth-child(2),
+      .tabla-contenedor td:nth-child(2),
+      .tabla-contenedor th:nth-child(3),
+      .tabla-contenedor td:nth-child(3),
+      .tabla-contenedor th:nth-child(4),
+      .tabla-contenedor td:nth-child(4),
+      .tabla-contenedor th:nth-child(5),
+      .tabla-contenedor td:nth-child(5) {
+
+        width:
+          9%;
+
+      }
+
+
+      .tabla-contenedor th:nth-child(6),
+      .tabla-contenedor td:nth-child(6) {
+
+        width:
+          14%;
+
+      }
+
+
+      .tabla-contenedor th:nth-child(7),
+      .tabla-contenedor td:nth-child(7) {
+
+        width:
+          29%;
+
+      }
+
+
+      .valor {
+
+        min-width:
+          23px;
+
+        width:
+          23px;
+
+        height:
+          23px;
+
+        font-size:
+          11px;
+
+      }
+
+
+      .molestias-si,
+      .molestias-no {
+
+        min-width:
+          23px;
+
+        height:
+          23px;
+
+        font-size:
+          9px;
+
       }
 
     }
@@ -575,11 +1766,19 @@
 
 <body>
 
+
   <div class="contenedor">
+
+
+    <!-- =======================================================
+         CABECERA
+         ======================================================= -->
 
     <div class="cabecera">
 
-      <h1>Panel Wellness</h1>
+      <h1>
+        Panel Wellness
+      </h1>
 
       <p>
         Consulta las respuestas Wellness de los jugadores por equipo y día.
@@ -593,6 +1792,7 @@
          ======================================================= -->
 
     <div class="filtros">
+
 
       <div class="campo">
 
@@ -626,11 +1826,13 @@
 
 
       <button
+        type="button"
         class="boton-consultar"
         onclick="consultarWellness()"
       >
         CONSULTAR
       </button>
+
 
     </div>
 
@@ -716,16 +1918,20 @@
          ======================================================= -->
 
     <button
+      type="button"
       class="boton-volver"
       onclick="volverAdmin()"
     >
       VOLVER
     </button>
 
+
   </div>
 
 
+
   <script>
+
 
     // =========================================================
     // SUPABASE
@@ -734,14 +1940,17 @@
     const SUPABASE_URL =
       "https://alprdcjaexllelxthhbv.supabase.co";
 
+
     const SUPABASE_KEY =
       "sb_publishable_6kF4hhGM3bwqgwv6Fz3mmw__HvkPXiD";
+
 
     const supabaseClient =
       supabase.createClient(
         SUPABASE_URL,
         SUPABASE_KEY
       );
+
 
 
     // =========================================================
@@ -751,11 +1960,13 @@
     let equipos = [];
 
 
+
     // =========================================================
     // JUGADORES
     // =========================================================
 
     let jugadoresActuales = [];
+
 
 
     // =========================================================
@@ -767,41 +1978,64 @@
       const ahora =
         new Date();
 
+
       const año =
         ahora.getFullYear();
+
 
       const mes =
         String(
           ahora.getMonth() + 1
-        ).padStart(2, "0");
+        ).padStart(
+          2,
+          "0"
+        );
+
 
       const dia =
         String(
           ahora.getDate()
-        ).padStart(2, "0");
+        ).padStart(
+          2,
+          "0"
+        );
+
 
       return `${año}-${mes}-${dia}`;
 
     }
 
 
+
     // =========================================================
     // FECHA LOCAL A ISO
     // =========================================================
 
-    function fechaLocalAISO(fechaTexto) {
+    function fechaLocalAISO(
+      fechaTexto
+    ) {
 
       const partes =
         fechaTexto.split("-");
 
+
       const año =
-        Number(partes[0]);
+        Number(
+          partes[0]
+        );
+
 
       const mes =
-        Number(partes[1]) - 1;
+        Number(
+          partes[1]
+        ) - 1;
+
 
       const dia =
-        Number(partes[2]);
+        Number(
+          partes[2]
+        );
+
 
       return new Date(
         año,
@@ -816,11 +2050,14 @@
     }
 
 
+
     // =========================================================
     // ESCAPAR HTML
     // =========================================================
 
-    function escaparHTML(texto) {
+    function escaparHTML(
+      texto
+    ) {
 
       if (
         texto === null ||
@@ -831,14 +2068,36 @@
 
       }
 
+
       return String(texto)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+
+        .replace(
+          /</g,
+          "&lt;"
+        )
+
+        .replace(
+          />/g,
+          "&gt;"
+        )
+
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+
+        .replace(
+          /'/g,
+          "&#039;"
+        );
 
     }
+
 
 
     // =========================================================
@@ -855,11 +2114,14 @@
           "mensaje"
         );
 
+
       mensaje.textContent =
         texto;
 
+
       mensaje.className =
         "mensaje";
+
 
       if (error) {
 
@@ -869,10 +2131,12 @@
 
       }
 
+
       mensaje.style.display =
         "block";
 
     }
+
 
 
     // =========================================================
@@ -886,10 +2150,12 @@
           "mensaje"
         );
 
+
       mensaje.style.display =
         "none";
 
     }
+
 
 
     // =========================================================
@@ -903,11 +2169,15 @@
           "equipo"
         );
 
+
       selectEquipo.innerHTML = `
+
         <option value="">
           Cargando equipos...
         </option>
+
       `;
+
 
       try {
 
@@ -918,7 +2188,9 @@
 
           .from("equipos")
 
-          .select("id, nombre")
+          .select(
+            "id, nombre"
+          )
 
           .order(
             "nombre",
@@ -926,6 +2198,7 @@
               ascending: true
             }
           );
+
 
         if (error) {
 
@@ -938,14 +2211,19 @@
 
         }
 
+
         equipos =
           data || [];
 
+
         selectEquipo.innerHTML = `
+
           <option value="">
             Selecciona un equipo
           </option>
+
         `;
+
 
         equipos.forEach(
           equipo => {
@@ -955,11 +2233,14 @@
                 "option"
               );
 
+
             opcion.value =
               equipo.id;
 
+
             opcion.textContent =
               equipo.nombre;
+
 
             selectEquipo.appendChild(
               opcion
@@ -968,10 +2249,14 @@
           }
         );
 
-        if (equipos.length > 0) {
+
+        if (
+          equipos.length > 0
+        ) {
 
           selectEquipo.value =
             equipos[0].id;
+
 
           await cargarJugadores(
             equipos[0].id
@@ -986,17 +2271,22 @@
 
         }
 
+
       } catch (error) {
 
         console.error(
           error
         );
 
+
         selectEquipo.innerHTML = `
+
           <option value="">
             Error al cargar equipos
           </option>
+
         `;
+
 
         mostrarMensaje(
           "No se han podido cargar los equipos desde Supabase.",
@@ -1006,6 +2296,7 @@
       }
 
     }
+
 
 
     // =========================================================
@@ -1019,11 +2310,13 @@
       jugadoresActuales =
         [];
 
+
       if (!equipoId) {
 
         return;
 
       }
+
 
       try {
 
@@ -1050,6 +2343,7 @@
             }
           );
 
+
         if (error) {
 
           console.error(
@@ -1061,8 +2355,10 @@
 
         }
 
+
         jugadoresActuales =
           data || [];
+
 
       } catch (error) {
 
@@ -1070,8 +2366,10 @@
           error
         );
 
+
         jugadoresActuales =
           [];
+
 
         mostrarMensaje(
           "No se han podido cargar los jugadores del equipo.",
@@ -1083,11 +2381,14 @@
     }
 
 
+
     // =========================================================
     // PINTAR SUEÑO
     // =========================================================
 
-    function pintarSueno(valor) {
+    function pintarSueno(
+      valor
+    ) {
 
       if (
         valor === null ||
@@ -1096,30 +2397,39 @@
       ) {
 
         return `
+
           <span class="sin-respuesta">
             —
           </span>
+
         `;
 
       }
 
+
       const numero =
         Number(valor);
 
+
       return `
+
         <span class="valor sueno-${numero}">
           ${escaparHTML(numero)}
         </span>
+
       `;
 
     }
+
 
 
     // =========================================================
     // PINTAR RIESGO
     // =========================================================
 
-    function pintarRiesgo(valor) {
+    function pintarRiesgo(
+      valor
+    ) {
 
       if (
         valor === null ||
@@ -1128,30 +2438,39 @@
       ) {
 
         return `
+
           <span class="sin-respuesta">
             —
           </span>
+
         `;
 
       }
 
+
       const numero =
         Number(valor);
 
+
       return `
+
         <span class="valor riesgo-${numero}">
           ${escaparHTML(numero)}
         </span>
+
       `;
 
     }
+
 
 
     // =========================================================
     // PINTAR MOLESTIAS
     // =========================================================
 
-    function pintarMolestias(valor) {
+    function pintarMolestias(
+      valor
+    ) {
 
       if (
         valor === null ||
@@ -1160,35 +2479,47 @@
       ) {
 
         return `
+
           <span class="sin-respuesta">
             —
           </span>
+
         `;
 
       }
+
 
       const texto =
         String(valor)
           .trim()
           .toLowerCase();
 
-      if (texto === "si") {
+
+      if (
+        texto === "si"
+      ) {
 
         return `
+
           <span class="molestias-si">
             Sí
           </span>
+
         `;
 
       }
 
+
       return `
+
         <span class="molestias-no">
           No
         </span>
+
       `;
 
     }
+
 
 
     // =========================================================
@@ -1199,30 +2530,36 @@
 
       ocultarMensaje();
 
+
       const equipoId =
         document.getElementById(
           "equipo"
         ).value;
+
 
       const fecha =
         document.getElementById(
           "fecha"
         ).value;
 
+
       const tabla =
         document.getElementById(
           "tablaWellness"
         );
+
 
       const contador =
         document.getElementById(
           "contador"
         );
 
+
       const tablaContenedor =
         document.querySelector(
           ".tabla-contenedor"
         );
+
 
 
       // =======================================================
@@ -1236,15 +2573,19 @@
           true
         );
 
+
         tablaContenedor.style.display =
           "none";
+
 
         contador.textContent =
           "";
 
+
         return;
 
       }
+
 
 
       // =======================================================
@@ -1258,15 +2599,19 @@
           true
         );
 
+
         tablaContenedor.style.display =
           "none";
+
 
         contador.textContent =
           "";
 
+
         return;
 
       }
+
 
 
       // =======================================================
@@ -1279,6 +2624,7 @@
             equipo.id === equipoId
         );
 
+
       if (!equipoSeleccionado) {
 
         mostrarMensaje(
@@ -1286,12 +2632,15 @@
           true
         );
 
+
         return;
 
       }
 
+
       const equipoNombre =
         equipoSeleccionado.nombre;
+
 
 
       // =======================================================
@@ -1303,6 +2652,7 @@
       );
 
 
+
       // =======================================================
       // MOSTRAR TABLA
       // =======================================================
@@ -1310,22 +2660,32 @@
       tablaContenedor.style.display =
         "block";
 
+
       tabla.innerHTML = `
+
         <tr>
+
           <td
             colspan="7"
             class="cargando"
           >
+
             Cargando respuestas...
+
           </td>
+
         </tr>
+
       `;
+
 
       contador.textContent =
         "Consultando...";
 
 
+
       try {
+
 
         // =====================================================
         // INICIO DEL DÍA
@@ -1337,6 +2697,7 @@
           );
 
 
+
         // =====================================================
         // FINAL DEL DÍA
         // =====================================================
@@ -1346,9 +2707,11 @@
             desde
           );
 
+
         hasta.setDate(
           hasta.getDate() + 1
         );
+
 
 
         // =====================================================
@@ -1392,6 +2755,7 @@
           );
 
 
+
         // =====================================================
         // COMPROBAR ERROR
         // =====================================================
@@ -1403,9 +2767,11 @@
             error
           );
 
+
           throw error;
 
         }
+
 
 
         // =====================================================
@@ -1414,6 +2780,7 @@
 
         const respuestasPorJugador =
           {};
+
 
         (data || []).forEach(
           registro => {
@@ -1426,12 +2793,14 @@
         );
 
 
+
         // =====================================================
         // CONTADOR
         // =====================================================
 
         let numeroRespuestas =
           0;
+
 
         jugadoresActuales.forEach(
           jugador => {
@@ -1449,8 +2818,10 @@
           }
         );
 
+
         contador.textContent =
           `${numeroRespuestas} de ${jugadoresActuales.length} jugadores han respondido`;
+
 
 
         // =====================================================
@@ -1462,20 +2833,28 @@
         ) {
 
           tabla.innerHTML = `
+
             <tr>
+
               <td
                 colspan="7"
                 class="cargando"
               >
+
                 No hay jugadores configurados
                 para este equipo.
+
               </td>
+
             </tr>
+
           `;
+
 
           return;
 
         }
+
 
 
         // =====================================================
@@ -1486,6 +2865,7 @@
           "";
 
 
+
         // =====================================================
         // CREAR FILAS
         // =====================================================
@@ -1493,13 +2873,16 @@
         jugadoresActuales.forEach(
           jugador => {
 
+
             const nombreJugador =
               jugador.nombre;
+
 
             const registro =
               respuestasPorJugador[
                 nombreJugador
               ];
+
 
 
             // =================================================
@@ -1513,11 +2896,15 @@
                   "tr"
                 );
 
+
               fila.innerHTML = `
 
                 <td>
-                  ${escaparHTML(nombreJugador)}
+                  ${escaparHTML(
+                    nombreJugador
+                  )}
                 </td>
+
 
                 <td>
                   <span class="sin-respuesta">
@@ -1525,11 +2912,6 @@
                   </span>
                 </td>
 
-                <td>
-                  <span class="sin-respuesta">
-                    —
-                  </span>
-                </td>
 
                 <td>
                   <span class="sin-respuesta">
@@ -1537,17 +2919,27 @@
                   </span>
                 </td>
 
-                <td>
-                  <span class="sin-respuesta">
-                    —
-                  </span>
-                </td>
 
                 <td>
                   <span class="sin-respuesta">
                     —
                   </span>
                 </td>
+
+
+                <td>
+                  <span class="sin-respuesta">
+                    —
+                  </span>
+                </td>
+
+
+                <td>
+                  <span class="sin-respuesta">
+                    —
+                  </span>
+                </td>
+
 
                 <td>
                   <span class="sin-respuesta">
@@ -1557,13 +2949,16 @@
 
               `;
 
+
               tabla.appendChild(
                 fila
               );
 
+
               return;
 
             }
+
 
 
             // =================================================
@@ -1573,40 +2968,51 @@
             const respuestas =
               registro.respuestas || {};
 
+
             const sueño =
               respuestas.sueno;
+
 
             const fatiga =
               respuestas.fatiga;
 
+
             const estres =
               respuestas.estres;
+
 
             const dolor =
               respuestas.dolor;
 
+
             const molestias =
               respuestas.molestias;
 
+
             const comentario =
               respuestas.comentario;
+
 
 
             // =================================================
             // COMENTARIO
             // =================================================
 
-            let comentarioHTML =
-              `
-                <span class="sin-respuesta">
-                  —
-                </span>
-              `;
+            let comentarioHTML = `
+
+              <span class="sin-respuesta">
+                —
+              </span>
+
+            `;
+
 
             if (
               comentario !== null &&
               comentario !== undefined &&
-              String(comentario).trim() !== ""
+              String(
+                comentario
+              ).trim() !== ""
             ) {
 
               comentarioHTML =
@@ -1615,6 +3021,7 @@
                 );
 
             }
+
 
 
             // =================================================
@@ -1626,37 +3033,57 @@
                 "tr"
               );
 
+
             fila.innerHTML = `
 
               <td>
-                ${escaparHTML(nombreJugador)}
+                ${escaparHTML(
+                  nombreJugador
+                )}
               </td>
 
-              <td>
-                ${pintarSueno(sueño)}
-              </td>
 
               <td>
-                ${pintarRiesgo(fatiga)}
+                ${pintarSueno(
+                  sueño
+                )}
               </td>
 
-              <td>
-                ${pintarRiesgo(estres)}
-              </td>
 
               <td>
-                ${pintarRiesgo(dolor)}
+                ${pintarRiesgo(
+                  fatiga
+                )}
               </td>
 
+
               <td>
-                ${pintarMolestias(molestias)}
+                ${pintarRiesgo(
+                  estres
+                )}
               </td>
+
+
+              <td>
+                ${pintarRiesgo(
+                  dolor
+                )}
+              </td>
+
+
+              <td>
+                ${pintarMolestias(
+                  molestias
+                )}
+              </td>
+
 
               <td>
                 ${comentarioHTML}
               </td>
 
             `;
+
 
             tabla.appendChild(
               fila
@@ -1668,24 +3095,34 @@
 
       } catch (error) {
 
+
         console.error(
           error
         );
 
+
         tabla.innerHTML = `
+
           <tr>
+
             <td
               colspan="7"
               class="cargando"
             >
+
               No se han podido cargar
               las respuestas.
+
             </td>
+
           </tr>
+
         `;
+
 
         contador.textContent =
           "Error al consultar los datos.";
+
 
         mostrarMensaje(
           "Ha ocurrido un error al consultar Supabase. Revisa la consola del navegador.",
@@ -1695,6 +3132,7 @@
       }
 
     }
+
 
 
     // =========================================================
@@ -1709,6 +3147,7 @@
     }
 
 
+
     // =========================================================
     // CAMBIO DE EQUIPO
     // =========================================================
@@ -1719,17 +3158,21 @@
       "change",
       async function () {
 
+
         const equipoId =
           this.value;
+
 
         await cargarJugadores(
           equipoId
         );
 
+
         document.querySelector(
           ".tabla-contenedor"
         ).style.display =
           "none";
+
 
         document.getElementById(
           "contador"
@@ -1740,6 +3183,7 @@
     );
 
 
+
     // =========================================================
     // INICIALIZAR
     // =========================================================
@@ -1748,17 +3192,21 @@
       "DOMContentLoaded",
       async function () {
 
+
         document.getElementById(
           "fecha"
         ).value =
           fechaHoyLocal();
+
 
         await cargarEquipos();
 
       }
     );
 
+
   </script>
+
 
 </body>
 
