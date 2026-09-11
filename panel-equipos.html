@@ -13,6 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
+
     * {
         box-sizing: border-box;
     }
@@ -329,6 +330,34 @@
         transition: background-color 0.2s ease;
     }
 
+
+    /* ==================================================
+       BOTÓN VOLVER
+       ================================================== */
+
+    .boton-volver {
+        display: block;
+        width: 180px;
+        margin: 28px auto 0;
+        padding: 12px 20px;
+        border: 2px solid #334155;
+        border-radius: 12px;
+        background: white;
+        color: #334155;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .boton-volver:hover {
+        background: #0f172a;
+        color: white;
+        border-color: #0f172a;
+        transform: translateY(-2px);
+    }
+
+
     @media (max-width: 700px) {
 
         body {
@@ -397,37 +426,15 @@
             min-width: 45px !important;
             max-width: 45px !important;
         }
+
+        .boton-volver {
+            width: 100%;
+            margin-top: 22px;
+        }
+
     }
 
-    .boton-volver {
-    display: block;
-    margin: 25px auto 0;
-    padding: 11px 18px;
-    border: 2px solid #334155;
-    border-radius: 12px;
-    background: transparent;
-    color: #334155;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.boton-volver:hover {
-    background: #0f172a;
-    color: white;
-    border-color: #0f172a;
-    transform: translateY(-2px);
-}
-
-@media (max-width: 700px) {
-    .boton-volver {
-        width: 100%;
-        margin-top: 22px;
-    }
-}
-</style>
-
+    </style>
 
 </head>
 
@@ -536,11 +543,20 @@
     </div>
 
 
-</div>
+    <!-- ==================================================
+         BOTÓN VOLVER
+         ================================================== -->
 
-<button type="button" class="boton-volver" onclick="history.back()">
-    ← Volver
-</button>
+    <button
+        type="button"
+        class="boton-volver"
+        onclick="window.location.href='index.html'"
+    >
+        ← Volver
+    </button>
+
+
+</div>
 
 
 
@@ -551,14 +567,11 @@
 // SUPABASE
 // ======================================================
 
-
 const SUPABASE_URL =
     "https://alprdcjaexllelxthhbv.supabase.co";
 
-
 const SUPABASE_KEY =
     "sb_publishable_6kF4hhGM3bwqgwv6Fz3mmw__HvkPXiD";
-
 
 const supabaseClient =
     supabase.createClient(
@@ -586,7 +599,6 @@ async function cargarEquipos() {
     equipo.innerHTML =
         '<option value="">Selecciona un equipo</option>';
 
-
     const { data, error } =
         await supabaseClient
             .from("equipos")
@@ -594,7 +606,6 @@ async function cargarEquipos() {
             .order("nombre", {
                 ascending: true
             });
-
 
     if (error) {
 
@@ -604,20 +615,16 @@ async function cargarEquipos() {
             '<option value="">Error al cargar equipos</option>';
 
         return;
-
     }
-
 
     data.forEach(function(item) {
 
         const opcion =
             document.createElement("option");
 
-        // El value será el UUID del equipo
         opcion.value =
             item.id;
 
-        // Lo que verá el usuario
         opcion.textContent =
             item.nombre;
 
@@ -636,13 +643,9 @@ async function cargarJugadoresEquipo(equipoId) {
 
     jugadoresActuales = [];
 
-
     if (!equipoId) {
-
         return;
-
     }
-
 
     const { data, error } =
         await supabaseClient
@@ -653,15 +656,12 @@ async function cargarJugadoresEquipo(equipoId) {
                 ascending: true
             });
 
-
     if (error) {
 
         console.error(error);
 
         return;
-
     }
-
 
     jugadoresActuales =
         data || [];
@@ -682,8 +682,6 @@ document
             const equipoId =
                 this.value;
 
-
-            // Limpiar tabla anterior
             document.getElementById(
                 "tablaJugadores"
             ).innerHTML = "";
@@ -703,7 +701,6 @@ document
             document.getElementById(
                 "mensaje"
             ).textContent = "";
-
 
             await cargarJugadoresEquipo(
                 equipoId
@@ -800,7 +797,6 @@ function obtenerFechas(
     const fechaActual =
         new Date(inicio);
 
-
     while (fechaActual <= fin) {
 
         fechas.push(
@@ -813,7 +809,6 @@ function obtenerFechas(
 
     }
 
-
     return fechas;
 
 }
@@ -825,16 +820,13 @@ function obtenerFechas(
 
 async function cargarTabla() {
 
-
     const equipoSelect =
         document.getElementById(
             "equipo"
         );
 
-
     const equipoId =
         equipoSelect.value;
-
 
     const equipoNombre =
         equipoSelect.value
@@ -843,48 +835,40 @@ async function cargarTabla() {
               ].textContent
             : "";
 
-
     const fechaInicio =
         document.getElementById(
             "fechaInicio"
         ).value;
-
 
     const fechaFin =
         document.getElementById(
             "fechaFin"
         ).value;
 
-
     const tabla =
         document.getElementById(
             "tablaJugadores"
         );
-
 
     const cabecera =
         document.getElementById(
             "cabeceraTabla"
         );
 
-
     const pie =
         document.getElementById(
             "pieTabla"
         );
-
 
     const columnasTabla =
         document.getElementById(
             "columnasTabla"
         );
 
-
     const mensaje =
         document.getElementById(
             "mensaje"
         );
-
 
     tabla.innerHTML = "";
 
@@ -962,15 +946,12 @@ async function cargarTabla() {
         fechaInicio +
         "T00:00:00";
 
-
     const fechaFinal =
         fechaLocal(fechaFin);
-
 
     fechaFinal.setDate(
         fechaFinal.getDate() + 1
     );
-
 
     const hasta =
         claveFecha(fechaFinal) +
@@ -990,8 +971,6 @@ async function cargarTabla() {
 
         .select("*")
 
-        // IMPORTANTE:
-        // respuestas.equipo guarda el nombre
         .eq(
             "equipo",
             equipoNombre
@@ -1047,18 +1026,15 @@ async function cargarTabla() {
                     registro.fecha
                 );
 
-
             const fecha =
                 claveFecha(
                     fechaRegistro
                 );
 
-
             const clave =
                 registro.jugador +
                 "|" +
                 fecha;
-
 
             registros[clave] =
                 registro;
@@ -1078,7 +1054,6 @@ async function cargarTabla() {
                 const fechaClave =
                     claveFecha(fecha);
 
-
                 return (data || []).some(
                     function(registro) {
 
@@ -1088,7 +1063,6 @@ async function cargarTabla() {
                                     registro.fecha
                                 )
                             );
-
 
                         return fechaRegistro === fechaClave;
 
@@ -1119,47 +1093,31 @@ async function cargarTabla() {
 
     let columnasHTML = "";
 
-
     columnasHTML += `
-        <col style="
-            width:130px;
-        ">
+        <col style="width:130px;">
     `;
-
 
     fechasConRPE.forEach(
         function() {
 
             columnasHTML += `
-                <col style="
-                    width:42px;
-                ">
+                <col style="width:42px;">
             `;
 
-
             columnasHTML += `
-                <col style="
-                    width:48px;
-                ">
+                <col style="width:48px;">
             `;
 
-
             columnasHTML += `
-                <col style="
-                    width:50px;
-                ">
+                <col style="width:50px;">
             `;
 
         }
     );
 
-
     columnasHTML += `
-        <col style="
-            width:65px;
-        ">
+        <col style="width:65px;">
     `;
-
 
     columnasTabla.innerHTML =
         columnasHTML;
@@ -1182,7 +1140,6 @@ async function cargarTabla() {
 
     `;
 
-
     let cabecera2 =
         "<tr>";
 
@@ -1200,7 +1157,6 @@ async function cargarTabla() {
                 </th>
 
             `;
-
 
             cabecera2 += `
 
@@ -1235,10 +1191,8 @@ async function cargarTabla() {
 
     `;
 
-
     cabecera2 +=
         "</tr>";
-
 
     cabecera.innerHTML =
         cabecera1 +
@@ -1257,7 +1211,6 @@ async function cargarTabla() {
 
             const clave =
                 claveFecha(fecha);
-
 
             medias[clave] = {
 
@@ -1281,12 +1234,10 @@ async function cargarTabla() {
             const nombre =
                 jugador.nombre;
 
-
             const fila =
                 document.createElement(
                     "tr"
                 );
-
 
             let html = `
 
@@ -1295,7 +1246,6 @@ async function cargarTabla() {
                 </td>
 
             `;
-
 
             let cargaTotal = 0;
 
@@ -1312,16 +1262,13 @@ async function cargarTabla() {
                             fecha
                         );
 
-
                     const clave =
                         nombre +
                         "|" +
                         fechaClave;
 
-
                     const registro =
                         registros[clave];
-
 
                     const respuestas =
                         registro
@@ -1330,7 +1277,6 @@ async function cargarTabla() {
                                 {}
                             )
                             : {};
-
 
                     const rpe =
                         respuestas.rpe ??
@@ -1401,7 +1347,6 @@ async function cargarTabla() {
                             fechaClave
                         ].suma +=
                             Number(rpe);
-
 
                         medias[
                             fechaClave
@@ -1493,7 +1438,6 @@ async function cargarTabla() {
             fila.innerHTML =
                 html;
 
-
             tabla.appendChild(
                 fila
             );
@@ -1511,10 +1455,8 @@ async function cargarTabla() {
             "tr"
         );
 
-
     filaMedia.className =
         "fila-media";
-
 
     let htmlMedia = `
 
@@ -1529,14 +1471,10 @@ async function cargarTabla() {
         function(fecha) {
 
             const clave =
-                claveFecha(
-                    fecha
-                );
-
+                claveFecha(fecha);
 
             const datos =
                 medias[clave];
-
 
             const media =
 
@@ -1578,7 +1516,6 @@ async function cargarTabla() {
 
     filaMedia.innerHTML =
         htmlMedia;
-
 
     pie.appendChild(
         filaMedia
@@ -1650,9 +1587,7 @@ async function guardarMinutos(
 
 
     if (!id) {
-
         return;
-
     }
 
 
@@ -1725,7 +1660,6 @@ async function guardarMinutos(
             resultado.error
         );
 
-
         alert(
             "No se han podido guardar los minutos. " +
             "Comprueba la política UPDATE de Supabase."
@@ -1748,9 +1682,7 @@ async function guardarMinutos(
 function colorRPE(valor) {
 
     if (!Number.isFinite(valor)) {
-
         return "";
-
     }
 
 
@@ -1931,9 +1863,7 @@ function colorearCargaTotal() {
 
 
     if (valores.length === 0) {
-
         return;
-
     }
 
 
@@ -2215,7 +2145,6 @@ document
 // ======================================================
 
 cargarEquipos();
-
 
 </script>
 
