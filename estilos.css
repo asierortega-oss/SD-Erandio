@@ -56,9 +56,6 @@ label {
     margin-bottom: 20px;
 }
 
-
-/* Primera pregunta sin tanto espacio arriba */
-
 .formulario > label:first-child {
     margin-top: 0;
 }
@@ -79,9 +76,6 @@ select {
     font-size: 15px;
     background: white;
 }
-
-
-/* Al seleccionar un campo */
 
 input:focus,
 textarea:focus,
@@ -106,9 +100,6 @@ select:focus {
 #formularioWellness textarea {
     margin-bottom: 25px;
 }
-
-
-/* Primera pregunta de Wellness */
 
 #formularioWellness label:first-of-type {
     margin-top: 15px;
@@ -212,9 +203,6 @@ button {
     overflow-x: auto;
     margin-top: 20px;
 }
-
-
-/* Estilo general para tablas */
 
 .tabla-contenedor table {
     border-collapse: collapse;
