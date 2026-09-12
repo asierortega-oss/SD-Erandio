@@ -230,6 +230,55 @@ textarea:focus {
             display: none;
         }
 
+        /* BOTONES WELLNESS DEL 1 AL 5 */
+
+.escala-wellness {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.boton-escala {
+    min-width: 0;
+    height: 48px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    color: white;
+    font-size: 18px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform .2s ease, border-color .2s ease;
+}
+
+.boton-escala:nth-child(1) {
+    background: #d32f2f;
+}
+
+.boton-escala:nth-child(2) {
+    background: #f57c00;
+}
+
+.boton-escala:nth-child(3) {
+    background: #fbc02d;
+    color: #1e293b;
+}
+
+.boton-escala:nth-child(4) {
+    background: #7cb342;
+}
+
+.boton-escala:nth-child(5) {
+    background: #2e7d32;
+}
+
+.boton-escala.seleccionado {
+    border-color: #0f172a;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, .18);
+    transform: translateY(-2px);
+}
+
         @media (max-width: 600px) {
 
             body {
@@ -389,28 +438,44 @@ textarea:focus {
                    CALIDAD DE SUEÑO 1-Muy mala 5-Muy buena
                 </label>
 
-                <input
-                    type="number"
-                    id="sueno"
-                    min="1"
-                    max="5"
-                    placeholder="Del 1 al 5"
-                >
+                <div class="escala-wellness" role="group" aria-label="Calidad de sueño del 1 al 5">
+
+    <button type="button" class="boton-escala" data-pregunta="sueno" data-valor="1" onclick="seleccionarWellness('sueno', 1)">1</button>
+
+    <button type="button" class="boton-escala" data-pregunta="sueno" data-valor="2" onclick="seleccionarWellness('sueno', 2)">2</button>
+
+    <button type="button" class="boton-escala" data-pregunta="sueno" data-valor="3" onclick="seleccionarWellness('sueno', 3)">3</button>
+
+    <button type="button" class="boton-escala" data-pregunta="sueno" data-valor="4" onclick="seleccionarWellness('sueno', 4)">4</button>
+
+    <button type="button" class="boton-escala" data-pregunta="sueno" data-valor="5" onclick="seleccionarWellness('sueno', 5)">5</button>
+
+</div>
+
+<input type="hidden" id="sueno">
 
 
                 <!-- FATIGA -->
 
                 <label for="fatiga">
-                    FATIGA 1-Muy fatigado 5-Muy fresco
-                </label>
+    FATIGA 1-Muy fatigado 5-Muy fresco
+</label>
 
-                <input
-                    type="number"
-                    id="fatiga"
-                    min="1"
-                    max="5"
-                    placeholder="Del 1 al 5"
-                >
+<div class="escala-wellness" role="group" aria-label="Fatiga del 1 al 5">
+
+    <button type="button" class="boton-escala" data-pregunta="fatiga" data-valor="1" onclick="seleccionarWellness('fatiga', 1)">1</button>
+
+    <button type="button" class="boton-escala" data-pregunta="fatiga" data-valor="2" onclick="seleccionarWellness('fatiga', 2)">2</button>
+
+    <button type="button" class="boton-escala" data-pregunta="fatiga" data-valor="3" onclick="seleccionarWellness('fatiga', 3)">3</button>
+
+    <button type="button" class="boton-escala" data-pregunta="fatiga" data-valor="4" onclick="seleccionarWellness('fatiga', 4)">4</button>
+
+    <button type="button" class="boton-escala" data-pregunta="fatiga" data-valor="5" onclick="seleccionarWellness('fatiga', 5)">5</button>
+
+</div>
+
+<input type="hidden" id="fatiga">
 
 
                 <!-- ESTRÉS -->
@@ -419,28 +484,44 @@ textarea:focus {
                     ESTRÉS 1-Mucho  5-Ningúno
                 </label>
 
-                <input
-                    type="number"
-                    id="estres"
-                    min="1"
-                    max="5"
-                    placeholder="Del 1 al 5"
-                >
+                <div class="escala-wellness" role="group" aria-label="Estrés del 1 al 5">
+
+    <button type="button" class="boton-escala" data-pregunta="estres" data-valor="1" onclick="seleccionarWellness('estres', 1)">1</button>
+
+    <button type="button" class="boton-escala" data-pregunta="estres" data-valor="2" onclick="seleccionarWellness('estres', 2)">2</button>
+
+    <button type="button" class="boton-escala" data-pregunta="estres" data-valor="3" onclick="seleccionarWellness('estres', 3)">3</button>
+
+    <button type="button" class="boton-escala" data-pregunta="estres" data-valor="4" onclick="seleccionarWellness('estres', 4)">4</button>
+
+    <button type="button" class="boton-escala" data-pregunta="estres" data-valor="5" onclick="seleccionarWellness('estres', 5)">5</button>
+
+</div>
+
+<input type="hidden" id="estres">
 
 
                 <!-- DOLOR MUSCULAR -->
 
                 <label for="dolorMuscular">
-                    DOLOR MUSCULAR 1-Mucho  5-Ningúno
+                    DOLOR 1-Mucho  5-Ningúno
                 </label>
 
-                <input
-                    type="number"
-                    id="dolorMuscular"
-                    min="1"
-                    max="5"
-                    placeholder="Del 1 al 5"
-                >
+                <div class="escala-wellness" role="group" aria-label="Dolor muscular del 1 al 5">
+
+    <button type="button" class="boton-escala" data-pregunta="dolorMuscular" data-valor="1" onclick="seleccionarWellness('dolorMuscular', 1)">1</button>
+
+    <button type="button" class="boton-escala" data-pregunta="dolorMuscular" data-valor="2" onclick="seleccionarWellness('dolorMuscular', 2)">2</button>
+
+    <button type="button" class="boton-escala" data-pregunta="dolorMuscular" data-valor="3" onclick="seleccionarWellness('dolorMuscular', 3)">3</button>
+
+    <button type="button" class="boton-escala" data-pregunta="dolorMuscular" data-valor="4" onclick="seleccionarWellness('dolorMuscular', 4)">4</button>
+
+    <button type="button" class="boton-escala" data-pregunta="dolorMuscular" data-valor="5" onclick="seleccionarWellness('dolorMuscular', 5)">5</button>
+
+</div>
+
+<input type="hidden" id="dolorMuscular">
 
 
                 <!-- MOLESTIAS -->
@@ -1305,12 +1386,49 @@ textarea:focus {
 
         }
 
+        /*
+=====================================================
+SELECCIONAR WELLNESS
+=====================================================
+*/
+
+function seleccionarWellness(pregunta, valor) {
+
+    // Guardar el valor en el input oculto
+    document.getElementById(pregunta).value = valor;
+
+    // Buscar todos los botones de esa pregunta
+    const botones = document.querySelectorAll(
+        '.boton-escala[data-pregunta="' + pregunta + '"]'
+    );
+
+    // Quitar selección de todos
+    botones.forEach(function(boton) {
+
+        boton.classList.remove("seleccionado");
+
+    });
+
+    // Marcar el botón pulsado
+    const botonSeleccionado = document.querySelector(
+        '.boton-escala[data-pregunta="' + pregunta + '"][data-valor="' + valor + '"]'
+    );
+
+    if (botonSeleccionado) {
+
+        botonSeleccionado.classList.add("seleccionado");
+
+    }
+
+}
+
 
         /*
         =====================================================
         LIMPIAR MENSAJE
         =====================================================
         */
+
 
         function limpiarMensaje() {
 
