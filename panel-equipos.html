@@ -530,6 +530,90 @@
 
     }
 
+    /* ==================================================
+   MEDIA SEMANAL DE CARGA
+   ================================================== */
+
+.resumen-semanal {
+    margin-top: 25px;
+    padding: 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    background: #f8fafc;
+}
+
+.resumen-semanal h2 {
+    margin: 0 0 18px;
+    text-align: center;
+    font-size: 18px;
+    color: #0f172a;
+}
+
+.linea-semanal {
+    display: flex;
+    width: 100%;
+    min-height: 75px;
+    overflow-x: auto;
+    border-radius: 12px;
+    gap: 3px;
+}
+
+.semana-celda {
+    flex: 1 0 85px;
+    min-width: 85px;
+    min-height: 70px;
+    padding: 10px 6px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    font-weight: 800;
+    font-size: 12px;
+}
+
+.semana-celda .semana-fecha {
+    font-size: 11px;
+    margin-bottom: 5px;
+}
+
+.semana-celda .semana-media {
+    font-size: 17px;
+}
+
+.semana-celda .semana-unidad {
+    font-size: 10px;
+    font-weight: 600;
+    margin-top: 3px;
+}
+
+.sin-datos-semanales {
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    color: #64748b;
+    font-weight: 700;
+}
+
+@media (max-width: 700px) {
+
+    .resumen-semanal {
+        padding: 14px;
+    }
+
+    .resumen-semanal h2 {
+        font-size: 16px;
+    }
+
+    .semana-celda {
+        flex-basis: 78px;
+        min-width: 78px;
+    }
+
+}
+
     </style>
 
 </head>
@@ -634,6 +718,14 @@
 
 
         </div>
+
+        <div id="resumenSemanal" class="resumen-semanal">
+
+    <h2>Media semanal de RPE del equipo</h2>
+
+    <div id="lineaSemanal" class="linea-semanal"></div>
+
+</div>
 
 
     </div>
@@ -798,6 +890,14 @@ document
                 "mensaje"
             ).textContent = "";
 
+            document.getElementById(
+    "lineaSemanal"
+).innerHTML = "";
+
+document.getElementById(
+    "resumenSemanal"
+).style.display = "none";
+
             await cargarJugadoresEquipo(
                 equipoId
             );
@@ -851,6 +951,26 @@ function claveFecha(fecha) {
         ).padStart(2, "0")
 
     );
+
+}
+
+// ======================================================
+// CLAVE DE SEMANA
+// ======================================================
+
+function claveSemana(fecha) {
+
+    const fechaSemana = new Date(fecha);
+
+    const dia = fechaSemana.getDay();
+
+    const diferencia = dia === 0 ? -6 : 1 - dia;
+
+    fechaSemana.setDate(
+        fechaSemana.getDate() + diferencia
+    );
+
+    return claveFecha(fechaSemana);
 
 }
 
@@ -978,6 +1098,10 @@ async function cargarTabla() {
 
     mensaje.textContent = "";
 
+    document.getElementById(
+    "lineaSemanal"
+).innerHTML = "";
+
 
     // --------------------------------------------------
     // COMPROBAR FILTROS
@@ -1023,6 +1147,10 @@ async function cargarTabla() {
         return;
 
     }
+
+    await cargarMediaSemanalEquipo(
+    equipoNombre
+);
 
 
     const fechasPeriodo =
@@ -1380,54 +1508,21 @@ async function cargarTabla() {
                         respuestas.rpe ??
                         "";
 
+// --------------------------------
+// MINUTOS
+// --------------------------------
 
-                    // --------------------------------
-                    // MINUTOS
-                    // --------------------------------
+// Si existen minutos guardados, se muestran.
+// Si no existen, se muestran 75 por defecto.
+const minutos =
+    respuestas.minutos ?? 75;
 
-                    let minutos;
+// --------------------------------
+// CARGA
+// --------------------------------
 
-
-                    if (
-
-                        respuestas.minutos !==
-                            undefined &&
-
-                        respuestas.minutos !==
-                            null &&
-
-                        respuestas.minutos !==
-                            ""
-
-                    ) {
-
-                        minutos =
-                            Number(
-                                respuestas.minutos
-                            );
-
-                    } else {
-
-                        minutos =
-                            75;
-
-                    }
-
-
-                    // --------------------------------
-                    // CARGA
-                    // --------------------------------
-
-                    const carga =
-
-                        Number(rpe) > 0 &&
-                        Number(minutos) > 0
-
-                            ? Number(rpe) *
-                              Number(minutos)
-
-                            : 0;
-
+const carga =
+    Number(rpe) * Number(minutos || 0);
 
                     // --------------------------------
                     // MEDIA RPE
@@ -1671,6 +1766,349 @@ async function cargarTabla() {
 
 }
 
+// ======================================================
+// MEDIA SEMANAL DE RPE DEL EQUIPO
+// ======================================================
+
+async function cargarMediaSemanalEquipo(equipoNombre) {
+
+    const resumen =
+        document.getElementById(
+            "resumenSemanal"
+        );
+
+    const linea =
+        document.getElementById(
+            "lineaSemanal"
+        );
+
+    resumen.style.display =
+        "block";
+
+    linea.innerHTML = `
+        <div class="sin-datos-semanales">
+            Calculando medias semanales de RPE...
+        </div>
+    `;
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("respuestas")
+
+        .select("*")
+
+        .eq(
+            "equipo",
+            equipoNombre
+        )
+
+        .eq(
+            "tipo",
+            "rpe"
+        )
+
+        .order(
+            "fecha",
+            {
+                ascending: true
+            }
+        );
+
+
+    if (error) {
+
+        console.error(error);
+
+        linea.innerHTML = `
+            <div class="sin-datos-semanales">
+                No se han podido cargar las medias semanales.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    const semanas = {};
+
+
+    /*
+       Agrupamos los registros por semana.
+       Cada registro aporta solamente su RPE.
+    */
+
+    (data || []).forEach(
+        function(registro) {
+
+            const fechaRegistro =
+                new Date(
+                    registro.fecha
+                );
+
+            const semana =
+                claveSemana(
+                    fechaRegistro
+                );
+
+            const respuestas =
+                registro.respuestas || {};
+
+            const rpe =
+                Number(
+                    respuestas.rpe
+                );
+
+
+            /*
+               Solo aceptamos RPE válidos
+               entre 1 y 10.
+            */
+
+            if (
+
+                !Number.isFinite(rpe) ||
+
+                rpe < 1 ||
+
+                rpe > 10
+
+            ) {
+
+                return;
+
+            }
+
+
+            if (!semanas[semana]) {
+
+                semanas[semana] = {
+
+                    sumaRPE: 0,
+
+                    cantidadRPE: 0
+
+                };
+
+            }
+
+
+            semanas[semana].sumaRPE +=
+                rpe;
+
+            semanas[semana].cantidadRPE++;
+
+        }
+    );
+
+
+    const semanasOrdenadas =
+        Object.keys(
+            semanas
+        ).sort();
+
+
+    if (
+        semanasOrdenadas.length === 0
+    ) {
+
+        linea.innerHTML = `
+            <div class="sin-datos-semanales">
+                No hay datos RPE para calcular las semanas.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    /*
+       Calculamos la media de RPE de cada semana.
+    */
+
+    const medias =
+        semanasOrdenadas.map(
+            function(semana) {
+
+                const datos =
+                    semanas[semana];
+
+                const media =
+
+                    datos.cantidadRPE > 0
+
+                        ? datos.sumaRPE /
+                          datos.cantidadRPE
+
+                        : 0;
+
+
+                return {
+
+                    semana: semana,
+
+                    media: media
+
+                };
+
+            }
+        );
+
+
+    /*
+       La escala de colores se calcula
+       comparando las medias semanales.
+    */
+
+
+    linea.innerHTML =
+        "";
+
+
+    medias.forEach(
+        function(item) {
+
+            const color =
+    obtenerColorRPEsemanal(
+        item.media
+    );
+
+
+            const celda =
+                document.createElement(
+                    "div"
+                );
+
+            celda.className =
+                "semana-celda";
+
+
+            celda.style.backgroundColor =
+                color;
+
+
+            celda.innerHTML = `
+
+                <div class="semana-fecha">
+                    Semana ${formatearSemana(item.semana)}
+                </div>
+
+                <div class="semana-media">
+                    ${item.media.toFixed(1)}
+                </div>
+
+                <div class="semana-unidad">
+                    RPE medio
+                </div>
+
+            `;
+
+
+            linea.appendChild(
+                celda
+            );
+
+        }
+    );
+
+}
+
+// ======================================================
+// COLOR DE LA MEDIA SEMANAL
+// ======================================================
+
+function obtenerColorRPEsemanal(valorRPE) {
+
+    const valor =
+        Math.max(
+            1,
+            Math.min(
+                10,
+                Number(valorRPE)
+            )
+        );
+
+    const porcentaje =
+        (valor - 1) / 9;
+
+    let r;
+    let g;
+    let b;
+
+    if (porcentaje <= 0.5) {
+
+        const p =
+            porcentaje / 0.5;
+
+        r =
+            Math.round(
+                76 +
+                (255 - 76) * p
+            );
+
+        g =
+            Math.round(
+                175 +
+                (152 - 175) * p
+            );
+
+        b =
+            Math.round(
+                80 +
+                (0 - 80) * p
+            );
+
+    } else {
+
+        const p =
+            (porcentaje - 0.5) / 0.5;
+
+        r =
+            Math.round(
+                255 +
+                (244 - 255) * p
+            );
+
+        g =
+            Math.round(
+                152 +
+                (67 - 152) * p
+            );
+
+        b =
+            Math.round(
+                0 +
+                (54 - 0) * p
+            );
+
+    }
+
+    return `rgb(${r}, ${g}, ${b})`;
+
+}
+
+// ======================================================
+// FORMATO DE SEMANA
+// ======================================================
+
+function formatearSemana(texto) {
+
+    const partes = texto.split("-");
+
+    return (
+
+        partes[2] +
+        "/" +
+        partes[1]
+
+    );
+
+}
 
 // ======================================================
 // GUARDAR MINUTOS
